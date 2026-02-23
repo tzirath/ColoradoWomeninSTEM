@@ -6,7 +6,7 @@
 # VITE_RECAPTCHA_SITE_KEY is a public key intentionally bundled into the
 # client JS — it is not a secret. This tells Netlify's scanner to skip it.
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "VITE_RECAPTCHA_SITE_KEY"
+  SECRETS_SCAN_OMIT_KEYS = "VITE_RECAPTCHA_SITE_KEY,GMAIL_USER"
 
 [dev]
   command     = "npm run dev"
