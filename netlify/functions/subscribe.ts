@@ -1,5 +1,44 @@
 import type { Handler, HandlerEvent } from "@netlify/functions";
 
+// ---------------------------------------------------------------------------
+// In-memory rate limiter (same pattern as contact.ts)
+// ---------------------------------------------------------------------------
+const rateLimitMap = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const RATE_LIMIT_MAX = 10; // slightly more generous than contact form
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const prev = rateLimitMap.get(ip) ?? [];
+  const recent = prev.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+
+  if (recent.length >= RATE_LIMIT_MAX) {
+    rateLimitMap.set(ip, recent);
+    return true;
+  }
+
+  recent.push(now);
+  rateLimitMap.set(ip, recent);
+  return false;
+}
+
+// ---------------------------------------------------------------------------
+// reCAPTCHA v3 verification (same as contact.ts)
+// ---------------------------------------------------------------------------
+async function verifyRecaptcha(token: string): Promise<number> {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secret) return 1; // skip check if not configured (dev only)
+
+  const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(token)}`,
+  });
+
+  const data = (await res.json()) as { success: boolean; score: number };
+  return data.success ? data.score : 0;
+}
+
 const headers = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": process.env.URL ?? "*",
@@ -19,6 +58,20 @@ const handler: Handler = async (event: HandlerEvent) => {
     };
   }
 
+  // ---------- Rate limit ----------
+  const ip =
+    event.headers["x-forwarded-for"]?.split(",")[0].trim() ??
+    event.headers["client-ip"] ??
+    "unknown";
+
+  if (isRateLimited(ip)) {
+    return {
+      statusCode: 429,
+      headers,
+      body: JSON.stringify({ error: "Too many requests. Please wait a while before trying again." }),
+    };
+  }
+
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
     return {
@@ -28,7 +81,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     };
   }
 
-  let body: { firstName?: string; email?: string };
+  let body: { firstName?: string; email?: string; recaptchaToken?: string };
   try {
     body = JSON.parse(event.body ?? "{}");
   } catch {
@@ -39,9 +92,9 @@ const handler: Handler = async (event: HandlerEvent) => {
     };
   }
 
-  const { firstName, email } = body;
+  const { firstName, email, recaptchaToken } = body;
 
-  if (!firstName?.trim() || !email?.trim()) {
+  if (!firstName?.trim() || !email?.trim() || !recaptchaToken) {
     return {
       statusCode: 400,
       headers,
@@ -58,6 +111,17 @@ const handler: Handler = async (event: HandlerEvent) => {
     };
   }
 
+  // ---------- reCAPTCHA v3 check ----------
+  const score = await verifyRecaptcha(recaptchaToken);
+  if (score < 0.5) {
+    return {
+      statusCode: 403,
+      headers,
+      body: JSON.stringify({ error: "Bot activity detected. Please refresh and try again." }),
+    };
+  }
+
+  // ---------- Add to Brevo ----------
   const res = await fetch("https://api.brevo.com/v3/contacts", {
     method: "POST",
     headers: {

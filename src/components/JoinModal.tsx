@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 interface JoinModalProps {
   open: boolean;
@@ -11,6 +12,7 @@ const inputClass =
   "w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50";
 
 const JoinModal = ({ open, onClose }: JoinModalProps) => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,12 +53,19 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
     e.preventDefault();
     if (!firstName.trim() || !email.trim()) return;
 
+    if (!executeRecaptcha) {
+      toast.error("Security check not ready — please refresh and try again.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
+      const recaptchaToken = await executeRecaptcha("subscribe");
+
       const res = await fetch("/.netlify/functions/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName: firstName.trim(), email: email.trim() }),
+        body: JSON.stringify({ firstName: firstName.trim(), email: email.trim(), recaptchaToken }),
       });
 
       const data = (await res.json()) as { success?: boolean; alreadyMember?: boolean; error?: string };
