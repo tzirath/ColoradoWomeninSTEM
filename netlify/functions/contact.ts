@@ -104,6 +104,7 @@ const handler: Handler = async (event: HandlerEvent) => {
   let body: {
     name?: string;
     email?: string;
+    inquiryType?: string;
     message?: string;
     recaptchaToken?: string;
   };
@@ -117,7 +118,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     };
   }
 
-  const { name, email, message, recaptchaToken } = body;
+  const { name, email, inquiryType, message, recaptchaToken } = body;
 
   // ---------- Input validation ----------
   if (
@@ -182,14 +183,17 @@ const handler: Handler = async (event: HandlerEvent) => {
     auth: { user: gmailUser, pass: gmailPass },
   });
 
+  const inquiry = inquiryType?.trim() || "General";
+
   await transporter.sendMail({
     from: `"Bloom Denver Contact Form" <${gmailUser}>`,
     to: gmailUser, // bloom.womeninstem@gmail.com
     replyTo: email,
-    subject: `New message from ${name} — Bloom Website`,
+    subject: `[${inquiry}] New message from ${name} — Bloom Website`,
     text: [
       `Name: ${name}`,
       `Email: ${email}`,
+      `Inquiry type: ${inquiry}`,
       `reCAPTCHA score: ${score.toFixed(2)}`,
       "",
       "Message:",
@@ -199,6 +203,7 @@ const handler: Handler = async (event: HandlerEvent) => {
       <h2 style="color:#1a4731">New Contact Form Submission</h2>
       <p><strong>Name:</strong> ${escapeHtml(name)}</p>
       <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+      <p><strong>Inquiry type:</strong> ${escapeHtml(inquiry)}</p>
       <p><strong>reCAPTCHA score:</strong> ${score.toFixed(2)} / 1.00</p>
       <hr />
       <p><strong>Message:</strong></p>

@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
+interface NavbarProps {
+  onJoinClick: () => void;
+}
+
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
@@ -9,7 +13,7 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ onJoinClick }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -54,6 +58,14 @@ const Navbar = () => {
           ))}
         </ul>
 
+        {/* Desktop Join button */}
+        <button
+          onClick={onJoinClick}
+          className="hidden md:inline-flex items-center bg-secondary text-secondary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
+        >
+          Join Bloom
+        </button>
+
         {/* Mobile toggle */}
         <button
           className="md:hidden text-foreground"
@@ -79,6 +91,14 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
+            <li>
+              <button
+                onClick={() => { setIsOpen(false); onJoinClick(); }}
+                className="bg-secondary text-secondary-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Join Bloom
+              </button>
+            </li>
           </ul>
         </div>
       )}

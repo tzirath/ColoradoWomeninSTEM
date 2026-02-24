@@ -6,6 +6,14 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { toast } from "sonner";
 import { Mail, MapPin, Instagram, Linkedin, Twitter, Loader2 } from "lucide-react";
 
+const INQUIRY_TYPES = [
+  "General",
+  "Volunteer",
+  "Sponsorship",
+  "Partnership",
+  "Media / Press",
+] as const;
+
 const contactSchema = z.object({
   name: z
     .string()
@@ -15,6 +23,9 @@ const contactSchema = z.object({
     .string()
     .email("Please enter a valid email address")
     .max(254, "Email is too long"),
+  inquiryType: z.enum(INQUIRY_TYPES, {
+    errorMap: () => ({ message: "Please select an inquiry type" }),
+  }),
   message: z
     .string()
     .min(10, "Message must be at least 10 characters")
@@ -25,6 +36,9 @@ type ContactForm = z.infer<typeof contactSchema>;
 
 const inputClass =
   "w-full px-4 py-3 rounded-lg bg-primary-foreground/10 border border-bloom-sage/30 text-primary-foreground placeholder:text-bloom-sage/60 font-body text-sm focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50";
+
+const selectClass =
+  "w-full px-4 py-3 rounded-lg bg-primary-foreground/10 border border-bloom-sage/30 text-primary-foreground font-body text-sm focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50 appearance-none cursor-pointer";
 
 const ContactSection = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -117,6 +131,33 @@ const ContactSection = () => {
                   </p>
                 )}
               </div>
+            </div>
+
+            <div className="relative">
+              <select
+                className={selectClass}
+                disabled={isSubmitting}
+                defaultValue=""
+                {...register("inquiryType")}
+              >
+                <option value="" disabled className="bg-primary text-bloom-sage/60">
+                  Select Inquiry Type
+                </option>
+                {INQUIRY_TYPES.map((type) => (
+                  <option key={type} value={type} className="bg-primary text-primary-foreground">
+                    {type}
+                  </option>
+                ))}
+              </select>
+              {/* Custom dropdown arrow */}
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-bloom-sage/60">
+                ▾
+              </span>
+              {errors.inquiryType && (
+                <p className="mt-1 text-xs text-bloom-coral-light font-body">
+                  {errors.inquiryType.message}
+                </p>
+              )}
             </div>
 
             <div>
