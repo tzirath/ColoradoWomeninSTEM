@@ -61,7 +61,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
 
           <button
             onClick={onJoinClick}
-            className="inline-flex items-center bg-secondary text-secondary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            className="inline-flex items-center bg-primary text-primary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
           >
             Join Bloom
           </button>
