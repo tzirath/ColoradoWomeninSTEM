@@ -212,7 +212,7 @@ const ContactSection = () => {
           <div className="mt-12 flex flex-col items-center gap-4 text-bloom-sage font-body text-sm">
             <div className="flex items-center gap-2">
               <Mail size={16} className="text-secondary" />
-              <span>bloom.womeninstem@gmail.com</span>
+              <span>coloradowomeninstem@gmail.com</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin size={16} className="text-secondary" />
