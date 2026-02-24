@@ -43,28 +43,29 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
           Bloom<span className="text-secondary">.</span>
         </a>
 
-        {/* Desktop */}
-        <ul className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleClick(link.href); }}
-                className="font-body text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {/* Desktop nav + Join button — grouped on the right */}
+        <div className="hidden md:flex items-center gap-8">
+          <ul className="flex items-center gap-8">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  onClick={(e) => { e.preventDefault(); handleClick(link.href); }}
+                  className="font-body text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        {/* Desktop Join button */}
-        <button
-          onClick={onJoinClick}
-          className="hidden md:inline-flex items-center bg-secondary text-secondary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
-        >
-          Join Bloom
-        </button>
+          <button
+            onClick={onJoinClick}
+            className="inline-flex items-center bg-secondary text-secondary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
+          >
+            Join Bloom
+          </button>
+        </div>
 
         {/* Mobile toggle */}
         <button
