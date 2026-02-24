@@ -79,7 +79,7 @@ const handler: Handler = async () => {
 
   try {
     const url =
-      "https://www.eventbriteapi.com/v3/me/events/" +
+      "https://www.eventbriteapi.com/v3/users/me/events/" +
       "?status=live" +
       "&time_filter=current_future" +
       "&expand=venue,category" +
