@@ -216,7 +216,7 @@ const ContactSection = () => {
             </div>
             <div className="flex items-center gap-2">
               <MapPin size={16} className="text-secondary" />
-              <span>Denver, Colorado</span>
+              <span>Colorado</span>
             </div>
             <div className="flex items-center gap-4 mt-2">
               <a href="#" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Instagram">
@@ -236,7 +236,7 @@ const ContactSection = () => {
       {/* Footer */}
       <div className="container mx-auto px-6 mt-16 pt-8 border-t border-bloom-sage/20">
         <p className="text-center font-body text-bloom-sage/60 text-xs">
-          © {new Date().getFullYear()} Bloom Women in STEM. All rights reserved. Denver, CO.
+          © {new Date().getFullYear()} Colorado Women in STEM (CWS). All rights reserved.
         </p>
       </div>
     </section>

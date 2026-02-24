@@ -40,7 +40,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
           onClick={(e) => { e.preventDefault(); handleClick("#home"); }}
           className="font-display text-2xl font-bold text-primary"
         >
-          Bloom<span className="text-secondary">.</span>
+          CWS<span className="text-secondary">.</span>
         </a>
 
         {/* Desktop nav + Join button — grouped on the right */}
@@ -63,7 +63,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
             onClick={onJoinClick}
             className="inline-flex items-center bg-primary text-primary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
           >
-            Join Bloom
+            Join CWS
           </button>
         </div>
 
@@ -97,7 +97,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
                 onClick={() => { setIsOpen(false); onJoinClick(); }}
                 className="bg-secondary text-secondary-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
               >
-                Join Bloom
+                Join CWS
               </button>
             </li>
           </ul>

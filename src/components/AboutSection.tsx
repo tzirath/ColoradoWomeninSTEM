@@ -11,7 +11,7 @@ const items = [
     icon: Target,
     title: "Our Mission",
     description:
-      "To cultivate belonging through intentional gatherings that encourage authenticity and collective growth for women in STEM across the Denver metro area.",
+      "To cultivate belonging through intentional gatherings that encourage authenticity and collective growth for women in STEM across Colorado.",
   },
   {
     icon: Heart,
@@ -30,13 +30,10 @@ const AboutSection = () => {
             Who We Are
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
-            About <span className="text-primary italic">Bloom</span>
+            About <span className="text-primary italic">CWS</span>
           </h2>
            <p className="font-body text-muted-foreground max-w-2xl mx-auto mt-4 leading-relaxed">
-            Founded in Denver, Bloom is a community for women in STEM rooted in
-            uplifting BIPOC women and those from historically marginalized
-            backgrounds. This is a space where women can become stronger
-            together.
+            Colorado Women in STEM is a community rooted in uplifting BIPOC women and those from historically marginalized backgrounds. We cultivate belonging through intentional gatherings that encourage authenticity and collective growth. This is a space where women can become stronger together.
           </p>
         </div>
 

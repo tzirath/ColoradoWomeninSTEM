@@ -186,10 +186,10 @@ const handler: Handler = async (event: HandlerEvent) => {
   const inquiry = inquiryType?.trim() || "General";
 
   await transporter.sendMail({
-    from: `"Bloom Denver Contact Form" <${gmailUser}>`,
-    to: gmailUser, // bloom.womeninstem@gmail.com
+    from: `"CWS Contact Form" <${gmailUser}>`,
+    to: gmailUser,
     replyTo: email,
-    subject: `[${inquiry}] New message from ${name} — Bloom Website`,
+    subject: `[${inquiry}] New message from ${name} — CWS Website`,
     text: [
       `Name: ${name}`,
       `Email: ${email}`,

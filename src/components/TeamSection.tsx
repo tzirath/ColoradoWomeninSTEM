@@ -27,7 +27,7 @@ const TeamSection = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">
-            The People Behind Bloom
+            The People Behind CWS
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
             Meet Our <span className="text-primary italic">Team</span>

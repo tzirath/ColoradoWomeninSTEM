@@ -113,7 +113,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
           <div className="text-center py-6">
             <div className="text-5xl mb-4">🌸</div>
             <h2 className="font-display text-2xl font-bold text-primary mb-2">
-              Welcome to Bloom!
+              Welcome to CWS!
             </h2>
             <p className="font-body text-muted-foreground leading-relaxed">
               You're in, {firstName}. We'll keep you in the loop on upcoming events,
@@ -133,7 +133,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
                 id="join-modal-title"
                 className="font-display text-2xl font-bold text-primary mb-1"
               >
-                Join Bloom<span className="text-secondary">.</span>
+                Join CWS<span className="text-secondary">.</span>
               </h2>
               <p className="font-body text-muted-foreground text-sm leading-relaxed">
                 Sign up to stay connected — you'll receive our newsletter and
