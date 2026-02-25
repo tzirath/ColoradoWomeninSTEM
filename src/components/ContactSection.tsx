@@ -98,8 +98,8 @@ const ContactSection = () => {
           <p className="font-body text-bloom-sage text-sm uppercase tracking-[0.2em] mb-3">
             Let's Connect
           </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-primary-foreground">
-            Get in <span className="italic text-secondary">Touch</span>
+          <h2 className="font-body text-4xl md:text-5xl font-bold text-primary-foreground">
+            Get in <span className="font-display italic text-secondary">Touch</span>
           </h2>
           <p className="font-body text-bloom-sage max-w-xl mx-auto mt-4 leading-relaxed">
             Whether you want to join, volunteer, sponsor, or simply learn more —

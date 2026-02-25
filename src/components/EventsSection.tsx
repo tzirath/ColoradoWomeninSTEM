@@ -56,8 +56,8 @@ const EventsSection = () => {
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">
             What's Coming Up
           </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
-            Future <span className="text-primary italic">Events</span>
+          <h2 className="font-body text-4xl md:text-5xl font-bold text-foreground">
+            Future <span className="font-display text-primary italic">Events</span>
           </h2>
         </div>
 
@@ -95,7 +95,7 @@ const EventsSection = () => {
               className="bg-background rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg transition-shadow border border-border group"
             >
               <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-                <h3 className="font-display text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="font-body text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                   {event.title}
                 </h3>
                 <span className="text-xs font-body font-semibold uppercase tracking-wider bg-secondary/15 text-secondary px-3 py-1 rounded-full">

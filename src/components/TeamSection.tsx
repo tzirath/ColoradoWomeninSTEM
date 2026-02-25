@@ -32,8 +32,8 @@ const TeamSection = () => {
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">
             The People Behind CWS
           </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
-            Meet Our <span className="text-primary italic">Team</span>
+          <h2 className="font-body text-4xl md:text-5xl font-bold text-foreground">
+            Meet Our <span className="font-display text-primary italic">Team</span>
           </h2>
         </div>
 
@@ -74,7 +74,7 @@ const TeamSection = () => {
                   }}
                 />
               </div>
-              <h3 className="font-display text-lg font-semibold text-foreground">
+              <h3 className="font-body text-lg font-semibold text-foreground">
                 {member.name}
               </h3>
               <p className="font-body text-secondary text-sm font-medium mb-2">
