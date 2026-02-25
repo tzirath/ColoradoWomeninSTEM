@@ -6,18 +6,21 @@ const teamMembers = [
     role: "Founder & Director",
     bio: "Material Engineer",
     image: "/team/arianne.jpg",
+    linkedin: "https://www.linkedin.com/in/arianne-lazaro/",
   },
   {
     name: "Dr. Tzirath Perez Oteiza",
     role: "Founder & Director",
     bio: "Data Science PhD researching Smart Cities and Urban wellbeing.",
     image: "/team/tzirath.jpg",
+    linkedin: "https://www.linkedin.com/in/tzirath-perez",
   },
   {
     name: "Maria Jose",
     role: "Vice President",
     bio: "Data scientist dedicated to connecting women across Denver's tech ecosystem.",
     image: "/team/mariajose.jpg",
+    linkedin: "",
   },
 ];
 
@@ -80,12 +83,17 @@ const TeamSection = () => {
               <p className="font-body text-muted-foreground text-sm leading-relaxed">
                 {member.bio}
               </p>
-              <button
-                className="mt-3 text-muted-foreground hover:text-primary transition-colors"
-                aria-label={`${member.name}'s LinkedIn`}
-              >
-                <Linkedin size={18} />
-              </button>
+              {member.linkedin && (
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-block text-muted-foreground hover:text-primary transition-colors"
+                  aria-label={`${member.name}'s LinkedIn`}
+                >
+                  <Linkedin size={18} />
+                </a>
+              )}
             </div>
           ))}
         </div>
