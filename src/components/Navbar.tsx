@@ -38,9 +38,13 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
         <a
           href="#home"
           onClick={(e) => { e.preventDefault(); handleClick("#home"); }}
-          className="font-display text-2xl font-bold text-primary"
+          aria-label="Colorado Women in STEM — Home"
         >
-          CWS<span className="text-secondary">.</span>
+          <img
+            src="/cws-logo.png"
+            alt="CWS — Colorado Women in STEM"
+            className="h-10 w-auto"
+          />
         </a>
 
         {/* Desktop nav + Join button — grouped on the right */}

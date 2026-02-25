@@ -5,19 +5,19 @@ const items = [
     icon: Eye,
     title: "Our Vision",
     description:
-      "A world where BIPOC women and those from historically marginalized backgrounds are equally represented and celebrated in every STEM field — where belonging is the foundation of innovation.",
+      "Equal representation and celebration of BIPOC women across every STEM discipline in Colorado. Where belonging is the foundation of innovation and diverse perspectives drive discovery.",
   },
   {
     icon: Target,
     title: "Our Mission",
     description:
-      "To cultivate belonging through intentional gatherings that encourage authenticity and collective growth for women in STEM across Colorado.",
+      "To cultivate intentional spaces where women in STEM across Colorado build authentic professional relationships, develop confidence through community support, and access opportunities through meaningful collaboration. We are rooted in uplifting BIPOC women and historically marginalized communities through dedicated programming and intentional inclusion.",
   },
   {
     icon: Heart,
     title: "Core Values",
     description:
-      "Belonging • Authenticity • Collective Growth • Equity • Community. We believe in creating intentional spaces where women can show up as their full selves and become stronger together.",
+      "Belonging • Authenticity • Collective Growth • Equity • Collaboration We believe in bringing your full self to every interaction, where individual achievement strengthens the collective. When one of us grows, we all benefit.",
   },
 ];
 
@@ -33,7 +33,19 @@ const AboutSection = () => {
             About <span className="text-primary italic">CWS</span>
           </h2>
            <p className="font-body text-muted-foreground max-w-2xl mx-auto mt-4 leading-relaxed">
-            Colorado Women in STEM is a community rooted in uplifting BIPOC women and those from historically marginalized backgrounds. We cultivate belonging through intentional gatherings that encourage authenticity and collective growth. This is a space where women can become stronger together.
+Colorado Women in STEM was founded by two friends, Tzirath and Arianne, 
+who recognized a need for deeper connection within the STEM community. 
+Beyond traditional networking, they envisioned a space where women could 
+engage authentically, support one another's growth, and build meaningful 
+professional relationships.
+
+Today, CWS cultivates belonging through intentional gatherings that 
+encourage authenticity and collective advancement. Our community serves 
+all women in STEM fields with a focus on uplifting BIPOC women and those 
+from historically marginalized backgrounds.
+
+This is a space where women can become stronger together.
+
           </p>
         </div>
 

@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', 'serif'],
-        body: ['"DM Sans"', 'sans-serif'],
+        display: ['Genty', '"Playfair Display"', 'serif'],
+        body: ['"Glacial Indifference"', '"DM Sans"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

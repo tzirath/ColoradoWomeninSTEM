@@ -27,7 +27,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
             <br />
             <span className="italic text-primary-foreground">Women in STEM</span>
           </h1>
-          <p className="font-body text-lg text-bloom-sage max-w-lg mb-8 leading-relaxed">CWS is a community for women in STEM rooted in uplifting BIPOC women and those from historically marginalized backgrounds. We cultivate belonging through intentional gatherings that encourage authenticity and collective growth. This is a space where women can become stronger together.
+          <p className="font-body text-lg text-bloom-sage max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
           </p>
           <div className="flex flex-wrap gap-4">
             <button
