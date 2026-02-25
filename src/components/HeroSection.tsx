@@ -20,9 +20,9 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
       <div className="relative container mx-auto px-6 py-32">
         <div className="max-w-2xl animate-fade-in-up">
           <p className="font-body text-bloom-sage text-sm uppercase tracking-[0.25em] mb-4">
-            Colorado
+            DenvColorado
           </p>
-          <h1 className="font-body text-5xl md:text-7xl font-bold text-primary-foreground leading-tight mb-6">Denver, Colorado
+          <h1 className="font-body text-5xl md:text-7xl font-bold text-primary-foreground leading-tight mb-6">Colorado
 
             <br />
             <span className="font-display italic text-secondary">Women in STEM</span>
@@ -33,7 +33,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
             <button
               onClick={onJoinClick}
               className="bg-secondary text-secondary-foreground font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity">
-              Join CWS
+              Join <span className="font-display ml-1">CWS</span>
             </button>
             <a
               href="#about"
