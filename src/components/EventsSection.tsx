@@ -12,7 +12,7 @@ interface Event {
 }
 
 async function fetchEvents(): Promise<Event[]> {
-  const res = await fetch("/.netlify/functions/events");
+  const res = await fetch("/api/events");
   if (!res.ok) throw new Error("Failed to load events");
   const data = await res.json();
   return data.events as Event[];

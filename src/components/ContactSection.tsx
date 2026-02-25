@@ -61,13 +61,18 @@ const ContactSection = () => {
     try {
       const recaptchaToken = await executeRecaptcha("contact_form");
 
-      const res = await fetch("/.netlify/functions/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, recaptchaToken }),
       });
 
-      const result = (await res.json()) as { error?: string };
+      let result: { error?: string } = {};
+      try {
+        result = (await res.json()) as { error?: string };
+      } catch {
+        throw new Error(`Server error (${res.status})`);
+      }
 
       if (res.ok) {
         toast.success("Message sent! We'll get back to you soon.");
@@ -75,8 +80,12 @@ const ContactSection = () => {
       } else {
         toast.error(result.error ?? "Something went wrong. Please try again.");
       }
-    } catch {
-      toast.error("Network error. Please check your connection and try again.");
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Network error. Please check your connection and try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

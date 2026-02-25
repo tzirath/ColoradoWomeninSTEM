@@ -62,7 +62,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
     try {
       const recaptchaToken = await executeRecaptcha("subscribe");
 
-      const res = await fetch("/.netlify/functions/subscribe", {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ firstName: firstName.trim(), email: email.trim(), recaptchaToken }),
