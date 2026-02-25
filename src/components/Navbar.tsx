@@ -60,6 +60,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
           </ul>
 
           <button
+            id="join-cws-trigger"
             onClick={onJoinClick}
             className="inline-flex items-center bg-primary text-primary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
           >

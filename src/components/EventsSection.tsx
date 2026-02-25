@@ -78,7 +78,14 @@ const EventsSection = () => {
 
           {!isLoading && !isError && events?.length === 0 && (
             <p className="text-center font-body text-muted-foreground py-8">
-              No upcoming events at this time. Stay tuned!
+              No upcoming events at this time.{" "}
+              <button
+                onClick={() => document.getElementById("join-cws-trigger")?.click()}
+                className="underline underline-offset-2 hover:text-foreground transition-colors"
+              >
+                Sign up for our newsletter
+              </button>{" "}
+              to be the first to know.
             </p>
           )}
 
