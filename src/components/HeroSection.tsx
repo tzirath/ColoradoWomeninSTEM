@@ -25,7 +25,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
           <h1 className="font-body text-4xl md:text-5xl font-bold text-primary-foreground leading-tight mb-6">Colorado
 
             <br />
-            <span className="font-display italic text-secondary">Women in STEM</span>
+            <span className="font-display italic text-secondary text-5xl md:text-6xl">Women in STEM</span>
           </h1>
           <p className="font-body text-lg text-bloom-sage max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
           </p>
