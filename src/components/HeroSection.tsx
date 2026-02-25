@@ -20,12 +20,12 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
       <div className="relative container mx-auto px-6 py-32">
         <div className="max-w-2xl animate-fade-in-up">
           <p className="font-body text-bloom-sage text-sm uppercase tracking-[0.25em] mb-4">
-            Colorado
+            Denver, Colorado
           </p>
-          <h1 className="font-display text-5xl md:text-7xl font-bold text-primary-foreground leading-tight mb-6">Colorado
+          <h1 className="font-display text-5xl md:text-7xl font-bold text-primary-foreground leading-tight mb-6">Denver, Colorado
 
             <br />
-            <span className="italic text-primary-foreground">Women in STEM</span>
+            <span className="italic text-secondary">Women in STEM</span>
           </h1>
           <p className="font-body text-lg text-bloom-sage max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
           </p>

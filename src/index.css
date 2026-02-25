@@ -1,9 +1,7 @@
-/* CWS brand fonts — place files in public/fonts/ */
+/* CWS brand fonts */
 @font-face {
   font-family: 'Genty';
-  src: url('/fonts/Genty.woff2') format('woff2'),
-       url('/fonts/Genty.woff') format('woff'),
-       url('/fonts/Genty.otf') format('opentype');
+  src: url('/fonts/genty/GentyDemo-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -11,9 +9,7 @@
 
 @font-face {
   font-family: 'Glacial Indifference';
-  src: url('/fonts/GlacialIndifference-Regular.woff2') format('woff2'),
-       url('/fonts/GlacialIndifference-Regular.woff') format('woff'),
-       url('/fonts/GlacialIndifference-Regular.otf') format('opentype');
+  src: url('/fonts/glacial-indifference/GlacialIndifference-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -21,21 +17,9 @@
 
 @font-face {
   font-family: 'Glacial Indifference';
-  src: url('/fonts/GlacialIndifference-Bold.woff2') format('woff2'),
-       url('/fonts/GlacialIndifference-Bold.woff') format('woff'),
-       url('/fonts/GlacialIndifference-Bold.otf') format('opentype');
+  src: url('/fonts/glacial-indifference/GlacialIndifference-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Glacial Indifference';
-  src: url('/fonts/GlacialIndifference-Italic.woff2') format('woff2'),
-       url('/fonts/GlacialIndifference-Italic.woff') format('woff'),
-       url('/fonts/GlacialIndifference-Italic.otf') format('opentype');
-  font-weight: 400;
-  font-style: italic;
   font-display: swap;
 }
 
