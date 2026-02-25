@@ -45,45 +45,33 @@
 
 @layer base {
   :root {
-    /* CWS brand palette
-       Raspberry Rose  #EA7468  → hsl(4, 75%, 66%)
-       Morning Sigh    #FCE8DD  → hsl(21, 83%, 93%)
-       Melon Water     #FCBCB2  → hsl(8, 92%, 84%)
-       Wulfenite       #CD7C3A  → hsl(27, 60%, 52%)
-       Pale Green      #CEB865  → hsl(48, 52%, 60%)
-       Bonsai          #757A52  → hsl(68, 20%, 40%)
-    */
-
-    --background: 21 50% 97%;
-    --foreground: 68 25% 18%;
+    --background: 20 15% 97%;
+    --foreground: 185 30% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 68 25% 18%;
+    --card-foreground: 185 30% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 68 25% 18%;
+    --popover-foreground: 185 30% 12%;
 
-    /* Bonsai as primary — dark olive, used for section BGs + icons */
-    --primary: 68 20% 32%;
-    --primary-foreground: 21 83% 93%;
+    --primary: 185 35% 20%;
+    --primary-foreground: 20 15% 97%;
 
-    /* Raspberry Rose as secondary — warm coral-red for buttons + accents */
-    --secondary: 4 75% 66%;
+    --secondary: 348 40% 62%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 8 40% 93%;
-    --muted-foreground: 68 12% 45%;
+    --muted: 185 12% 90%;
+    --muted-foreground: 185 10% 40%;
 
-    /* Wulfenite amber accent */
-    --accent: 27 60% 52%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 348 30% 75%;
+    --accent-foreground: 185 30% 12%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 21 40% 88%;
-    --input: 21 40% 88%;
-    --ring: 68 20% 32%;
+    --border: 185 15% 85%;
+    --input: 185 15% 85%;
+    --ring: 185 35% 20%;
 
     --radius: 0.75rem;
 
@@ -96,37 +84,36 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Named brand tokens */
-    --bloom-cream: 21 83% 93%;          /* Morning Sigh  #FCE8DD */
-    --bloom-green-dark: 68 28% 18%;     /* Dark Bonsai  (hero bg) */
-    --bloom-green: 68 20% 32%;          /* Bonsai       #757A52  */
-    --bloom-green-light: 48 52% 60%;    /* Pale Green   #CEB865  */
-    --bloom-coral: 4 75% 66%;           /* Raspberry Rose #EA7468 */
-    --bloom-coral-light: 8 92% 84%;     /* Melon Water  #FCBCB2  */
-    --bloom-gold: 27 60% 52%;           /* Wulfenite    #CD7C3A  */
-    --bloom-sage: 21 60% 85%;           /* Warm blush — text on dark BGs */
+    --bloom-cream: 20 15% 97%;
+    --bloom-green-dark: 185 40% 14%;
+    --bloom-green: 185 35% 20%;
+    --bloom-green-light: 185 25% 50%;
+    --bloom-coral: 348 40% 62%;
+    --bloom-coral-light: 348 40% 78%;
+    --bloom-gold: 348 30% 75%;
+    --bloom-sage: 185 18% 70%;
   }
 
   .dark {
-    --background: 68 25% 8%;
-    --foreground: 21 83% 93%;
-    --card: 68 25% 12%;
-    --card-foreground: 21 83% 93%;
-    --popover: 68 25% 12%;
-    --popover-foreground: 21 83% 93%;
-    --primary: 68 20% 50%;
-    --primary-foreground: 21 83% 93%;
-    --secondary: 4 75% 66%;
+    --background: 185 30% 8%;
+    --foreground: 20 15% 97%;
+    --card: 185 30% 12%;
+    --card-foreground: 20 15% 97%;
+    --popover: 185 30% 12%;
+    --popover-foreground: 20 15% 97%;
+    --primary: 185 35% 40%;
+    --primary-foreground: 20 15% 97%;
+    --secondary: 348 40% 62%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 68 15% 18%;
-    --muted-foreground: 68 10% 65%;
-    --accent: 27 60% 52%;
-    --accent-foreground: 0 0% 100%;
+    --muted: 185 15% 18%;
+    --muted-foreground: 185 10% 65%;
+    --accent: 348 30% 75%;
+    --accent-foreground: 185 30% 12%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 68 15% 22%;
-    --input: 68 15% 22%;
-    --ring: 68 20% 50%;
+    --border: 185 15% 22%;
+    --input: 185 15% 22%;
+    --ring: 185 35% 40%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
