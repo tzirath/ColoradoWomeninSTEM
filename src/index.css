@@ -29,44 +29,41 @@
 
 @layer base {
   :root {
-    /* Palette extracted from CWS logo image:
-       Dark teal-slate (shadowy background)  → hsl(188, 28%, 20%)
-       Medium teal (mid background)          → hsl(188, 22%, 38%)
-       Warm coral-pink (flowers)             → hsl(7,  55%, 64%)
-       Soft peach (lighter flower areas)     → hsl(18, 65%, 78%)
-       Light cream (highlights)              → hsl(15, 35%, 96%)
+    /* Official CWS Brand Palette — February 2025
+       Primary:   #F2D8C2 #87332B #5B1B3A #2F4731
+       Secondary: #F6C891 #D47465 #863B56 #36654B
     */
 
-    --background: 15 30% 97%;
-    --foreground: 188 28% 14%;
+    --background: 28 30% 97%;
+    --foreground: 125 17% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 188 28% 14%;
+    --card-foreground: 125 17% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 188 28% 14%;
+    --popover-foreground: 125 17% 18%;
 
-    /* Deep teal-slate from logo shadow */
-    --primary: 188 28% 20%;
-    --primary-foreground: 15 35% 96%;
+    /* #2F4731 — dark forest green */
+    --primary: 125 17% 23%;
+    --primary-foreground: 28 27% 93%;
 
-    /* Warm coral-pink from the flowers */
-    --secondary: 7 55% 64%;
+    /* #D47465 — salmon/terracotta accent */
+    --secondary: 8 56% 61%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 188 14% 91%;
-    --muted-foreground: 188 12% 42%;
+    --muted: 28 15% 92%;
+    --muted-foreground: 125 10% 42%;
 
-    /* Soft peach accent */
-    --accent: 18 65% 78%;
-    --accent-foreground: 188 28% 14%;
+    /* #5B1B3A — deep plum */
+    --accent: 331 47% 23%;
+    --accent-foreground: 28 27% 86%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 188 18% 86%;
-    --input: 188 18% 86%;
-    --ring: 188 28% 20%;
+    --border: 28 15% 86%;
+    --input: 28 15% 86%;
+    --ring: 125 17% 23%;
 
     --radius: 0.75rem;
 
@@ -79,25 +76,25 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --bloom-cream: 15 35% 96%;           /* Light cream from logo highlights */
-    --bloom-green-dark: 188 32% 14%;     /* Darkest teal — hero gradient */
-    --bloom-green: 188 28% 20%;          /* Deep teal = primary */
-    --bloom-green-light: 188 22% 50%;    /* Medium teal */
-    --bloom-coral: 7 55% 64%;            /* Warm coral-pink = secondary */
-    --bloom-coral-light: 18 65% 78%;     /* Soft peach */
-    --bloom-gold: 28 50% 58%;            /* Warm amber from flower details */
-    --bloom-sage: 15 25% 80%;            /* Warm mist — text on dark backgrounds */
+    --bloom-cream: 28 27% 86%;           /* #F2D8C2 light peach */
+    --bloom-green-dark: 127 21% 14%;     /* Deeper green — hero gradient */
+    --bloom-green: 125 17% 23%;          /* #2F4731 dark forest green */
+    --bloom-green-light: 147 30% 30%;    /* #36654B medium green */
+    --bloom-coral: 8 56% 61%;            /* #D47465 salmon = secondary */
+    --bloom-coral-light: 5 52% 35%;      /* #87332B brick red */
+    --bloom-gold: 33 74% 77%;            /* #F6C891 golden amber */
+    --bloom-sage: 28 22% 78%;            /* warm peach mist — text on dark bg */
   }
 
   .dark {
-    --background: 188 28% 8%;
-    --foreground: 15 35% 96%;
-    --card: 188 28% 12%;
-    --card-foreground: 15 35% 96%;
-    --popover: 188 28% 12%;
-    --popover-foreground: 15 35% 96%;
-    --primary: 188 28% 42%;
-    --primary-foreground: 15 35% 96%;
+    --background: 125 17% 8%;
+    --foreground: 28 27% 93%;
+    --card: 125 17% 12%;
+    --card-foreground: 28 27% 93%;
+    --popover: 125 17% 12%;
+    --popover-foreground: 28 27% 93%;
+    --primary: 125 17% 42%;
+    --primary-foreground: 28 27% 93%;
     --secondary: 7 55% 64%;
     --secondary-foreground: 0 0% 100%;
     --muted: 188 16% 18%;
