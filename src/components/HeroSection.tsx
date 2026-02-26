@@ -22,17 +22,17 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
           <p className="font-body text-bloom-sage text-sm uppercase tracking-[0.25em] mb-4">
             Denver, Colorado
           </p>
-          <h1 className="font-body text-4xl md:text-5xl font-bold text-primary-foreground leading-tight mb-6">Colorado
+          <h1 className="font-body text-5xl md:text-6xl font-bold text-primary-foreground leading-none mb-6">Colorado
 
             <br />
-            <span className="font-display italic text-secondary text-5xl md:text-6xl">Women in STEM</span>
+            <span className="font-display italic text-secondary text-6xl md:text-7xl block mt-4">Women in STEM</span>
           </h1>
           <p className="font-body text-lg text-bloom-sage max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
           </p>
           <div className="flex flex-wrap gap-4">
             <button
               onClick={onJoinClick}
-              className="bg-secondary text-secondary-foreground font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity">
+              className="bg-secondary text-secondary-foreground font-body font-semibold text-lg px-9 py-3.5 rounded-lg hover:opacity-90 transition-opacity">
               Join <span className="font-display ml-1">CWS</span>
             </button>
             <a

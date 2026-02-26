@@ -62,9 +62,9 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
           <button
             id="join-cws-trigger"
             onClick={onJoinClick}
-            className="inline-flex items-center bg-secondary text-white font-body font-semibold text-base px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+            className="inline-flex items-center bg-secondary text-white font-body font-semibold text-lg px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
           >
-            Join <span className="font-display ml-1 leading-none align-middle">CWS</span>
+            Join <span className="font-display ml-1" style={{ lineHeight: 1, position: "relative", top: "0.05em" }}>CWS</span>
           </button>
         </div>
 

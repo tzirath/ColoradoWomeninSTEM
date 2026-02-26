@@ -56,8 +56,8 @@ This is a space where women can become stronger together.
               className="group bg-background rounded-2xl p-8 shadow-sm hover:shadow-lg transition-shadow border border-border"
               style={{ animationDelay: `${i * 150}ms` }}
             >
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                <item.icon className="w-7 h-7 text-primary" />
+              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
+                <item.icon className="w-7 h-7 text-accent" />
               </div>
               <h3 className="font-body text-xl font-semibold text-foreground mb-3">
                 {item.title}
