@@ -32,7 +32,7 @@ const AboutSection = () => {
           <h2 className="font-body text-4xl md:text-5xl font-bold text-foreground">
             About <span className="font-display text-primary italic">CWS</span>
           </h2>
-           <p className="font-body text-muted-foreground max-w-2xl mx-auto mt-4 leading-relaxed">
+           <p className="font-body text-foreground max-w-2xl mx-auto mt-4 leading-relaxed">
 Colorado Women in STEM was founded by two friends, Tzirath and Arianne, 
 who recognized a need for deeper connection within the STEM community. 
 Beyond traditional networking, they envisioned a space where women could 
@@ -62,7 +62,7 @@ This is a space where women can become stronger together.
               <h3 className="font-body text-xl font-semibold text-foreground mb-3">
                 {item.title}
               </h3>
-              <p className="font-body text-muted-foreground leading-relaxed text-sm">
+              <p className="font-body text-foreground leading-relaxed text-sm">
                 {item.description}
               </p>
             </div>
