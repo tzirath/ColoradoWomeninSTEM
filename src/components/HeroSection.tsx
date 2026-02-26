@@ -19,15 +19,15 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
 
       <div className="relative container mx-auto px-6 py-32">
         <div className="max-w-2xl animate-fade-in-up">
-          <p className="font-body text-bloom-sage text-sm uppercase tracking-[0.25em] mb-4">
+          <p className="font-body text-white/70 text-sm uppercase tracking-[0.25em] mb-4">
             Denver, Colorado
           </p>
-          <h1 className="font-body text-5xl md:text-6xl font-bold text-primary-foreground leading-none mb-6">Colorado
+          <h1 className="font-body text-5xl md:text-6xl font-bold text-white leading-none mb-6">Colorado
 
             <br />
             <span className="font-display italic text-secondary text-6xl md:text-7xl block mt-4">Women in STEM</span>
           </h1>
-          <p className="font-body text-lg text-bloom-sage max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
+          <p className="font-body text-lg text-white/85 max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
           </p>
           <div className="flex flex-wrap gap-4">
             <button
@@ -41,7 +41,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
                 e.preventDefault();
                 document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-block border-2 border-bloom-sage text-bloom-sage font-body font-semibold px-8 py-3 rounded-lg hover:bg-bloom-sage/10 transition-colors">
+              className="inline-block border-2 border-white/60 text-white font-body font-semibold px-8 py-3 rounded-lg hover:bg-white/10 transition-colors">
               Learn More
             </a>
           </div>
