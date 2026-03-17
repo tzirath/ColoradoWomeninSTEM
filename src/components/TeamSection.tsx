@@ -5,6 +5,7 @@ const teamMembers = [
     name: "Arianne Lazaro",
     role: "Founder & Director",
     bio: "Materials Engineer with interests in Human Spaceflight and Space In-Situ Resource Utilization",
+    hobbies: "",
     image: "/team/arianne.jpg",
     linkedin: "https://www.linkedin.com/in/arianne-lazaro/",
   },
@@ -12,6 +13,7 @@ const teamMembers = [
     name: "Dr. Tzirath Perez Oteiza",
     role: "Founder & Director",
     bio: "Data Science PhD exploring how cities influence human wellbeing. I’m also committed to uplifting and connecting women in STEM.",
+    hobbies: "Dance · Tennis · Travel · Crafts",
     image: "/team/tzirath.jpg",
     linkedin: "https://www.linkedin.com/in/tzirath-perez",
   },
@@ -19,6 +21,7 @@ const teamMembers = [
     name: "Maria Jose",
     role: "Growth and Engagement Strategist",
     bio: "Data Storyteller with interests in program management, community-centered design, and social impact",
+    hobbies: "Sewing/Fashion Design · Pilates · Travel · Reading",
     image: "/team/mariajose.jpg",
     linkedin: "https://www.linkedin.com/in/maria-jose-cardenas-carranza/",
   },
@@ -83,6 +86,11 @@ const TeamSection = () => {
               <p className="font-body text-muted-foreground text-sm leading-relaxed">
                 {member.bio}
               </p>
+              {member.hobbies && (
+                <p className="font-body text-muted-foreground/70 text-xs mt-2 tracking-wide">
+                  {member.hobbies}
+                </p>
+              )}
               {member.linkedin && (
                 <a
                   href={member.linkedin}
