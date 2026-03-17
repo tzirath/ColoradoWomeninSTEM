@@ -12,7 +12,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
         <img
           src={heroImage}
           alt="Women collaborating in STEM"
-          className="w-full h-full object-cover" />
+          className="w-full h-full object-cover object-[center_30%]" />
 
         <div className="absolute inset-0 bg-gradient-to-r from-bloom-green-dark/90 via-bloom-green-dark/70 to-transparent" />
       </div>
