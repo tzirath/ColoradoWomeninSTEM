@@ -9,7 +9,7 @@ interface SignupBannerProps {
 }
 
 const STORAGE_KEY = "cws_banner_dismissed";
-const DELAY_MS = 10_000;
+const DELAY_MS = 7_000;
 
 const SignupBanner = ({ onJoinClick }: SignupBannerProps) => {
   const [visible, setVisible] = useState(false);
@@ -33,33 +33,25 @@ const SignupBanner = ({ onJoinClick }: SignupBannerProps) => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-lg animate-fade-in-up">
-      <div className="relative bg-card border border-border rounded-2xl shadow-xl overflow-hidden">
+    <div className="fixed bottom-4 left-4 right-4 z-50 flex justify-center animate-fade-in-up">
+      <div className="relative bg-card border border-border rounded-2xl shadow-xl w-full max-w-lg overflow-hidden">
 
         {/* Flower decorations */}
-        <Image
-          src="/flower1.webp"
-          alt=""
-          width={64}
-          height={64}
-          aria-hidden="true"
-          className="absolute -top-3 -left-3 w-16 h-16 object-contain opacity-70 rotate-[-20deg] pointer-events-none select-none"
-        />
         <Image
           src="/flower2.webp"
           alt=""
           width={56}
           height={56}
           aria-hidden="true"
-          className="absolute -bottom-2 left-8 w-14 h-14 object-contain opacity-60 rotate-[15deg] pointer-events-none select-none"
+          className="absolute -bottom-2 left-6 w-14 h-14 object-contain opacity-50 rotate-[15deg] pointer-events-none select-none"
         />
         <Image
           src="/flower3.webp"
           alt=""
-          width={60}
-          height={60}
+          width={56}
+          height={56}
           aria-hidden="true"
-          className="absolute -top-2 right-16 w-15 h-15 object-contain opacity-60 rotate-[10deg] pointer-events-none select-none"
+          className="absolute -top-2 right-20 w-14 h-14 object-contain opacity-50 rotate-[10deg] pointer-events-none select-none"
         />
 
         {/* Dismiss button */}
@@ -73,15 +65,9 @@ const SignupBanner = ({ onJoinClick }: SignupBannerProps) => {
 
         {/* Content */}
         <div className="px-5 pt-4 pb-4 flex flex-col sm:flex-row sm:items-center gap-3">
-          {/* Logo + text */}
+          {/* Emoji + text */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <Image
-              src="/cws-logo.png"
-              alt="CWS logo"
-              width={40}
-              height={40}
-              className="shrink-0 rounded-lg"
-            />
+            <span className="text-2xl shrink-0">🌸</span>
             <div className="min-w-0">
               <p className="font-body font-semibold text-foreground text-sm leading-snug">
                 Join Colorado Women in STEM
