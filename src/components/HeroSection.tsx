@@ -1,4 +1,6 @@
-import heroImage from "@/assets/hero-bloom.png";
+"use client";
+
+import Image from "next/image";
 
 interface HeroSectionProps {
   onJoinClick: () => void;
@@ -9,10 +11,12 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
-        <img
-          src={heroImage}
+        <Image
+          src="/images/hero-bloom.png"
           alt="Women collaborating in STEM"
-          className="w-full h-full object-cover object-[center_30%]" />
+          fill
+          priority
+          className="object-cover object-[center_30%]" />
 
         <div className="absolute inset-0 bg-gradient-to-r from-bloom-green-dark/90 via-bloom-green-dark/70 to-transparent" />
       </div>

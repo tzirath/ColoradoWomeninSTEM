@@ -17,7 +17,7 @@ const items = [
     icon: Heart,
     title: "Core Values",
     description:
-      "Belonging • Authenticity • Collective Growth • Equity • Collaboration We believe in bringing your full self to every interaction, where individual achievement strengthens the collective. When one of us grows, we all benefit.",
+      "Belonging • Authenticity • Collective Growth • Equity • Collaboration • We believe in bringing your full self to every interaction, where individual achievement strengthens the collective. When one of us grows, we all benefit.",
   },
 ];
 
