@@ -8,6 +8,7 @@ import TeamSection from "@/components/TeamSection";
 import EventsSection from "@/components/EventsSection";
 import ContactSection from "@/components/ContactSection";
 import JoinModal from "@/components/JoinModal";
+import SignupBanner from "@/components/SignupBanner";
 
 export default function Home() {
   const [joinOpen, setJoinOpen] = useState(false);
@@ -21,6 +22,7 @@ export default function Home() {
       <EventsSection />
       <ContactSection />
       <JoinModal open={joinOpen} onClose={() => setJoinOpen(false)} />
+      <SignupBanner onJoinClick={() => setJoinOpen(true)} />
     </div>
   );
 }
