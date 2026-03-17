@@ -1,4 +1,4 @@
-import heroImage from "@/assets/hero-bloom.jpg";
+import heroImage from "@/assets/hero-bloom.png";
 
 interface HeroSectionProps {
   onJoinClick: () => void;

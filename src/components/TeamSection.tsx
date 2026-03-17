@@ -4,23 +4,23 @@ const teamMembers = [
   {
     name: "Arianne Lazaro",
     role: "Founder & Director",
-    bio: "Material Engineer",
+    bio: "Materials Engineer with interests in Human Spaceflight and Space In-Situ Resource Utilization",
     image: "/team/arianne.jpg",
     linkedin: "https://www.linkedin.com/in/arianne-lazaro/",
   },
   {
     name: "Dr. Tzirath Perez Oteiza",
     role: "Founder & Director",
-    bio: "Data Science PhD researching Smart Cities and Urban wellbeing.",
+    bio: "Data Science PhD exploring how cities influence human wellbeing. I’m also committed to uplifting and connecting women in STEM.",
     image: "/team/tzirath.jpg",
     linkedin: "https://www.linkedin.com/in/tzirath-perez",
   },
   {
     name: "Maria Jose",
-    role: "Vice President",
-    bio: "Data scientist dedicated to connecting women across Denver's tech ecosystem.",
+    role: "Growth and Engagement Strategist",
+    bio: "Data Storyteller with interests in program management, community-centered design, and social impact",
     image: "/team/mariajose.jpg",
-    linkedin: "",
+    linkedin: "https://www.linkedin.com/in/maria-jose-cardenas-carranza/",
   },
 ];
 
