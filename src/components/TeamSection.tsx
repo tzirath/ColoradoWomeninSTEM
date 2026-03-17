@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Linkedin } from "lucide-react";
 
 const teamMembers = [
@@ -27,6 +28,61 @@ const teamMembers = [
   },
 ];
 
+function TeamMemberCard({ member }: { member: typeof teamMembers[number] }) {
+  const [imgError, setImgError] = useState(false);
+
+  const initials = member.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
+
+  return (
+    <div className="group text-center w-56">
+      <div className="w-32 h-32 mx-auto mb-5 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors flex items-center justify-center">
+        {imgError ? (
+          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-bloom-coral/20 flex items-center justify-center">
+            <span className="font-display text-3xl font-bold text-primary">
+              {initials}
+            </span>
+          </div>
+        ) : (
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        )}
+      </div>
+      <h3 className="font-body text-lg font-semibold text-foreground">
+        {member.name}
+      </h3>
+      <p className="font-body text-secondary text-sm font-medium mb-2">
+        {member.role}
+      </p>
+      <p className="font-body text-muted-foreground text-sm leading-relaxed">
+        {member.bio}
+      </p>
+      {member.hobbies && (
+        <p className="font-body text-muted-foreground/70 text-xs mt-2 tracking-wide">
+          {member.hobbies}
+        </p>
+      )}
+      {member.linkedin && (
+        <a
+          href={member.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block text-muted-foreground hover:text-primary transition-colors"
+          aria-label={`${member.name}'s LinkedIn`}
+        >
+          <Linkedin size={18} />
+        </a>
+      )}
+    </div>
+  );
+}
+
 const TeamSection = () => {
   return (
     <section id="team" className="py-24 bg-background">
@@ -42,67 +98,7 @@ const TeamSection = () => {
 
         <div className="flex flex-wrap justify-center gap-8">
           {teamMembers.map((member) => (
-            <div
-              key={member.name}
-              className="group text-center w-56"
-            >
-              <div className="w-32 h-32 mx-auto mb-5 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    // Fallback to initials if image is missing
-                    const target = e.currentTarget;
-                    target.style.display = "none";
-                    const parent = target.parentElement;
-                    if (parent && !parent.querySelector(".initials-fallback")) {
-                      parent.classList.add(
-                        "bg-gradient-to-br",
-                        "from-primary/20",
-                        "to-bloom-coral/20",
-                        "flex",
-                        "items-center",
-                        "justify-center"
-                      );
-                      const span = document.createElement("span");
-                      span.className =
-                        "initials-fallback font-display text-3xl font-bold text-primary";
-                      span.textContent = member.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("");
-                      parent.appendChild(span);
-                    }
-                  }}
-                />
-              </div>
-              <h3 className="font-body text-lg font-semibold text-foreground">
-                {member.name}
-              </h3>
-              <p className="font-body text-secondary text-sm font-medium mb-2">
-                {member.role}
-              </p>
-              <p className="font-body text-muted-foreground text-sm leading-relaxed">
-                {member.bio}
-              </p>
-              {member.hobbies && (
-                <p className="font-body text-muted-foreground/70 text-xs mt-2 tracking-wide">
-                  {member.hobbies}
-                </p>
-              )}
-              {member.linkedin && (
-                <a
-                  href={member.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-block text-muted-foreground hover:text-primary transition-colors"
-                  aria-label={`${member.name}'s LinkedIn`}
-                >
-                  <Linkedin size={18} />
-                </a>
-              )}
-            </div>
+            <TeamMemberCard key={member.name} member={member} />
           ))}
         </div>
       </div>
