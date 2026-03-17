@@ -12,14 +12,14 @@ const teamMembers = [
   {
     name: "Dr. Tzirath Perez Oteiza",
     role: "Founder & Director",
-    bio: "Data Science PhD exploring how cities influence human wellbeing. I’m also committed to uplifting and connecting women in STEM.",
+    bio: "Data Science PhD exploring how cities influence human wellbeing.",
     hobbies: "Dance · Yoga · Tennis · Travel",
     image: "/team/tzirath.jpg",
     linkedin: "https://www.linkedin.com/in/tzirath-perez",
   },
   {
     name: "Maria Jose",
-    role: "Growth and Engagement Strategist",
+    role: "Growth & Engagement Strategist",
     bio: "Data Storyteller with interests in program management, community-centered design, and social impact",
     hobbies: "Sewing/Fashion Design · Pilates · Travel · Reading",
     image: "/team/mariajose.jpg",
