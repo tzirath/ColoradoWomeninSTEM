@@ -231,7 +231,7 @@ const ContactSection = () => {
               <a href="#" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/groups/18686021/" target="_blank" rel="noopener noreferrer" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
               </a>
               <a href="#" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Twitter">
