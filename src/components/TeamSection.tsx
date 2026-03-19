@@ -18,14 +18,6 @@ const teamMembers = [
     image: "/team/tzirath.jpg",
     linkedin: "https://www.linkedin.com/in/tzirath-perez",
   },
-  {
-    name: "Maria Jose",
-    role: "Growth & Engagement Strategist",
-    bio: "Data Storyteller with interests in program management, community-centered design, and social impact",
-    hobbies: "Sewing/Fashion Design · Pilates · Travel · Reading",
-    image: "/team/mariajose.jpg",
-    linkedin: "https://www.linkedin.com/in/maria-jose-cardenas-carranza/",
-  },
 ];
 
 function TeamMemberCard({ member }: { member: typeof teamMembers[number] }) {
