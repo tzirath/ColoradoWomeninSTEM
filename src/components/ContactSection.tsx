@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { toast } from "sonner";
-import { Mail, MapPin, Instagram, Linkedin, Twitter, Loader2 } from "lucide-react";
+import { Mail, MapPin, Instagram, Linkedin, Loader2 } from "lucide-react";
 
 const INQUIRY_TYPES = [
   "General",
@@ -228,14 +228,11 @@ const ContactSection = () => {
               <span>Colorado</span>
             </div>
             <div className="flex items-center gap-4 mt-2">
-              <a href="#" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/coloradowomeninstem/" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
               <a href="https://www.linkedin.com/groups/18686021/" target="_blank" rel="noopener noreferrer" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
-              </a>
-              <a href="#" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Twitter">
-                <Twitter size={20} />
               </a>
             </div>
           </div>
