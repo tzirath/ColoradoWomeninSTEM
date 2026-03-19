@@ -228,7 +228,7 @@ const ContactSection = () => {
               <span>Colorado</span>
             </div>
             <div className="flex items-center gap-4 mt-2">
-              <a href="https://www.instagram.com/coloradowomeninstem/" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/coloradowomeninstem/" target="_blank" rel="noopener noreferrer" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
               <a href="https://www.linkedin.com/groups/18686021/" target="_blank" rel="noopener noreferrer" className="text-bloom-sage hover:text-secondary transition-colors" aria-label="LinkedIn">
