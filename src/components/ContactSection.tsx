@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -242,7 +244,7 @@ const ContactSection = () => {
       {/* Footer */}
       <div className="container mx-auto px-6 mt-16 pt-8 border-t border-bloom-sage/20">
         <p className="text-center font-body text-bloom-sage/60 text-xs">
-          © {new Date().getFullYear()} Colorado Women in STEM (CWS). All rights reserved.
+          © {new Date().getFullYear()} Colorado Women of Color in STEM (CWS). All rights reserved.
         </p>
       </div>
     </section>

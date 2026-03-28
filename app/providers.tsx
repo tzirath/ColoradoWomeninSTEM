@@ -6,6 +6,22 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import { JoinModalProvider, useJoinModal } from "@/components/JoinModalContext";
+import JoinModal from "@/components/JoinModal";
+import Navbar from "@/components/Navbar";
+import SignupBanner from "@/components/SignupBanner";
+
+function SiteShell({ children }: { children: React.ReactNode }) {
+  const { open, openModal, closeModal } = useJoinModal();
+  return (
+    <>
+      <Navbar onJoinClick={openModal} />
+      <main>{children}</main>
+      <JoinModal open={open} onClose={closeModal} />
+      <SignupBanner onJoinClick={openModal} />
+    </>
+  );
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -16,7 +32,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          {children}
+          <JoinModalProvider>
+            <SiteShell>{children}</SiteShell>
+          </JoinModalProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </GoogleReCaptchaProvider>

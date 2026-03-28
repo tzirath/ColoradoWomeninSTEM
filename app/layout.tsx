@@ -3,16 +3,16 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Colorado Women in STEM",
+  title: "Colorado Women of Color in STEM",
   description:
-    "Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.",
+    "Colorado Women of Color in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.",
   icons: { icon: "/cws-logo.png" },
   openGraph: {
-    title: "Colorado Women in STEM",
+    title: "Colorado Women of Color in STEM",
     description:
-      "A community cultivating belonging and opportunity for women in STEM across Colorado.",
+      "A community cultivating belonging and opportunity for women of color in STEM across Colorado.",
     url: "https://coloradowomeninstem.com",
-    siteName: "Colorado Women in STEM",
+    siteName: "Colorado Women of Color in STEM",
     locale: "en_US",
     type: "website",
   },

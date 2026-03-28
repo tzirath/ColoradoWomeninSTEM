@@ -29,9 +29,9 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
           <h1 className="font-body text-5xl md:text-6xl font-bold text-white leading-none mb-6">Colorado
 
             <br />
-            <span className="font-display italic text-secondary text-6xl md:text-7xl block mt-4">Women in STEM</span>
+            <span className="font-display italic text-secondary text-6xl md:text-7xl block mt-4">Women of Color in STEM</span>
           </h1>
-          <p className="font-body text-lg text-white/85 max-w-lg mb-8 leading-relaxed"> Colorado Women in STEM cultivates community, confidence, and opportunity for women pursuing Science, Technology, Engineering, and Mathematics in the Denver metro area.
+          <p className="font-body text-lg text-white/85 max-w-lg mb-8 leading-relaxed">Colorado Women of Color in STEM cultivates community, confidence, and opportunity for BIPOC women pursuing Science, Technology, Engineering, and Mathematics in Colorado.
           </p>
           <div className="flex flex-wrap gap-4">
             <button
