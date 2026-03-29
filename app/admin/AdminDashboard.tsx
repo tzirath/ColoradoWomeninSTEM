@@ -36,7 +36,7 @@ interface Props {
   initialCommittees: Committee[];
 }
 
-type Tab = "news" | "team" | "content" | "values" | "roles";
+type Tab = "news" | "team" | "content" | "roles";
 
 // ── Content sections + fields ────────────────────────────────────────────────
 const CONTENT_SECTIONS = [
@@ -50,6 +50,11 @@ const CONTENT_SECTIONS = [
       { key: "about_mission", label: "Mission statement" },
       { key: "about_vision", label: "Vision statement" },
     ],
+  },
+  {
+    id: "core-values",
+    label: "Core Values",
+    fields: [],
   },
   {
     id: "get-involved",
@@ -100,7 +105,6 @@ const MAIN_TABS = [
   { key: "news" as Tab, icon: Megaphone, label: "News" },
   { key: "team" as Tab, icon: Users, label: "Team" },
   { key: "content" as Tab, icon: FileText, label: "Site Content" },
-  { key: "values" as Tab, icon: Heart, label: "Core Values" },
   { key: "roles" as Tab, icon: Briefcase, label: "Open Roles" },
 ];
 
@@ -537,7 +541,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
             )}
 
             {/* ── Site Content ── */}
-            {tab === "content" && (
+            {tab === "content" && contentSection !== "core-values" && (
               <div>
                 <div className="mb-8">
                   <h2 className="font-body text-xl font-semibold text-foreground">{activeSection.label}</h2>
@@ -587,8 +591,8 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
               </div>
             )}
 
-            {/* ── Core Values ── */}
-            {tab === "values" && (
+            {/* ── Core Values (under Site Content sidebar) ── */}
+            {tab === "content" && contentSection === "core-values" && (
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div>
