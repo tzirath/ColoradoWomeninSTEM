@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "../api/_lib/supabase";
 import AdminDashboard from "./AdminDashboard";
 
 export default async function AdminPage() {
@@ -20,7 +21,7 @@ export default async function AdminPage() {
     supabase.from("core_values").select("*").order("sort_order"),
     supabase.from("open_roles").select("*").order("sort_order"),
     supabase.from("committees").select("*").order("sort_order"),
-    supabase.from("members").select("*").order("created_at", { ascending: false }),
+    getSupabaseAdmin().from("members").select("*").order("created_at", { ascending: false }),
   ]);
 
   return (
