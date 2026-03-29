@@ -5,11 +5,11 @@ import { Users, Briefcase, HeartHandshake, Network, Repeat2, Wrench, Mic } from 
 import Link from "next/link";
 
 const programs = [
-  { slug: "members-network", icon: Network, title: "Members Networking Database", description: "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage." },
-  { slug: "skill-swap", icon: Repeat2, title: "Skill Swap", description: "Connect with members based on what you can teach and what you want to learn — building a true knowledge-sharing community." },
-  { slug: "stem-in-action", icon: Wrench, title: "STEM in Action (Design Team)", description: "Partner with community organizations to apply your technical skills towards solutions they help define." },
-  { slug: "mentorship", icon: Users, title: "Mentorship", description: "Pair with members for guidance and advice on navigating careers, academia, and life in STEM as a woman of color." },
-  { slug: "cws-voices", icon: Mic, title: "CWS Voices", description: "Empower members with the resources and peer support to navigate ethical challenges and societal impact in STEM workplaces." },
+  { slug: "members-network", contentKey: "initiative_members_network", icon: Network, title: "Members Networking Database", defaultDesc: "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage." },
+  { slug: "skill-swap", contentKey: "initiative_skill_swap", icon: Repeat2, title: "Skill Swap", defaultDesc: "Connect with members based on what you can teach and what you want to learn — building a true knowledge-sharing community." },
+  { slug: "stem-in-action", contentKey: "initiative_stem_in_action", icon: Wrench, title: "STEM in Action (Design Team)", defaultDesc: "Partner with community organizations to apply your technical skills towards solutions they help define." },
+  { slug: "mentorship", contentKey: "initiative_mentorship", icon: Users, title: "Mentorship", defaultDesc: "Pair with members for guidance and advice on navigating careers, academia, and life in STEM as a woman of color." },
+  { slug: "cws-voices", contentKey: "initiative_cws_voices", icon: Mic, title: "CWS Voices", defaultDesc: "Empower members with the resources and peer support to navigate ethical challenges and societal impact in STEM workplaces." },
 ];
 
 interface Role { id: string; title: string; commitment: string; description: string; }
@@ -68,7 +68,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
                   <p.icon className="w-7 h-7 text-accent" />
                 </div>
                 <h3 className="font-body text-xl font-semibold text-foreground mb-3">{p.title}</h3>
-                <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6 flex-1">{p.description}</p>
+                <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6 flex-1">{content[p.contentKey] || p.defaultDesc}</p>
                 <Link href={`/initiatives/${p.slug}`}
                   className="inline-block bg-secondary text-white font-body font-semibold text-sm px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity text-center">
                   Learn More & Sign Up

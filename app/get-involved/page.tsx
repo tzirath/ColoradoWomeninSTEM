@@ -13,6 +13,14 @@ const DEFAULT_ROLES = [
   { id: "4", title: "Committee Chair — Professional Development", commitment: "~3–5 hrs/month", description: "Design and deliver programming to support members' career growth.", sort_order: 3, active: true },
 ];
 
+const INITIATIVE_KEYS = [
+  "initiative_members_network",
+  "initiative_skill_swap",
+  "initiative_stem_in_action",
+  "initiative_mentorship",
+  "initiative_cws_voices",
+];
+
 const DEFAULT_CONTENT = {
   get_involved_hero: "Whether you're joining as a member, lending a skill, or stepping up to lead — there's a place for you here.",
   get_involved_member_desc: "Membership is free and open to all women of color in STEM and allies across Colorado. Join to connect, grow, and contribute.",
@@ -23,7 +31,7 @@ export default async function GetInvolvedPage() {
   const supabase = createClient();
   const [{ data: rolesRows }, { data: contentRows }] = await Promise.all([
     supabase.from("open_roles").select("*").eq("active", true).order("sort_order"),
-    supabase.from("site_content").select("key, value").in("key", Object.keys(DEFAULT_CONTENT)),
+    supabase.from("site_content").select("key, value").in("key", [...Object.keys(DEFAULT_CONTENT), ...INITIATIVE_KEYS]),
   ]);
 
   const content = { ...DEFAULT_CONTENT } as Record<string, string>;
