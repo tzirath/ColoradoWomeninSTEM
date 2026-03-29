@@ -67,7 +67,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        <Link href="/" className="font-display text-6xl font-bold text-primary">
+        <Link href="/" className="font-display text-6xl font-bold text-primary leading-none flex items-center">
           CWS<span className="text-secondary">.</span>
         </Link>
 
