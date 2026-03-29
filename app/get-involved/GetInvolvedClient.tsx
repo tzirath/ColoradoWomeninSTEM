@@ -1,13 +1,15 @@
 "use client";
 
 import { useJoinModal } from "@/components/JoinModalContext";
-import { Users, Repeat2, Wrench, UserCheck, Briefcase, HeartHandshake } from "lucide-react";
+import { Users, Briefcase, HeartHandshake, Network, Repeat2, Wrench, Mic } from "lucide-react";
 import Link from "next/link";
 
 const programs = [
-  { id: "skill-swap", icon: Repeat2, title: "Skill Swap", description: "Teach what you know, learn what you want. Fill out the form and we'll match you with a fellow member.", cta: "Sign up for Skill Swap", formUrl: "https://forms.gle/placeholder-skill-swap" },
-  { id: "stem-in-action", icon: Wrench, title: "STEM in Action", description: "Join the design team and lend your technical expertise to community-driven projects.", cta: "Join the Design Team", formUrl: "https://forms.gle/placeholder-stem-action" },
-  { id: "mentorship", icon: UserCheck, title: "Mentorship", description: "Apply as a mentor or mentee for the next CWS Mentorship cohort.", cta: "Apply for Mentorship", formUrl: "https://forms.gle/placeholder-mentorship" },
+  { slug: "members-network", icon: Network, title: "Members Networking Database", description: "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage." },
+  { slug: "skill-swap", icon: Repeat2, title: "Skill Swap", description: "Connect with members based on what you can teach and what you want to learn — building a true knowledge-sharing community." },
+  { slug: "stem-in-action", icon: Wrench, title: "STEM in Action (Design Team)", description: "Partner with community organizations to apply your technical skills towards solutions they help define." },
+  { slug: "mentorship", icon: Users, title: "Mentorship", description: "Pair with members for guidance and advice on navigating careers, academia, and life in STEM as a woman of color." },
+  { slug: "cws-voices", icon: Mic, title: "CWS Voices", description: "Empower members with the resources and peer support to navigate ethical challenges and societal impact in STEM workplaces." },
 ];
 
 interface Role { id: string; title: string; commitment: string; description: string; }
@@ -59,18 +61,18 @@ export default function GetInvolvedClient({ roles, content }: Props) {
               Sign Up for an <span className="font-display italic text-primary">Initiative</span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {programs.map((p) => (
-              <div key={p.id} id={p.id} className="bg-card rounded-2xl p-8 border border-border shadow-sm">
+              <div key={p.slug} className="bg-card rounded-2xl p-8 border border-border shadow-sm flex flex-col">
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                   <p.icon className="w-7 h-7 text-accent" />
                 </div>
                 <h3 className="font-body text-xl font-semibold text-foreground mb-3">{p.title}</h3>
-                <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6">{p.description}</p>
-                <a href={p.formUrl} target="_blank" rel="noopener noreferrer"
-                  className="inline-block bg-secondary text-white font-body font-semibold text-sm px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
-                  {p.cta}
-                </a>
+                <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6 flex-1">{p.description}</p>
+                <Link href={`/initiatives/${p.slug}`}
+                  className="inline-block bg-secondary text-white font-body font-semibold text-sm px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity text-center">
+                  Learn More & Sign Up
+                </Link>
               </div>
             ))}
           </div>
