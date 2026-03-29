@@ -175,7 +175,6 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
                           key={item.href}
                           href={item.href}
                           className="font-body text-sm text-foreground/60 hover:text-primary transition-colors py-1"
-                          onClick={() => { setIsOpen(false); setInitiativesOpen(false); }}
                         >
                           {item.label}
                         </Link>
