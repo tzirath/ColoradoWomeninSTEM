@@ -17,6 +17,7 @@ interface TeamMember { id: string; name: string; role: string; bio: string; hobb
 interface ContentItem { key: string; value: string; }
 interface CoreValue { id: string; label: string; description: string; sort_order: number; }
 interface OpenRole { id: string; title: string; commitment: string; description: string; sort_order: number; active: boolean; }
+interface Committee { id: string; name: string; description: string; sort_order: number; }
 
 interface Props {
   user: User;
@@ -25,6 +26,7 @@ interface Props {
   initialContent: ContentItem[];
   initialCoreValues: CoreValue[];
   initialOpenRoles: OpenRole[];
+  initialCommittees: Committee[];
 }
 
 type Tab = "news" | "team" | "content" | "values" | "roles";
@@ -89,11 +91,13 @@ const MAIN_TABS = [
   { key: "roles" as Tab, icon: Briefcase, label: "Open Roles" },
 ];
 
-export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles }: Props) {
+export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees }: Props) {
   const [tab, setTab] = useState<Tab>("news");
   const [contentSection, setContentSection] = useState("about");
+  const [teamSection, setTeamSection] = useState<"members" | "committees">("members");
   const [newsItems, setNewsItems] = useState(initialNewsItems);
   const [teamMembers, setTeamMembers] = useState(initialTeamMembers);
+  const [committees, setCommittees] = useState(initialCommittees);
   const [content, setContent] = useState<Record<string, string>>(Object.fromEntries(initialContent.map((c) => [c.key, c.value])));
   const [coreValues, setCoreValues] = useState(initialCoreValues);
   const [openRoles, setOpenRoles] = useState(initialOpenRoles);
@@ -235,6 +239,29 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     showToast("Role removed.");
   };
 
+  // ── Committees ────────────────────────────────────────────
+  const saveCommittee = async (c: Committee) => {
+    setSaving(c.id);
+    try {
+      const payload = { name: c.name, description: c.description, sort_order: c.sort_order };
+      if (c.id.startsWith("new-")) {
+        const { data, error } = await supabase.from("committees").insert(payload).select().single();
+        if (error) throw error;
+        setCommittees(committees.map((x) => x.id === c.id ? data : x));
+      } else {
+        const { error } = await supabase.from("committees").update(payload).eq("id", c.id);
+        if (error) throw error;
+      }
+      showToast("Committee saved!"); router.refresh();
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
+  };
+
+  const removeCommittee = async (id: string) => {
+    if (!id.startsWith("new-")) await supabase.from("committees").delete().eq("id", id);
+    setCommittees(committees.filter((c) => c.id !== id));
+    showToast("Committee removed.");
+  };
+
   const activeSection = CONTENT_SECTIONS.find((s) => s.id === contentSection) ?? CONTENT_SECTIONS[0];
 
   // Group content sections by parent for sidebar
@@ -283,7 +310,22 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       </div>
 
       {/* ── Body ── */}
-      <div className={tab === "content" ? "flex" : ""}>
+      <div className={tab === "content" || tab === "team" ? "flex" : ""}>
+
+        {/* Team sidebar */}
+        {tab === "team" && (
+          <aside className="w-52 shrink-0 border-r border-border bg-card min-h-[calc(100vh-120px)] sticky top-[121px] self-start">
+            <nav className="py-4 px-3 flex flex-col gap-1">
+              {(["members", "committees"] as const).map((s) => (
+                <button key={s} onClick={() => setTeamSection(s)}
+                  className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg font-body text-sm transition-colors ${teamSection === s ? "bg-primary/10 text-primary font-medium" : "text-foreground/70 hover:bg-muted hover:text-foreground"}`}>
+                  {s === "members" ? "Team Members" : "Committees"}
+                  {teamSection === s && <ChevronRight size={13} />}
+                </button>
+              ))}
+            </nav>
+          </aside>
+        )}
 
         {/* Content sidebar */}
         {tab === "content" && (
@@ -310,7 +352,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
         )}
 
         {/* Main content area */}
-        <div className={tab === "content" ? "flex-1 min-w-0" : ""}>
+        <div className={tab === "content" || tab === "team" ? "flex-1 min-w-0" : ""}>
           <div className="container mx-auto px-6 py-10 max-w-3xl">
 
             {/* ── News ── */}
@@ -349,7 +391,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
             )}
 
             {/* ── Team ── */}
-            {tab === "team" && (
+            {tab === "team" && teamSection === "members" && (
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -420,6 +462,49 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                   ))}
                 </div>
                 {teamMembers.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No members. Add one above.</p>}
+              </div>
+            )}
+
+            {/* ── Committees ── */}
+            {tab === "team" && teamSection === "committees" && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="font-body text-xl font-semibold text-foreground">Committees</h2>
+                    <p className="font-body text-sm text-foreground/60 mt-1">Shown in the table on the Team page.</p>
+                  </div>
+                  <button onClick={() => setCommittees([...committees, { id: `new-${Date.now()}`, name: "", description: "", sort_order: committees.length }])}
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
+                    <Plus size={14} /> Add Committee
+                  </button>
+                </div>
+                <div className="flex flex-col gap-5">
+                  {committees.map((c) => (
+                    <div key={c.id} className="bg-card border border-border rounded-2xl p-5">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-body font-semibold text-foreground">{c.name || "New Committee"}</span>
+                        <button onClick={() => removeCommittee(c.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
+                      </div>
+                      <div className="grid gap-3">
+                        <div>
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Name</label>
+                          <input value={c.name} onChange={(e) => setCommittees(committees.map((x) => x.id === c.id ? { ...x, name: e.target.value } : x))}
+                            placeholder="e.g. Social" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                        </div>
+                        <div>
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Description</label>
+                          <textarea value={c.description} onChange={(e) => setCommittees(committees.map((x) => x.id === c.id ? { ...x, description: e.target.value } : x))}
+                            rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
+                        </div>
+                      </div>
+                      <button onClick={() => saveCommittee(c)} disabled={saving === c.id}
+                        className="mt-4 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
+                        <Save size={13} />{saving === c.id ? "Saving…" : "Save"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {committees.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No committees. Add one above.</p>}
               </div>
             )}
 

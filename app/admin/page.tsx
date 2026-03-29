@@ -10,6 +10,7 @@ export default async function AdminPage() {
     { data: siteContent },
     { data: coreValues },
     { data: openRoles },
+    { data: committees },
   ] = await Promise.all([
     supabase.auth.getUser(),
     supabase.from("news_items").select("*").order("sort_order"),
@@ -17,6 +18,7 @@ export default async function AdminPage() {
     supabase.from("site_content").select("key, value"),
     supabase.from("core_values").select("*").order("sort_order"),
     supabase.from("open_roles").select("*").order("sort_order"),
+    supabase.from("committees").select("*").order("sort_order"),
   ]);
 
   return (
@@ -27,6 +29,7 @@ export default async function AdminPage() {
       initialContent={siteContent ?? []}
       initialCoreValues={coreValues ?? []}
       initialOpenRoles={openRoles ?? []}
+      initialCommittees={committees ?? []}
     />
   );
 }

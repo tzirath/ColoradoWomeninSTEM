@@ -6,36 +6,20 @@ export const metadata = {
   description: "Meet the founders and committee leads of Colorado Women of Color in STEM.",
 };
 
-const committees = [
-  {
-    name: "Social",
-    description: "Plan events that bring members together.",
-    chair: "TBD",
-  },
-  {
-    name: "Outreach & Partnerships",
-    description: "Find meaningful partnerships with external organizations and sponsors.",
-    chair: "TBD",
-  },
-  {
-    name: "Community Service",
-    description: "Seek out community-focused initiatives.",
-    chair: "TBD",
-  },
-  {
-    name: "Professional Development",
-    description: "Empower members with the tools and knowledge to thrive in their careers and beyond.",
-    chair: "TBD",
-  },
+const DEFAULT_COMMITTEES = [
+  { id: "1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
+  { id: "2", name: "Outreach & Partnerships", description: "Find meaningful partnerships with external organizations and sponsors.", sort_order: 1 },
+  { id: "3", name: "Community Service", description: "Seek out community-focused initiatives.", sort_order: 2 },
+  { id: "4", name: "Professional Development", description: "Empower members with the tools and knowledge to thrive in their careers and beyond.", sort_order: 3 },
 ];
 
 export default async function TeamPage() {
   const supabase = createClient();
-  const { data: members } = await supabase
-    .from("team_members")
-    .select("*")
-    .eq("active", true)
-    .order("sort_order");
+  const [{ data: members }, { data: committeesData }] = await Promise.all([
+    supabase.from("team_members").select("*").eq("active", true).order("sort_order"),
+    supabase.from("committees").select("*").order("sort_order"),
+  ]);
+  const committees = committeesData?.length ? committeesData : DEFAULT_COMMITTEES;
 
   return (
     <div className="min-h-screen bg-background pt-24">
@@ -64,8 +48,7 @@ export default async function TeamPage() {
               <thead>
                 <tr className="bg-primary/10 text-left">
                   <th className="px-6 py-4 font-semibold text-foreground rounded-tl-xl">Committee</th>
-                  <th className="px-6 py-4 font-semibold text-foreground">Description</th>
-                  <th className="px-6 py-4 font-semibold text-foreground rounded-tr-xl">Chair</th>
+                  <th className="px-6 py-4 font-semibold text-foreground rounded-tr-xl">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -78,7 +61,6 @@ export default async function TeamPage() {
                   >
                     <td className="px-6 py-4 font-semibold text-foreground">{c.name}</td>
                     <td className="px-6 py-4 text-foreground/80">{c.description}</td>
-                    <td className="px-6 py-4 text-foreground/60 italic">{c.chair}</td>
                   </tr>
                 ))}
               </tbody>
