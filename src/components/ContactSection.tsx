@@ -241,12 +241,6 @@ const ContactSection = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="container mx-auto px-6 mt-16 pt-8 border-t border-bloom-sage/20">
-        <p className="text-center font-body text-bloom-sage/60 text-xs">
-          © {new Date().getFullYear()} Colorado Women of Color in STEM (CWS). All rights reserved.
-        </p>
-      </div>
     </section>
   );
 };

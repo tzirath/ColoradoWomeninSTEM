@@ -10,6 +10,7 @@ import { JoinModalProvider, useJoinModal } from "@/components/JoinModalContext";
 import JoinModal from "@/components/JoinModal";
 import Navbar from "@/components/Navbar";
 import SignupBanner from "@/components/SignupBanner";
+import Footer from "@/components/Footer";
 
 function SiteShell({ children }: { children: React.ReactNode }) {
   const { open, openModal, closeModal } = useJoinModal();
@@ -17,6 +18,7 @@ function SiteShell({ children }: { children: React.ReactNode }) {
     <>
       <Navbar onJoinClick={openModal} />
       <main>{children}</main>
+      <Footer />
       <JoinModal open={open} onClose={closeModal} />
       <SignupBanner onJoinClick={openModal} />
     </>
