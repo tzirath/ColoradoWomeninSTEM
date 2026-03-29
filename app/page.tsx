@@ -7,9 +7,9 @@ import Link from "next/link";
 import { ArrowRight, Megaphone, ChevronLeft, ChevronRight } from "lucide-react";
 
 const NEWS_ITEMS = [
-  { emoji: "🌱", text: "Applications open for the Spring 2025 Mentorship cohort — apply by April 30" },
-  { emoji: "🔄", text: "Skill Swap launch event coming this May — stay tuned for details" },
-  { emoji: "📸", text: "Follow us on Instagram @coloradowomeninstem for updates" },
+  "Applications open for the Spring 2025 Mentorship cohort — apply by April 30",
+  "Skill Swap launch event coming this May — stay tuned for details",
+  "Follow us on Instagram @coloradowomeninstem for updates",
 ];
 
 function NewsBanner() {
@@ -37,15 +37,18 @@ function NewsBanner() {
   }, [current]);
 
   return (
-    <div className="bg-secondary/10 border-y border-secondary/20 py-2.5">
-      <div className="container mx-auto px-6 flex items-center gap-3">
-        <Megaphone size={15} className="text-secondary shrink-0" />
+    <div className="bg-secondary/10 border-y border-secondary/20 py-4">
+      <div className="container mx-auto px-6 flex items-center justify-center gap-4">
+        {/* Arrows */}
+        <button onClick={prev} className="text-foreground/40 hover:text-secondary transition-colors shrink-0" aria-label="Previous">
+          <ChevronLeft size={18} />
+        </button>
 
         {/* Slider */}
-        <div className="flex-1 overflow-hidden relative h-6 flex items-center">
+        <div className="flex-1 max-w-2xl overflow-hidden relative h-7 flex items-center justify-center">
           <p
             key={current}
-            className="font-body text-sm text-foreground/80 absolute w-full"
+            className="font-body text-base font-semibold text-foreground absolute w-full text-center flex items-center justify-center gap-2"
             style={{
               animation: animating
                 ? direction === "left"
@@ -56,32 +59,28 @@ function NewsBanner() {
                   : "slideInRight 0.3s ease forwards",
             }}
           >
-            <span className="mr-2">{NEWS_ITEMS[current].emoji}</span>
-            {NEWS_ITEMS[current].text}
+            <Megaphone size={16} className="text-secondary shrink-0" />
+            {NEWS_ITEMS[current]}
           </p>
         </div>
 
-        {/* Dots */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          {NEWS_ITEMS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i, i > current ? "left" : "right")}
-              className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                i === current ? "bg-secondary" : "bg-secondary/30"
-              }`}
-              aria-label={`Go to item ${i + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Arrows */}
-        <button onClick={prev} className="text-foreground/40 hover:text-secondary transition-colors shrink-0" aria-label="Previous">
-          <ChevronLeft size={16} />
-        </button>
         <button onClick={next} className="text-foreground/40 hover:text-secondary transition-colors shrink-0" aria-label="Next">
-          <ChevronRight size={16} />
+          <ChevronRight size={18} />
         </button>
+      </div>
+
+      {/* Dots */}
+      <div className="flex justify-center items-center gap-1.5 mt-2">
+        {NEWS_ITEMS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i, i > current ? "left" : "right")}
+            className={`w-1.5 h-1.5 rounded-full transition-colors ${
+              i === current ? "bg-secondary" : "bg-secondary/30"
+            }`}
+            aria-label={`Go to item ${i + 1}`}
+          />
+        ))}
       </div>
 
       <style jsx>{`
