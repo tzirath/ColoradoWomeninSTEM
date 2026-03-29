@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   LogOut, Megaphone, Users, Plus, Trash2, GripVertical,
-  Save, FileText, Heart, Briefcase, Upload, ChevronRight
+  Save, FileText, Heart, Briefcase, Upload, ChevronRight, LayoutDashboard, Search, Mail, MailX
 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import type { User } from "@supabase/supabase-js";
 
 const INACTIVITY_MS = 15 * 60 * 1000;
@@ -18,6 +19,7 @@ interface ContentItem { key: string; value: string; }
 interface CoreValue { id: string; label: string; description: string; sort_order: number; }
 interface OpenRole { id: string; title: string; commitment: string; description: string; sort_order: number; active: boolean; }
 interface Committee { id: string; name: string; description: string; sort_order: number; }
+interface Member { id: string; email: string; first_name: string; stem_area: string | null; interests: string[]; opted_in: boolean; created_at: string; }
 
 const DEFAULT_COMMITTEES: Committee[] = [
   { id: "default-1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
@@ -34,9 +36,10 @@ interface Props {
   initialCoreValues: CoreValue[];
   initialOpenRoles: OpenRole[];
   initialCommittees: Committee[];
+  initialMembers: Member[];
 }
 
-type Tab = "news" | "team" | "content" | "roles";
+type Tab = "dashboard" | "news" | "team" | "content" | "roles";
 
 // ── Content sections + fields ────────────────────────────────────────────────
 const CONTENT_SECTIONS = [
@@ -102,14 +105,16 @@ const CONTENT_SECTIONS = [
 ];
 
 const MAIN_TABS = [
+  { key: "dashboard" as Tab, icon: LayoutDashboard, label: "Dashboard" },
   { key: "news" as Tab, icon: Megaphone, label: "News" },
   { key: "team" as Tab, icon: Users, label: "Team" },
   { key: "content" as Tab, icon: FileText, label: "Site Content" },
   { key: "roles" as Tab, icon: Briefcase, label: "Open Roles" },
 ];
 
-export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees }: Props) {
-  const [tab, setTab] = useState<Tab>("news");
+export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees, initialMembers }: Props) {
+  const [tab, setTab] = useState<Tab>("dashboard");
+  const [memberSearch, setMemberSearch] = useState("");
   const [contentSection, setContentSection] = useState("about");
   const [teamSection, setTeamSection] = useState<"members" | "committees">("members");
   const [newsItems, setNewsItems] = useState(initialNewsItems);
@@ -406,6 +411,166 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
         {/* Main content area */}
         <div className={tab === "content" || tab === "team" ? "flex-1 min-w-0" : ""}>
           <div className="container mx-auto px-6 py-10 max-w-3xl">
+
+            {/* ── Dashboard ── */}
+            {tab === "dashboard" && (() => {
+              const now = new Date();
+              const thisMonth = initialMembers.filter((m) => {
+                const d = new Date(m.created_at);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+              });
+              const optedIn = initialMembers.filter((m) => m.opted_in);
+
+              // Signups by month (last 6 months)
+              const monthData = Array.from({ length: 6 }, (_, i) => {
+                const d = new Date(now.getFullYear(), now.getMonth() - 5 + i, 1);
+                const label = d.toLocaleString("default", { month: "short" });
+                const count = initialMembers.filter((m) => {
+                  const md = new Date(m.created_at);
+                  return md.getMonth() === d.getMonth() && md.getFullYear() === d.getFullYear();
+                }).length;
+                return { month: label, count };
+              });
+
+              // STEM area breakdown
+              const stemCounts: Record<string, number> = {};
+              initialMembers.forEach((m) => {
+                const k = m.stem_area || "Not specified";
+                stemCounts[k] = (stemCounts[k] || 0) + 1;
+              });
+              const stemData = Object.entries(stemCounts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, count]) => ({ name, count }));
+
+              // Interests breakdown
+              const interestCounts: Record<string, number> = {};
+              initialMembers.forEach((m) => {
+                (m.interests ?? []).forEach((interest) => {
+                  interestCounts[interest] = (interestCounts[interest] || 0) + 1;
+                });
+              });
+              const interestData = Object.entries(interestCounts).sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
+
+              const filtered = initialMembers.filter((m) => {
+                const q = memberSearch.toLowerCase();
+                return !q || m.email.toLowerCase().includes(q) || m.first_name.toLowerCase().includes(q) || (m.stem_area ?? "").toLowerCase().includes(q);
+              });
+
+              const COLORS = ["#7C5CBF", "#C06C8A", "#9B7ED9", "#D4909F", "#A78BDB", "#E0A0B0", "#B39FD6", "#F0B8C0"];
+
+              return (
+                <div className="space-y-10">
+                  {/* Stat cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { label: "Total Members", value: initialMembers.length, sub: "all time" },
+                      { label: "This Month", value: thisMonth.length, sub: "new sign-ups" },
+                      { label: "Newsletter", value: optedIn.length, sub: `${initialMembers.length ? Math.round(optedIn.length / initialMembers.length * 100) : 0}% opted in` },
+                      { label: "STEM Fields", value: Object.keys(stemCounts).filter((k) => k !== "Not specified").length, sub: "represented" },
+                    ].map((stat) => (
+                      <div key={stat.label} className="bg-card border border-border rounded-2xl p-5">
+                        <p className="font-body text-xs text-foreground/50 uppercase tracking-wide mb-1">{stat.label}</p>
+                        <p className="font-display text-4xl font-bold text-primary">{stat.value}</p>
+                        <p className="font-body text-xs text-foreground/50 mt-1">{stat.sub}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Sign-ups over time */}
+                  <div className="bg-card border border-border rounded-2xl p-6">
+                    <h3 className="font-body font-semibold text-foreground mb-4">Sign-ups — last 6 months</h3>
+                    <ResponsiveContainer width="100%" height={180}>
+                      <BarChart data={monthData} barSize={32}>
+                        <XAxis dataKey="month" tick={{ fontFamily: "inherit", fontSize: 12 }} axisLine={false} tickLine={false} />
+                        <YAxis allowDecimals={false} tick={{ fontFamily: "inherit", fontSize: 12 }} axisLine={false} tickLine={false} width={24} />
+                        <Tooltip contentStyle={{ fontFamily: "inherit", fontSize: 12, borderRadius: 8 }} />
+                        <Bar dataKey="count" fill="#7C5CBF" radius={[6, 6, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* STEM Areas */}
+                    <div className="bg-card border border-border rounded-2xl p-6">
+                      <h3 className="font-body font-semibold text-foreground mb-4">STEM Areas</h3>
+                      {stemData.length === 0 ? <p className="font-body text-sm text-foreground/40">No data yet.</p> : (
+                        <ResponsiveContainer width="100%" height={220}>
+                          <BarChart data={stemData} layout="vertical" barSize={14}>
+                            <XAxis type="number" allowDecimals={false} tick={{ fontFamily: "inherit", fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <YAxis type="category" dataKey="name" width={130} tick={{ fontFamily: "inherit", fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <Tooltip contentStyle={{ fontFamily: "inherit", fontSize: 12, borderRadius: 8 }} />
+                            <Bar dataKey="count" radius={[0, 6, 6, 0]}>
+                              {stemData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      )}
+                    </div>
+
+                    {/* Interests */}
+                    <div className="bg-card border border-border rounded-2xl p-6">
+                      <h3 className="font-body font-semibold text-foreground mb-4">Interests</h3>
+                      {interestData.length === 0 ? <p className="font-body text-sm text-foreground/40">No data yet.</p> : (
+                        <div className="flex flex-col gap-2">
+                          {interestData.map(({ name, count }, i) => (
+                            <div key={name}>
+                              <div className="flex justify-between font-body text-sm mb-1">
+                                <span className="text-foreground/80">{name}</span>
+                                <span className="text-foreground/50">{count}</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-border overflow-hidden">
+                                <div className="h-full rounded-full" style={{ width: `${Math.round(count / initialMembers.length * 100)}%`, backgroundColor: COLORS[i % COLORS.length] }} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Member table */}
+                  <div className="bg-card border border-border rounded-2xl p-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                      <h3 className="font-body font-semibold text-foreground">Member Directory</h3>
+                      <div className="relative">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40" />
+                        <input value={memberSearch} onChange={(e) => setMemberSearch(e.target.value)}
+                          placeholder="Search name, email, field…"
+                          className="pl-8 pr-4 py-2 font-body text-sm bg-background border border-border rounded-lg outline-none focus:border-primary transition-colors w-full sm:w-64" />
+                      </div>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full font-body text-sm">
+                        <thead>
+                          <tr className="border-b border-border text-left">
+                            <th className="pb-3 pr-4 font-medium text-foreground/50 whitespace-nowrap">Name</th>
+                            <th className="pb-3 pr-4 font-medium text-foreground/50 whitespace-nowrap">Email</th>
+                            <th className="pb-3 pr-4 font-medium text-foreground/50 whitespace-nowrap hidden md:table-cell">STEM Area</th>
+                            <th className="pb-3 pr-4 font-medium text-foreground/50 whitespace-nowrap hidden lg:table-cell">Interests</th>
+                            <th className="pb-3 font-medium text-foreground/50 whitespace-nowrap">Newsletter</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filtered.map((m) => (
+                            <tr key={m.id} className="border-b border-border/50 hover:bg-background/50 transition-colors">
+                              <td className="py-3 pr-4 font-medium text-foreground whitespace-nowrap">{m.first_name}</td>
+                              <td className="py-3 pr-4 text-foreground/70">{m.email}</td>
+                              <td className="py-3 pr-4 text-foreground/60 hidden md:table-cell">{m.stem_area || <span className="text-foreground/30">—</span>}</td>
+                              <td className="py-3 pr-4 text-foreground/60 hidden lg:table-cell max-w-[200px] truncate">{m.interests?.join(", ") || <span className="text-foreground/30">—</span>}</td>
+                              <td className="py-3">
+                                {m.opted_in
+                                  ? <Mail size={14} className="text-primary" />
+                                  : <MailX size={14} className="text-foreground/30" />}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {filtered.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-8">No members found.</p>}
+                    </div>
+                    <p className="font-body text-xs text-foreground/40 mt-4">{filtered.length} of {initialMembers.length} members</p>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* ── News ── */}
             {tab === "news" && (
