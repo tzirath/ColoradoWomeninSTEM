@@ -44,6 +44,7 @@ const CONTENT_SECTIONS = [
     id: "about",
     label: "About",
     fields: [
+      { key: "about_story_image", label: "Story — photo", type: "image" as const },
       { key: "about_story_p1", label: "Story — paragraph 1" },
       { key: "about_story_p2", label: "Story — paragraph 2" },
       { key: "about_mission", label: "Mission statement" },
@@ -117,6 +118,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
   const [toast, setToast] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(INACTIVITY_MS);
   const [uploadingFor, setUploadingFor] = useState<string | null>(null);
+  const [uploadingContent, setUploadingContent] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -204,6 +206,20 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       if (error) throw error;
       showToast("Saved!"); router.refresh();
     } catch { showToast("Error saving."); } finally { setSaving(null); }
+  };
+
+  const handleContentImageUpload = async (key: string, file: File) => {
+    setUploadingContent(key);
+    try {
+      const ext = file.name.split(".").pop();
+      const filename = `content/${key}-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("team-photos").upload(filename, file, { upsert: true });
+      if (upErr) throw upErr;
+      const { data: { publicUrl } } = supabase.storage.from("team-photos").getPublicUrl(filename);
+      setContent({ ...content, [key]: publicUrl });
+      await supabase.from("site_content").upsert({ key, value: publicUrl, updated_at: new Date().toISOString() });
+      showToast("Image uploaded!"); router.refresh();
+    } catch { showToast("Upload failed."); } finally { setUploadingContent(null); }
   };
 
   // ── Core Values ───────────────────────────────────────────
@@ -531,16 +547,40 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                   {activeSection.fields.map((field) => (
                     <div key={field.key} className="bg-card border border-border rounded-2xl p-5">
                       <label className="block font-body text-sm font-medium text-foreground mb-3">{field.label}</label>
-                      <textarea
-                        value={content[field.key] ?? ""}
-                        onChange={(e) => setContent({ ...content, [field.key]: e.target.value })}
-                        rows={field.key.endsWith("_body") ? 6 : field.key.endsWith("_tagline") ? 1 : 3}
-                        className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-y"
-                      />
-                      <button onClick={() => saveContentField(field.key)} disabled={saving === field.key}
-                        className="mt-3 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
-                        <Save size={13} />{saving === field.key ? "Saving…" : "Save"}
-                      </button>
+                      {field.type === "image" ? (
+                        <div className="flex items-center gap-4">
+                          <div className="w-20 h-20 rounded-xl overflow-hidden border border-border bg-muted flex items-center justify-center shrink-0">
+                            {content[field.key]
+                              ? <img src={content[field.key]} alt="" className="w-full h-full object-cover" />
+                              : <img src="/cws-logo-sqr.png" alt="default" className="w-full h-full object-cover opacity-40" />}
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <label className="inline-flex items-center gap-2 cursor-pointer bg-background border border-border rounded-lg px-4 py-2 font-body text-sm hover:border-primary transition-colors">
+                              <Upload size={14} className="text-foreground/60" />
+                              {uploadingContent === field.key ? "Uploading…" : "Upload Image"}
+                              <input type="file" accept="image/*" className="hidden"
+                                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleContentImageUpload(field.key, f); }} />
+                            </label>
+                            {content[field.key] && (
+                              <button onClick={() => { setContent({ ...content, [field.key]: "" }); saveContentField(field.key); }}
+                                className="font-body text-xs text-foreground/40 hover:text-red-500 transition-colors text-left">Remove</button>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <textarea
+                            value={content[field.key] ?? ""}
+                            onChange={(e) => setContent({ ...content, [field.key]: e.target.value })}
+                            rows={field.key.endsWith("_body") ? 6 : field.key.endsWith("_tagline") || field.key.endsWith("_url") ? 1 : 3}
+                            className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-y"
+                          />
+                          <button onClick={() => saveContentField(field.key)} disabled={saving === field.key}
+                            className="mt-3 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
+                            <Save size={13} />{saving === field.key ? "Saving…" : "Save"}
+                          </button>
+                        </>
+                      )}
                     </div>
                   ))}
                 </div>

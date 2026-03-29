@@ -23,7 +23,7 @@ const DEFAULTS: Record<string, string> = {
 export default async function AboutPage() {
   const supabase = createClient();
   const [{ data: contentRows }, { data: valuesRows }] = await Promise.all([
-    supabase.from("site_content").select("key, value").in("key", ["about_story_p1", "about_story_p2", "about_mission", "about_vision"]),
+    supabase.from("site_content").select("key, value").in("key", ["about_story_p1", "about_story_p2", "about_mission", "about_vision", "about_story_image"]),
     supabase.from("core_values").select("*").order("sort_order"),
   ]);
 
@@ -36,13 +36,24 @@ export default async function AboutPage() {
 
       {/* Story */}
       <section className="py-20 bg-card">
-        <div className="container mx-auto px-6 max-w-3xl">
-          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Who We Are</p>
-          <h1 className="font-body text-4xl md:text-5xl font-bold text-foreground mb-8">
-            Our <span className="font-display italic text-primary">Story</span>
-          </h1>
-          <p className="font-body text-foreground text-lg leading-relaxed">{c.about_story_p1}</p>
-          <p className="font-body text-foreground text-lg leading-relaxed mt-6">{c.about_story_p2}</p>
+        <div className="container mx-auto px-6 max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Who We Are</p>
+              <h1 className="font-body text-4xl md:text-5xl font-bold text-foreground mb-8">
+                Our <span className="font-display italic text-primary">Story</span>
+              </h1>
+              <p className="font-body text-foreground text-lg leading-relaxed">{c.about_story_p1}</p>
+              <p className="font-body text-foreground text-lg leading-relaxed mt-6">{c.about_story_p2}</p>
+            </div>
+            <div className="flex justify-center">
+              <img
+                src={c.about_story_image || "/cws-logo-sqr.png"}
+                alt="Our Story"
+                className="rounded-2xl w-full max-w-sm object-cover shadow-md"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

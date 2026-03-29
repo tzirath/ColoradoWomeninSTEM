@@ -8,6 +8,7 @@ const sections = [
       { label: "Our Story", href: "/about" },
       { label: "Team", href: "/team" },
       { label: "Get Involved", href: "/get-involved" },
+      { label: "Open Roles", href: "/get-involved#open-roles" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -32,11 +33,11 @@ const sections = [
           Denver, Colorado
         </div>
         <a
-          href="mailto:hello@coloradowomeninstem.org"
+          href="mailto:coloradowomeninstem@gmail.com"
           className="flex items-center gap-2 text-bloom-sage/70 text-sm font-body hover:text-secondary transition-colors"
         >
           <Mail size={14} className="shrink-0" />
-          hello@coloradowomeninstem.org
+          coloradowomeninstem@gmail.com
         </a>
         <Link
           href="/contact"
@@ -113,17 +114,17 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-bloom-sage/20 pt-8 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <p className="font-body text-bloom-sage/50 text-xs">
-            © {new Date().getFullYear()} Colorado Women of Color in STEM (CWS). All Rights Reserved.
-          </p>
-          <div className="flex flex-col items-center gap-1 sm:items-end">
-            <Link href="/about" className="font-body text-bloom-sage/50 text-xs hover:text-bloom-sage/80 transition-colors">
-              Privacy Policy
-            </Link>
+          <div className="flex flex-col items-center gap-1 sm:items-start">
+            <p className="font-body text-bloom-sage/50 text-xs">
+              © {new Date().getFullYear()} Colorado Women of Color in STEM (CWS). All Rights Reserved.
+            </p>
             <Link href="/admin" className="font-body text-bloom-sage/20 text-xs hover:text-bloom-sage/50 transition-colors">
               Admin
             </Link>
           </div>
+          <Link href="/about" className="font-body text-bloom-sage/50 text-xs hover:text-bloom-sage/80 transition-colors">
+            Privacy Policy
+          </Link>
         </div>
       </div>
     </footer>

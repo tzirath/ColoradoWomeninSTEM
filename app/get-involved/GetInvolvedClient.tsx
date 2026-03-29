@@ -80,7 +80,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
       </section>
 
       {/* Open Roles */}
-      <section className="py-20 bg-card">
+      <section id="open-roles" className="py-20 bg-card">
         <div className="container mx-auto px-6">
           <div className="text-center mb-14">
             <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Leadership Opportunities</p>
