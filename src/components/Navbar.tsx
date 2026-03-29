@@ -66,8 +66,8 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
         scrolled ? "shadow-md" : ""
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        <Link href="/" className="font-display text-6xl font-bold text-primary leading-none flex items-center">
+      <div className="container mx-auto flex items-center justify-between py-5 px-6">
+        <Link href="/" className="font-display text-5xl font-bold text-primary leading-none flex items-end pb-1">
           CWS<span className="text-secondary">.</span>
         </Link>
 
