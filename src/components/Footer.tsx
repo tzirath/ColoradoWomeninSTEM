@@ -112,11 +112,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-bloom-sage/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-bloom-sage/20 pt-8 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
           <p className="font-body text-bloom-sage/50 text-xs">
             © {new Date().getFullYear()} Colorado Women of Color in STEM (CWS). All Rights Reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col items-center gap-1 sm:items-end">
             <Link href="/about" className="font-body text-bloom-sage/50 text-xs hover:text-bloom-sage/80 transition-colors">
               Privacy Policy
             </Link>
