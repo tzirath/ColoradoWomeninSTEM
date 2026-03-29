@@ -82,10 +82,15 @@ const CONTENT_SECTIONS = [
     parent: "Initiatives",
     fields: [
       { key: "initiative_members_network_body", label: "Members Network — page body" },
+      { key: "initiative_members_network_signup_url", label: "Members Network — Sign Up link" },
       { key: "initiative_skill_swap_body", label: "Skill Swap — page body" },
+      { key: "initiative_skill_swap_signup_url", label: "Skill Swap — Sign Up link" },
       { key: "initiative_stem_in_action_body", label: "STEM in Action — page body" },
+      { key: "initiative_stem_in_action_signup_url", label: "STEM in Action — Sign Up link" },
       { key: "initiative_mentorship_body", label: "Mentorship — page body" },
+      { key: "initiative_mentorship_signup_url", label: "Mentorship — Sign Up link" },
       { key: "initiative_cws_voices_body", label: "CWS Voices — page body" },
+      { key: "initiative_cws_voices_signup_url", label: "CWS Voices — Sign Up link" },
     ],
   },
 ];

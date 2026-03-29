@@ -71,7 +71,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
                 <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6 flex-1">{content[p.contentKey] || p.defaultDesc}</p>
                 <Link href={`/initiatives/${p.slug}`}
                   className="inline-block bg-secondary text-white font-body font-semibold text-sm px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity text-center">
-                  Learn More & Sign Up
+                  Sign Up
                 </Link>
               </div>
             ))}
