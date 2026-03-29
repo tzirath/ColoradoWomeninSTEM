@@ -123,6 +123,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
   const [countdown, setCountdown] = useState(INACTIVITY_MS);
   const [uploadingFor, setUploadingFor] = useState<string | null>(null);
   const [uploadingContent, setUploadingContent] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -333,7 +334,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       <div className="border-b border-border bg-card overflow-x-auto sticky top-[73px] z-30">
         <div className="container mx-auto px-6 flex min-w-max">
           {MAIN_TABS.map(({ key, icon: Icon, label }) => (
-            <button key={key} onClick={() => setTab(key)}
+            <button key={key} onClick={() => { setTab(key); setSidebarOpen(false); }}
               className={`inline-flex items-center gap-2 px-5 py-3.5 font-body text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${tab === key ? "border-primary text-primary" : "border-transparent text-foreground/60 hover:text-foreground"}`}>
               <Icon size={15} />{label}
             </button>
@@ -342,46 +343,65 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       </div>
 
       {/* ── Body ── */}
-      <div className={tab === "content" || tab === "team" ? "flex" : ""}>
+      <div className={tab === "content" || tab === "team" ? "flex flex-col md:flex-row" : ""}>
 
         {/* Team sidebar */}
-        {tab === "team" && (
-          <aside className="w-52 shrink-0 border-r border-border bg-card min-h-[calc(100vh-120px)] sticky top-[121px] self-start">
-            <nav className="py-4 px-3 flex flex-col gap-1">
-              {(["members", "committees"] as const).map((s) => (
-                <button key={s} onClick={() => setTeamSection(s)}
-                  className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg font-body text-sm transition-colors ${teamSection === s ? "bg-primary/10 text-primary font-medium" : "text-foreground/70 hover:bg-muted hover:text-foreground"}`}>
-                  {s === "members" ? "Team Members" : "Committees"}
-                  {teamSection === s && <ChevronRight size={13} />}
-                </button>
-              ))}
-            </nav>
-          </aside>
-        )}
+        {tab === "team" && (() => {
+          const teamLabels: Record<string, string> = { members: "Team Members", committees: "Committees" };
+          return (
+            <aside className="md:w-52 shrink-0 border-b md:border-b-0 md:border-r border-border bg-card md:min-h-[calc(100vh-120px)] md:sticky md:top-[121px] md:self-start">
+              {/* Mobile toggle */}
+              <button onClick={() => setSidebarOpen((v) => !v)}
+                className="md:hidden w-full flex items-center justify-between px-5 py-3 font-body text-sm font-medium text-foreground">
+                <span>{teamLabels[teamSection]}</span>
+                <ChevronRight size={15} className={`transition-transform ${sidebarOpen ? "rotate-90" : ""}`} />
+              </button>
+              <nav className={`${sidebarOpen ? "block" : "hidden"} md:block py-4 px-3 flex flex-col gap-1`}>
+                {(["members", "committees"] as const).map((s) => (
+                  <button key={s} onClick={() => { setTeamSection(s); setSidebarOpen(false); }}
+                    className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg font-body text-sm transition-colors ${teamSection === s ? "bg-primary/10 text-primary font-medium" : "text-foreground/70 hover:bg-muted hover:text-foreground"}`}>
+                    {teamLabels[s]}
+                    {teamSection === s && <ChevronRight size={13} className="hidden md:block" />}
+                  </button>
+                ))}
+              </nav>
+            </aside>
+          );
+        })()}
 
         {/* Content sidebar */}
-        {tab === "content" && (
-          <aside className="w-52 shrink-0 border-r border-border bg-card min-h-[calc(100vh-120px)] sticky top-[121px] self-start">
-            <nav className="py-4 px-3 flex flex-col gap-1">
-              {sidebarGroups.map((group, gi) => (
-                <div key={gi}>
-                  {group.group && (
-                    <p className="font-body text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40 px-3 pt-4 pb-2">
-                      {group.group}
-                    </p>
-                  )}
-                  {group.items.map((section) => (
-                    <button key={section.id} onClick={() => setContentSection(section.id)}
-                      className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg font-body text-sm transition-colors ${contentSection === section.id ? "bg-primary/10 text-primary font-medium" : "text-foreground/70 hover:bg-muted hover:text-foreground"}`}>
-                      {section.label}
-                      {contentSection === section.id && <ChevronRight size={13} />}
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </nav>
-          </aside>
-        )}
+        {tab === "content" && (() => {
+          const allSections = CONTENT_SECTIONS;
+          const activeLabel = allSections.find((s) => s.id === contentSection)?.label ?? "Select section";
+          return (
+            <aside className="md:w-52 shrink-0 border-b md:border-b-0 md:border-r border-border bg-card md:min-h-[calc(100vh-120px)] md:sticky md:top-[121px] md:self-start">
+              {/* Mobile toggle */}
+              <button onClick={() => setSidebarOpen((v) => !v)}
+                className="md:hidden w-full flex items-center justify-between px-5 py-3 font-body text-sm font-medium text-foreground">
+                <span>{activeLabel}</span>
+                <ChevronRight size={15} className={`transition-transform ${sidebarOpen ? "rotate-90" : ""}`} />
+              </button>
+              <nav className={`${sidebarOpen ? "block" : "hidden"} md:block py-4 px-3 flex flex-col gap-1`}>
+                {sidebarGroups.map((group, gi) => (
+                  <div key={gi}>
+                    {group.group && (
+                      <p className="font-body text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40 px-3 pt-4 pb-2">
+                        {group.group}
+                      </p>
+                    )}
+                    {group.items.map((section) => (
+                      <button key={section.id} onClick={() => { setContentSection(section.id); setSidebarOpen(false); }}
+                        className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg font-body text-sm transition-colors ${contentSection === section.id ? "bg-primary/10 text-primary font-medium" : "text-foreground/70 hover:bg-muted hover:text-foreground"}`}>
+                        {section.label}
+                        {contentSection === section.id && <ChevronRight size={13} className="hidden md:block" />}
+                      </button>
+                    ))}
+                  </div>
+                ))}
+              </nav>
+            </aside>
+          );
+        })()}
 
         {/* Main content area */}
         <div className={tab === "content" || tab === "team" ? "flex-1 min-w-0" : ""}>
