@@ -17,8 +17,8 @@ const INITIATIVE_META = [
 
 export default async function InitiativesPage() {
   const supabase = createClient();
-  const { data } = await supabase.from("site_content").select("key, value")
-    .in("key", INITIATIVE_META.map((i) => i.contentKey));
+  const allKeys = INITIATIVE_META.flatMap((i) => [i.contentKey, `${i.contentKey}_tagline`]);
+  const { data } = await supabase.from("site_content").select("key, value").in("key", allKeys);
 
   const contentMap: Record<string, string> = {};
   data?.forEach((row) => { contentMap[row.key] = row.value; });
@@ -47,7 +47,7 @@ export default async function InitiativesPage() {
                   <item.icon className="w-7 h-7 text-accent" />
                 </div>
                 <h2 className="font-body text-xl font-semibold text-foreground mb-1">{item.title}</h2>
-                <p className="font-body text-secondary text-sm font-medium mb-3 italic">{item.tagline}</p>
+                <p className="font-body text-secondary text-sm font-medium mb-3 italic">{contentMap[`${item.contentKey}_tagline`] || item.tagline}</p>
                 <p className="font-body text-foreground/80 text-sm leading-relaxed mb-4">
                   {contentMap[item.contentKey] || item.defaultDesc}
                 </p>

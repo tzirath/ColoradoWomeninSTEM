@@ -88,10 +88,15 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
   if (!item) notFound();
 
   const supabase = createClient();
-  const { data } = await supabase.from("site_content").select("value").eq("key", item.contentKey).single();
+  const { data: contentRows } = await supabase.from("site_content").select("key, value")
+    .in("key", [item.contentKey, `${item.contentKey}_tagline`]);
+
+  const contentMap: Record<string, string> = {};
+  contentRows?.forEach((row) => { contentMap[row.key] = row.value; });
 
   // If content exists in DB, use it as a single block; otherwise use default paragraphs
-  const body: string[] = data?.value ? [data.value] : item.defaultBody;
+  const body: string[] = contentMap[item.contentKey] ? [contentMap[item.contentKey]] : item.defaultBody;
+  const tagline = contentMap[`${item.contentKey}_tagline`] || item.tagline;
   const Icon = item.icon;
 
   return (
@@ -106,7 +111,7 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
             <Icon className="w-8 h-8 text-accent" />
           </div>
 
-          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-2 italic">{item.tagline}</p>
+          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-2 italic">{tagline}</p>
           <h1 className="font-body text-4xl md:text-5xl font-bold text-foreground mb-10">{item.title}</h1>
 
           <div className="space-y-6">

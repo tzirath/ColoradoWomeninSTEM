@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   LogOut, Megaphone, Users, Plus, Trash2, GripVertical,
-  Save, FileText, Heart, Briefcase, Upload, X
+  Save, FileText, Heart, Briefcase, Upload, ChevronRight
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
@@ -29,34 +29,75 @@ interface Props {
 
 type Tab = "news" | "team" | "content" | "values" | "roles";
 
-const CONTENT_FIELDS: { key: string; label: string; section: string; multiline?: boolean }[] = [
-  { key: "about_story_p1", label: "Story — paragraph 1", section: "About", multiline: true },
-  { key: "about_story_p2", label: "Story — paragraph 2", section: "About", multiline: true },
-  { key: "about_mission", label: "Mission statement", section: "About", multiline: true },
-  { key: "about_vision", label: "Vision statement", section: "About", multiline: true },
-  { key: "get_involved_hero", label: "Hero subtitle", section: "Get Involved", multiline: true },
-  { key: "get_involved_member_desc", label: "Become a Member description", section: "Get Involved", multiline: true },
-  { key: "get_involved_community_service", label: "Community Service description", section: "Get Involved", multiline: true },
-  { key: "initiative_members_network", label: "Members Network — card description", section: "Initiatives", multiline: true },
-  { key: "initiative_skill_swap", label: "Skill Swap — card description", section: "Initiatives", multiline: true },
-  { key: "initiative_stem_in_action", label: "STEM in Action — card description", section: "Initiatives", multiline: true },
-  { key: "initiative_mentorship", label: "Mentorship — card description", section: "Initiatives", multiline: true },
-  { key: "initiative_cws_voices", label: "CWS Voices — card description", section: "Initiatives", multiline: true },
-  { key: "initiative_members_network_body", label: "Members Network — full page body", section: "Initiative Detail Pages", multiline: true },
-  { key: "initiative_skill_swap_body", label: "Skill Swap — full page body", section: "Initiative Detail Pages", multiline: true },
-  { key: "initiative_stem_in_action_body", label: "STEM in Action — full page body", section: "Initiative Detail Pages", multiline: true },
-  { key: "initiative_mentorship_body", label: "Mentorship — full page body", section: "Initiative Detail Pages", multiline: true },
-  { key: "initiative_cws_voices_body", label: "CWS Voices — full page body", section: "Initiative Detail Pages", multiline: true },
+// ── Content sections + fields ────────────────────────────────────────────────
+const CONTENT_SECTIONS = [
+  {
+    id: "about",
+    label: "About",
+    fields: [
+      { key: "about_story_p1", label: "Story — paragraph 1" },
+      { key: "about_story_p2", label: "Story — paragraph 2" },
+      { key: "about_mission", label: "Mission statement" },
+      { key: "about_vision", label: "Vision statement" },
+    ],
+  },
+  {
+    id: "get-involved",
+    label: "Get Involved",
+    fields: [
+      { key: "get_involved_hero", label: "Page subtitle" },
+      { key: "get_involved_member_desc", label: "Become a Member description" },
+      { key: "get_involved_community_service", label: "Community Service description" },
+    ],
+  },
+  {
+    id: "initiative-cards",
+    label: "Initiative Cards",
+    parent: "Initiatives",
+    fields: [
+      { key: "initiative_members_network_tagline", label: "Members Network — tagline" },
+      { key: "initiative_members_network", label: "Members Network — description" },
+      { key: "initiative_skill_swap_tagline", label: "Skill Swap — tagline" },
+      { key: "initiative_skill_swap", label: "Skill Swap — description" },
+      { key: "initiative_stem_in_action_tagline", label: "STEM in Action — tagline" },
+      { key: "initiative_stem_in_action", label: "STEM in Action — description" },
+      { key: "initiative_mentorship_tagline", label: "Mentorship — tagline" },
+      { key: "initiative_mentorship", label: "Mentorship — description" },
+      { key: "initiative_cws_voices_tagline", label: "CWS Voices — tagline" },
+      { key: "initiative_cws_voices", label: "CWS Voices — description" },
+    ],
+  },
+  {
+    id: "initiative-pages",
+    label: "Initiative Detail Pages",
+    parent: "Initiatives",
+    fields: [
+      { key: "initiative_members_network_body", label: "Members Network — page body" },
+      { key: "initiative_skill_swap_body", label: "Skill Swap — page body" },
+      { key: "initiative_stem_in_action_body", label: "STEM in Action — page body" },
+      { key: "initiative_mentorship_body", label: "Mentorship — page body" },
+      { key: "initiative_cws_voices_body", label: "CWS Voices — page body" },
+    ],
+  },
+];
+
+const MAIN_TABS = [
+  { key: "news" as Tab, icon: Megaphone, label: "News" },
+  { key: "team" as Tab, icon: Users, label: "Team" },
+  { key: "content" as Tab, icon: FileText, label: "Site Content" },
+  { key: "values" as Tab, icon: Heart, label: "Core Values" },
+  { key: "roles" as Tab, icon: Briefcase, label: "Open Roles" },
 ];
 
 export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles }: Props) {
   const [tab, setTab] = useState<Tab>("news");
+  const [contentSection, setContentSection] = useState("about");
   const [newsItems, setNewsItems] = useState(initialNewsItems);
   const [teamMembers, setTeamMembers] = useState(initialTeamMembers);
   const [content, setContent] = useState<Record<string, string>>(Object.fromEntries(initialContent.map((c) => [c.key, c.value])));
   const [coreValues, setCoreValues] = useState(initialCoreValues);
   const [openRoles, setOpenRoles] = useState(initialOpenRoles);
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState<string | null>(null); // key being saved
   const [toast, setToast] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(INACTIVITY_MS);
   const [uploadingFor, setUploadingFor] = useState<string | null>(null);
@@ -91,7 +132,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
 
   // ── News ─────────────────────────────────────────────────
   const saveNewsItems = async () => {
-    setSaving(true);
+    setSaving("news");
     try {
       await supabase.from("news_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
       const rows = newsItems.filter((n) => n.text.trim()).map((n, i) => ({
@@ -100,12 +141,12 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       }));
       if (rows.length) { const { error } = await supabase.from("news_items").insert(rows); if (error) throw error; }
       showToast("News saved!"); router.refresh();
-    } catch { showToast("Error saving."); } finally { setSaving(false); }
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
   };
 
   // ── Team ─────────────────────────────────────────────────
   const saveTeamMember = async (member: TeamMember) => {
-    setSaving(true);
+    setSaving(member.id);
     try {
       const payload = { name: member.name, role: member.role, bio: member.bio, hobbies: member.hobbies, image_path: member.image_path, linkedin: member.linkedin, sort_order: member.sort_order, active: member.active };
       if (member.id.startsWith("new-")) {
@@ -117,7 +158,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
         if (error) throw error;
       }
       showToast("Member saved!"); router.refresh();
-    } catch { showToast("Error saving."); } finally { setSaving(false); }
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
   };
 
   const removeTeamMember = async (id: string) => {
@@ -136,33 +177,33 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       const { data: { publicUrl } } = supabase.storage.from("team-photos").getPublicUrl(filename);
       setTeamMembers(teamMembers.map((m) => m.id === memberId ? { ...m, image_path: publicUrl } : m));
       showToast("Photo uploaded!");
-    } catch { showToast("Upload failed. Try again."); } finally { setUploadingFor(null); }
+    } catch { showToast("Upload failed."); } finally { setUploadingFor(null); }
   };
 
-  // ── Site Content ─────────────────────────────────────────
+  // ── Content ───────────────────────────────────────────────
   const saveContentField = async (key: string) => {
-    setSaving(true);
+    setSaving(key);
     try {
       const { error } = await supabase.from("site_content").upsert({ key, value: content[key] ?? "", updated_at: new Date().toISOString() });
       if (error) throw error;
       showToast("Saved!"); router.refresh();
-    } catch { showToast("Error saving."); } finally { setSaving(false); }
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
   };
 
-  // ── Core Values ──────────────────────────────────────────
+  // ── Core Values ───────────────────────────────────────────
   const saveCoreValue = async (v: CoreValue) => {
-    setSaving(true);
+    setSaving(v.id);
     try {
       if (v.id.startsWith("new-")) {
         const { data, error } = await supabase.from("core_values").insert({ label: v.label, description: v.description, sort_order: v.sort_order }).select().single();
         if (error) throw error;
         setCoreValues(coreValues.map((c) => c.id === v.id ? data : c));
       } else {
-        const { error } = await supabase.from("core_values").update({ label: v.label, description: v.description, sort_order: v.sort_order }).eq("id", v.id);
+        const { error } = await supabase.from("core_values").update({ label: v.label, description: v.description }).eq("id", v.id);
         if (error) throw error;
       }
       showToast("Value saved!"); router.refresh();
-    } catch { showToast("Error saving."); } finally { setSaving(false); }
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
   };
 
   const removeCoreValue = async (id: string) => {
@@ -171,9 +212,9 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     showToast("Value removed.");
   };
 
-  // ── Open Roles ───────────────────────────────────────────
+  // ── Open Roles ────────────────────────────────────────────
   const saveOpenRole = async (r: OpenRole) => {
-    setSaving(true);
+    setSaving(r.id);
     try {
       const payload = { title: r.title, commitment: r.commitment, description: r.description, sort_order: r.sort_order, active: r.active };
       if (r.id.startsWith("new-")) {
@@ -185,7 +226,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
         if (error) throw error;
       }
       showToast("Role saved!"); router.refresh();
-    } catch { showToast("Error saving."); } finally { setSaving(false); }
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
   };
 
   const removeOpenRole = async (id: string) => {
@@ -194,23 +235,24 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     showToast("Role removed.");
   };
 
-  const sections = [...new Set(CONTENT_FIELDS.map((f) => f.section))];
+  const activeSection = CONTENT_SECTIONS.find((s) => s.id === contentSection) ?? CONTENT_SECTIONS[0];
 
-  const TABS = [
-    ["news", Megaphone, "News"],
-    ["team", Users, "Team"],
-    ["content", FileText, "Content"],
-    ["values", Heart, "Core Values"],
-    ["roles", Briefcase, "Open Roles"],
-  ] as const;
+  // Group content sections by parent for sidebar
+  const sidebarGroups: { group?: string; items: typeof CONTENT_SECTIONS }[] = [
+    { items: CONTENT_SECTIONS.filter((s) => !s.parent) },
+    { group: "Initiatives", items: CONTENT_SECTIONS.filter((s) => s.parent === "Initiatives") },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
       {toast && (
-        <div className="fixed top-4 right-4 z-50 bg-primary text-primary-foreground font-body text-sm px-5 py-3 rounded-lg shadow-lg">{toast}</div>
+        <div className="fixed top-4 right-4 z-50 bg-primary text-primary-foreground font-body text-sm px-5 py-3 rounded-lg shadow-lg animate-fade-in">
+          {toast}
+        </div>
       )}
 
-      <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
+      {/* ── Header ── */}
+      <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
           <Image src="/cws-logo.png" alt="CWS" width={36} height={36} />
           <div>
@@ -219,8 +261,8 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <span className={`font-body text-xs ${countdownWarning ? "text-red-500 font-semibold" : "text-foreground/40"}`}>
-            Auto sign-out in {countdownMin}:{countdownSec.toString().padStart(2, "0")}
+          <span className={`font-body text-xs tabular-nums ${countdownWarning ? "text-red-500 font-semibold" : "text-foreground/40"}`}>
+            Auto sign-out {countdownMin}:{countdownSec.toString().padStart(2, "0")}
           </span>
           <button onClick={handleSignOut} className="inline-flex items-center gap-2 font-body text-sm text-foreground/60 hover:text-foreground transition-colors">
             <LogOut size={15} /> Sign out
@@ -228,251 +270,284 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
         </div>
       </header>
 
-      <div className="border-b border-border bg-card overflow-x-auto">
-        <div className="container mx-auto px-6 flex gap-0 min-w-max">
-          {TABS.map(([key, Icon, label]) => (
+      {/* ── Main Tab Bar ── */}
+      <div className="border-b border-border bg-card overflow-x-auto sticky top-[73px] z-30">
+        <div className="container mx-auto px-6 flex min-w-max">
+          {MAIN_TABS.map(({ key, icon: Icon, label }) => (
             <button key={key} onClick={() => setTab(key)}
-              className={`inline-flex items-center gap-2 px-5 py-4 font-body text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${tab === key ? "border-primary text-primary" : "border-transparent text-foreground/60 hover:text-foreground"}`}>
+              className={`inline-flex items-center gap-2 px-5 py-3.5 font-body text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${tab === key ? "border-primary text-primary" : "border-transparent text-foreground/60 hover:text-foreground"}`}>
               <Icon size={15} />{label}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-10 max-w-3xl">
+      {/* ── Body ── */}
+      <div className={tab === "content" ? "flex" : ""}>
 
-        {/* ── News ── */}
-        {tab === "news" && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <div><h2 className="font-body text-xl font-semibold text-foreground">News Banner</h2>
-                <p className="font-body text-sm text-foreground/60 mt-1">Rotating announcements at the top of the home page.</p></div>
-              <button onClick={() => setNewsItems([...newsItems, { id: `new-${Date.now()}`, text: "", active: true, sort_order: newsItems.length }])}
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 transition-opacity">
-                <Plus size={14} /> Add Item
-              </button>
-            </div>
-            <div className="flex flex-col gap-3">
-              {newsItems.map((item) => (
-                <div key={item.id} className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3">
-                  <GripVertical size={16} className="text-foreground/30 shrink-0" />
-                  <input value={item.text} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, text: e.target.value } : n))}
-                    placeholder="Enter announcement text..."
-                    className="flex-1 font-body text-sm bg-transparent outline-none text-foreground placeholder:text-foreground/30" />
-                  <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60 shrink-0">
-                    <input type="checkbox" checked={item.active} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, active: e.target.checked } : n))} className="accent-primary" /> Active
-                  </label>
-                  <button onClick={() => setNewsItems(newsItems.filter((n) => n.id !== item.id))} className="text-foreground/30 hover:text-red-500 transition-colors shrink-0"><Trash2 size={15} /></button>
+        {/* Content sidebar */}
+        {tab === "content" && (
+          <aside className="w-52 shrink-0 border-r border-border bg-card min-h-[calc(100vh-120px)] sticky top-[121px] self-start">
+            <nav className="py-4 px-3 flex flex-col gap-1">
+              {sidebarGroups.map((group, gi) => (
+                <div key={gi}>
+                  {group.group && (
+                    <p className="font-body text-xs font-semibold uppercase tracking-[0.15em] text-foreground/40 px-3 pt-4 pb-2">
+                      {group.group}
+                    </p>
+                  )}
+                  {group.items.map((section) => (
+                    <button key={section.id} onClick={() => setContentSection(section.id)}
+                      className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg font-body text-sm transition-colors ${contentSection === section.id ? "bg-primary/10 text-primary font-medium" : "text-foreground/70 hover:bg-muted hover:text-foreground"}`}>
+                      {section.label}
+                      {contentSection === section.id && <ChevronRight size={13} />}
+                    </button>
+                  ))}
                 </div>
               ))}
-            </div>
-            {newsItems.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No items. Add one above.</p>}
-            <button onClick={saveNewsItems} disabled={saving}
-              className="mt-6 inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50">
-              <Save size={15} />{saving ? "Saving…" : "Save All"}
-            </button>
-          </div>
+            </nav>
+          </aside>
         )}
 
-        {/* ── Team ── */}
-        {tab === "team" && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <div><h2 className="font-body text-xl font-semibold text-foreground">Team Members</h2>
-                <p className="font-body text-sm text-foreground/60 mt-1">Add, edit, or remove team member profiles.</p></div>
-              <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", sort_order: teamMembers.length, active: true }])}
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                <Plus size={14} /> Add Member
-              </button>
-            </div>
-            <div className="flex flex-col gap-6">
-              {teamMembers.map((member) => (
-                <div key={member.id} className="bg-card border border-border rounded-2xl p-6">
-                  <div className="flex items-center justify-between mb-5">
-                    <h3 className="font-body font-semibold text-foreground">{member.name || "New Member"}</h3>
-                    <div className="flex items-center gap-2">
-                      <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60">
-                        <input type="checkbox" checked={member.active} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, active: e.target.checked } : m))} className="accent-primary" /> Active
-                      </label>
-                      <button onClick={() => removeTeamMember(member.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
-                    </div>
-                  </div>
+        {/* Main content area */}
+        <div className={tab === "content" ? "flex-1 min-w-0" : ""}>
+          <div className="container mx-auto px-6 py-10 max-w-3xl">
 
-                  {/* Photo upload */}
-                  <div className="mb-5 flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border bg-muted flex items-center justify-center shrink-0">
-                      {member.image_path ? (
-                        <img src={member.image_path} alt={member.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="font-display text-xl font-bold text-primary">{member.name?.[0] ?? "?"}</span>
-                      )}
-                    </div>
-                    <div>
-                      <label className="inline-flex items-center gap-2 cursor-pointer bg-background border border-border rounded-lg px-4 py-2 font-body text-sm hover:border-primary transition-colors">
-                        <Upload size={14} className="text-foreground/60" />
-                        {uploadingFor === member.id ? "Uploading…" : "Upload Photo"}
-                        <input type="file" accept="image/*" className="hidden"
-                          onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePhotoUpload(member.id, f); }} />
-                      </label>
-                      {member.image_path && (
-                        <button onClick={() => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, image_path: "" } : m))}
-                          className="ml-2 font-body text-xs text-foreground/40 hover:text-red-500 transition-colors">
-                          Remove
-                        </button>
-                      )}
-                    </div>
+            {/* ── News ── */}
+            {tab === "news" && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="font-body text-xl font-semibold text-foreground">News Banner</h2>
+                    <p className="font-body text-sm text-foreground/60 mt-1">Rotating announcements at the top of the home page.</p>
                   </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {([["Name", "name", "Dr. Jane Smith"], ["Role", "role", "Founder & Director"], ["LinkedIn URL", "linkedin", "https://linkedin.com/in/..."]] as const).map(([label, field, ph]) => (
-                      <div key={field}>
-                        <label className="block font-body text-xs font-medium text-foreground/60 mb-1">{label}</label>
-                        <input value={(member[field] as string) ?? ""} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, [field]: e.target.value } : m))}
-                          placeholder={ph} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
-                      </div>
-                    ))}
-                    <div className="sm:col-span-2">
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Bio</label>
-                      <textarea value={member.bio} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, bio: e.target.value } : m))}
-                        rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Hobbies / Interests</label>
-                      <input value={member.hobbies} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, hobbies: e.target.value } : m))}
-                        placeholder="Dance · Yoga · Travel" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
-                    </div>
-                  </div>
-                  <button onClick={() => saveTeamMember(member)} disabled={saving || uploadingFor === member.id}
-                    className="mt-5 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
-                    <Save size={13} />{saving ? "Saving…" : "Save"}
+                  <button onClick={() => setNewsItems([...newsItems, { id: `new-${Date.now()}`, text: "", active: true, sort_order: newsItems.length }])}
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
+                    <Plus size={14} /> Add
                   </button>
                 </div>
-              ))}
-            </div>
-            {teamMembers.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No team members. Add one above.</p>}
-          </div>
-        )}
+                <div className="flex flex-col gap-3">
+                  {newsItems.map((item) => (
+                    <div key={item.id} className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3">
+                      <GripVertical size={16} className="text-foreground/30 shrink-0" />
+                      <input value={item.text} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, text: e.target.value } : n))}
+                        placeholder="Announcement text..."
+                        className="flex-1 font-body text-sm bg-transparent outline-none text-foreground placeholder:text-foreground/30" />
+                      <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60 shrink-0">
+                        <input type="checkbox" checked={item.active} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, active: e.target.checked } : n))} className="accent-primary" /> Active
+                      </label>
+                      <button onClick={() => setNewsItems(newsItems.filter((n) => n.id !== item.id))} className="text-foreground/30 hover:text-red-500 transition-colors shrink-0"><Trash2 size={15} /></button>
+                    </div>
+                  ))}
+                </div>
+                {newsItems.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No items. Add one above.</p>}
+                <button onClick={saveNewsItems} disabled={saving === "news"}
+                  className="mt-6 inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50">
+                  <Save size={15} />{saving === "news" ? "Saving…" : "Save All"}
+                </button>
+              </div>
+            )}
 
-        {/* ── Site Content ── */}
-        {tab === "content" && (
-          <div>
-            <div className="mb-8">
-              <h2 className="font-body text-xl font-semibold text-foreground">Site Content</h2>
-              <p className="font-body text-sm text-foreground/60 mt-1">Edit text across all pages. Save each field individually.</p>
-            </div>
-            {sections.map((section) => (
-              <div key={section} className="mb-10">
-                <h3 className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-foreground/40 mb-4">{section}</h3>
+            {/* ── Team ── */}
+            {tab === "team" && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="font-body text-xl font-semibold text-foreground">Team Members</h2>
+                    <p className="font-body text-sm text-foreground/60 mt-1">Add, edit, or remove team member profiles.</p>
+                  </div>
+                  <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", sort_order: teamMembers.length, active: true }])}
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
+                    <Plus size={14} /> Add Member
+                  </button>
+                </div>
+                <div className="flex flex-col gap-6">
+                  {teamMembers.map((member) => (
+                    <div key={member.id} className="bg-card border border-border rounded-2xl p-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <h3 className="font-body font-semibold text-foreground">{member.name || "New Member"}</h3>
+                        <div className="flex items-center gap-2">
+                          <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60">
+                            <input type="checkbox" checked={member.active} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, active: e.target.checked } : m))} className="accent-primary" /> Active
+                          </label>
+                          <button onClick={() => removeTeamMember(member.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
+                        </div>
+                      </div>
+                      {/* Photo */}
+                      <div className="mb-5 flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border bg-muted flex items-center justify-center shrink-0">
+                          {member.image_path
+                            ? <img src={member.image_path} alt={member.name} className="w-full h-full object-cover" />
+                            : <span className="font-display text-xl font-bold text-primary">{member.name?.[0] ?? "?"}</span>}
+                        </div>
+                        <div>
+                          <label className="inline-flex items-center gap-2 cursor-pointer bg-background border border-border rounded-lg px-4 py-2 font-body text-sm hover:border-primary transition-colors">
+                            <Upload size={14} className="text-foreground/60" />
+                            {uploadingFor === member.id ? "Uploading…" : "Upload Photo"}
+                            <input type="file" accept="image/*" className="hidden"
+                              onChange={(e) => { const f = e.target.files?.[0]; if (f) handlePhotoUpload(member.id, f); }} />
+                          </label>
+                          {member.image_path && (
+                            <button onClick={() => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, image_path: "" } : m))}
+                              className="ml-2 font-body text-xs text-foreground/40 hover:text-red-500 transition-colors">Remove</button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {([["Name", "name", "Dr. Jane Smith"], ["Role", "role", "Founder & Director"], ["LinkedIn URL", "linkedin", "https://linkedin.com/in/..."]] as const).map(([lbl, field, ph]) => (
+                          <div key={field}>
+                            <label className="block font-body text-xs font-medium text-foreground/60 mb-1">{lbl}</label>
+                            <input value={(member[field] as string) ?? ""} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, [field]: e.target.value } : m))}
+                              placeholder={ph} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                          </div>
+                        ))}
+                        <div className="sm:col-span-2">
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Bio</label>
+                          <textarea value={member.bio} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, bio: e.target.value } : m))}
+                            rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Hobbies / Interests</label>
+                          <input value={member.hobbies} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, hobbies: e.target.value } : m))}
+                            placeholder="Dance · Yoga · Travel" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                        </div>
+                      </div>
+                      <button onClick={() => saveTeamMember(member)} disabled={saving === member.id || uploadingFor === member.id}
+                        className="mt-5 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
+                        <Save size={13} />{saving === member.id ? "Saving…" : "Save"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {teamMembers.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No members. Add one above.</p>}
+              </div>
+            )}
+
+            {/* ── Site Content ── */}
+            {tab === "content" && (
+              <div>
+                <div className="mb-8">
+                  <h2 className="font-body text-xl font-semibold text-foreground">{activeSection.label}</h2>
+                  <p className="font-body text-sm text-foreground/60 mt-1">Save each field individually — changes go live immediately.</p>
+                </div>
                 <div className="flex flex-col gap-5">
-                  {CONTENT_FIELDS.filter((f) => f.section === section).map((field) => (
+                  {activeSection.fields.map((field) => (
                     <div key={field.key} className="bg-card border border-border rounded-2xl p-5">
                       <label className="block font-body text-sm font-medium text-foreground mb-3">{field.label}</label>
-                      <textarea value={content[field.key] ?? ""} onChange={(e) => setContent({ ...content, [field.key]: e.target.value })}
-                        rows={field.multiline ? 4 : 1}
-                        className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-y" />
-                      <button onClick={() => saveContentField(field.key)} disabled={saving}
+                      <textarea
+                        value={content[field.key] ?? ""}
+                        onChange={(e) => setContent({ ...content, [field.key]: e.target.value })}
+                        rows={field.key.endsWith("_body") ? 6 : field.key.endsWith("_tagline") ? 1 : 3}
+                        className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-y"
+                      />
+                      <button onClick={() => saveContentField(field.key)} disabled={saving === field.key}
                         className="mt-3 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
-                        <Save size={13} />{saving ? "Saving…" : "Save"}
+                        <Save size={13} />{saving === field.key ? "Saving…" : "Save"}
                       </button>
                     </div>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {/* ── Core Values ── */}
-        {tab === "values" && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <div><h2 className="font-body text-xl font-semibold text-foreground">Core Values</h2>
-                <p className="font-body text-sm text-foreground/60 mt-1">Edit labels and descriptions shown on the About page.</p></div>
-              <button onClick={() => setCoreValues([...coreValues, { id: `new-${Date.now()}`, label: "", description: "", sort_order: coreValues.length }])}
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                <Plus size={14} /> Add Value
-              </button>
-            </div>
-            <div className="flex flex-col gap-5">
-              {coreValues.map((v) => (
-                <div key={v.id} className="bg-card border border-border rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-body font-semibold text-foreground">{v.label || "New Value"}</span>
-                    <button onClick={() => removeCoreValue(v.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
+            {/* ── Core Values ── */}
+            {tab === "values" && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="font-body text-xl font-semibold text-foreground">Core Values</h2>
+                    <p className="font-body text-sm text-foreground/60 mt-1">Shown on the About page.</p>
                   </div>
-                  <div className="grid gap-3">
-                    <div>
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Label</label>
-                      <input value={v.label} onChange={(e) => setCoreValues(coreValues.map((c) => c.id === v.id ? { ...c, label: e.target.value } : c))}
-                        placeholder="e.g. Belonging" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
-                    </div>
-                    <div>
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Description</label>
-                      <textarea value={v.description} onChange={(e) => setCoreValues(coreValues.map((c) => c.id === v.id ? { ...c, description: e.target.value } : c))}
-                        rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
-                    </div>
-                  </div>
-                  <button onClick={() => saveCoreValue(v)} disabled={saving}
-                    className="mt-4 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
-                    <Save size={13} />{saving ? "Saving…" : "Save"}
+                  <button onClick={() => setCoreValues([...coreValues, { id: `new-${Date.now()}`, label: "", description: "", sort_order: coreValues.length }])}
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
+                    <Plus size={14} /> Add Value
                   </button>
                 </div>
-              ))}
-            </div>
-            {coreValues.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No values. Add one above.</p>}
-          </div>
-        )}
+                <div className="flex flex-col gap-5">
+                  {coreValues.map((v) => (
+                    <div key={v.id} className="bg-card border border-border rounded-2xl p-5">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-body font-semibold text-foreground">{v.label || "New Value"}</span>
+                        <button onClick={() => removeCoreValue(v.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
+                      </div>
+                      <div className="grid gap-3">
+                        <div>
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Label</label>
+                          <input value={v.label} onChange={(e) => setCoreValues(coreValues.map((c) => c.id === v.id ? { ...c, label: e.target.value } : c))}
+                            placeholder="e.g. Belonging" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                        </div>
+                        <div>
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Description</label>
+                          <textarea value={v.description} onChange={(e) => setCoreValues(coreValues.map((c) => c.id === v.id ? { ...c, description: e.target.value } : c))}
+                            rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
+                        </div>
+                      </div>
+                      <button onClick={() => saveCoreValue(v)} disabled={saving === v.id}
+                        className="mt-4 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
+                        <Save size={13} />{saving === v.id ? "Saving…" : "Save"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {coreValues.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No values. Add one above.</p>}
+              </div>
+            )}
 
-        {/* ── Open Roles ── */}
-        {tab === "roles" && (
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <div><h2 className="font-body text-xl font-semibold text-foreground">Open Roles</h2>
-                <p className="font-body text-sm text-foreground/60 mt-1">Manage volunteer and leadership opportunities on the Get Involved page.</p></div>
-              <button onClick={() => setOpenRoles([...openRoles, { id: `new-${Date.now()}`, title: "", commitment: "", description: "", sort_order: openRoles.length, active: true }])}
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                <Plus size={14} /> Add Role
-              </button>
-            </div>
-            <div className="flex flex-col gap-5">
-              {openRoles.map((r) => (
-                <div key={r.id} className="bg-card border border-border rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-body font-semibold text-foreground">{r.title || "New Role"}</span>
-                    <div className="flex items-center gap-2">
-                      <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60">
-                        <input type="checkbox" checked={r.active} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, active: e.target.checked } : o))} className="accent-primary" /> Active
-                      </label>
-                      <button onClick={() => removeOpenRole(r.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
-                    </div>
+            {/* ── Open Roles ── */}
+            {tab === "roles" && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="font-body text-xl font-semibold text-foreground">Open Roles</h2>
+                    <p className="font-body text-sm text-foreground/60 mt-1">Volunteer and leadership opportunities on Get Involved.</p>
                   </div>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <div className="sm:col-span-2">
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Title</label>
-                      <input value={r.title} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, title: e.target.value } : o))}
-                        placeholder="Committee Chair — Social" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
-                    </div>
-                    <div>
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Time commitment</label>
-                      <input value={r.commitment} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, commitment: e.target.value } : o))}
-                        placeholder="~2–4 hrs/month" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Description</label>
-                      <textarea value={r.description} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, description: e.target.value } : o))}
-                        rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
-                    </div>
-                  </div>
-                  <button onClick={() => saveOpenRole(r)} disabled={saving}
-                    className="mt-4 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
-                    <Save size={13} />{saving ? "Saving…" : "Save"}
+                  <button onClick={() => setOpenRoles([...openRoles, { id: `new-${Date.now()}`, title: "", commitment: "", description: "", sort_order: openRoles.length, active: true }])}
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
+                    <Plus size={14} /> Add Role
                   </button>
                 </div>
-              ))}
-            </div>
-            {openRoles.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No roles. Add one above.</p>}
+                <div className="flex flex-col gap-5">
+                  {openRoles.map((r) => (
+                    <div key={r.id} className="bg-card border border-border rounded-2xl p-5">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-body font-semibold text-foreground">{r.title || "New Role"}</span>
+                        <div className="flex items-center gap-2">
+                          <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60">
+                            <input type="checkbox" checked={r.active} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, active: e.target.checked } : o))} className="accent-primary" /> Active
+                          </label>
+                          <button onClick={() => removeOpenRole(r.id)} className="text-foreground/30 hover:text-red-500 transition-colors"><Trash2 size={15} /></button>
+                        </div>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Title</label>
+                          <input value={r.title} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, title: e.target.value } : o))}
+                            placeholder="Committee Chair — Social" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                        </div>
+                        <div>
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Time commitment</label>
+                          <input value={r.commitment} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, commitment: e.target.value } : o))}
+                            placeholder="~2–4 hrs/month" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Description</label>
+                          <textarea value={r.description} onChange={(e) => setOpenRoles(openRoles.map((o) => o.id === r.id ? { ...o, description: e.target.value } : o))}
+                            rows={2} className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors resize-none" />
+                        </div>
+                      </div>
+                      <button onClick={() => saveOpenRole(r)} disabled={saving === r.id}
+                        className="mt-4 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50">
+                        <Save size={13} />{saving === r.id ? "Saving…" : "Save"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {openRoles.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No roles. Add one above.</p>}
+              </div>
+            )}
+
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
