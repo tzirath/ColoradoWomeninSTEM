@@ -34,16 +34,16 @@ export default function NewsBanner({ items }: Props) {
   if (!items.length) return null;
 
   return (
-    <div className="bg-secondary/10 border-y border-secondary/20 py-4">
+    <div className="bg-secondary/10 border-y border-secondary/20 py-3 md:py-4">
       <div className="container mx-auto px-6 flex items-center justify-center gap-4">
         <button onClick={prev} className="text-foreground/40 hover:text-secondary transition-colors shrink-0" aria-label="Previous">
           <ChevronLeft size={18} />
         </button>
 
-        <div className="flex-1 max-w-2xl overflow-hidden relative h-7 flex items-center justify-center">
+        <div className="flex-1 max-w-2xl overflow-hidden relative min-h-[1.75rem] flex items-center justify-center">
           <p
             key={current}
-            className="font-body text-base font-semibold text-foreground absolute w-full text-center flex items-center justify-center gap-2"
+            className="font-body text-base font-semibold text-foreground absolute w-full text-center flex items-center justify-center gap-2 px-2 leading-snug"
             style={{
               animation: animating
                 ? direction === "left"

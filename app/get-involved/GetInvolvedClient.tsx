@@ -61,8 +61,8 @@ export default function GetInvolvedClient({ roles, content }: Props) {
               Sign Up for an <span className="font-display italic text-primary">Initiative</span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {programs.map((p) => (
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {programs.slice(0, 3).map((p) => (
               <div key={p.slug} className="bg-card rounded-2xl p-8 border border-border shadow-sm flex flex-col">
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                   <p.icon className="w-7 h-7 text-accent" />
@@ -75,6 +75,12 @@ export default function GetInvolvedClient({ roles, content }: Props) {
                 </Link>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link href="/initiatives"
+              className="inline-flex items-center gap-2 border-2 border-primary text-primary font-body font-semibold px-7 py-3 rounded-lg hover:bg-primary/5 transition-colors">
+              View All Initiatives
+            </Link>
           </div>
         </div>
       </section>

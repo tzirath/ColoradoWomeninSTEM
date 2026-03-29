@@ -152,25 +152,36 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
             {navLinks.map((link) =>
               link.dropdown ? (
                 <li key={link.href} className="w-full text-center">
-                  <Link
-                    href="/initiatives"
-                    className="block font-body text-lg text-foreground/80 hover:text-primary transition-colors py-1"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Initiatives
-                  </Link>
-                  <div className="flex flex-col items-center gap-2 mt-1">
-                    {initiatives.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="font-body text-sm text-foreground/60 hover:text-primary transition-colors"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                  <div className="flex items-center justify-center gap-1">
+                    <Link
+                      href="/initiatives"
+                      className="font-body text-lg text-foreground/80 hover:text-primary transition-colors py-1"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Initiatives
+                    </Link>
+                    <button
+                      onClick={() => setInitiativesOpen((v) => !v)}
+                      className="text-foreground/50 hover:text-primary transition-colors p-1"
+                      aria-label="Toggle initiatives"
+                    >
+                      <ChevronDown size={16} className={`transition-transform ${initiativesOpen ? "rotate-180" : ""}`} />
+                    </button>
                   </div>
+                  {initiativesOpen && (
+                    <div className="flex flex-col items-center gap-2 mt-1">
+                      {initiatives.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="font-body text-sm text-foreground/60 hover:text-primary transition-colors"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </li>
               ) : (
                 <li key={link.href}>

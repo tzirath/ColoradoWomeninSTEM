@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, MapPin, Clock } from "lucide-react";
+import { useJoinModal } from "@/components/JoinModalContext";
 
 interface Event {
   title: string;
@@ -45,6 +46,7 @@ function EventSkeleton() {
 // Main section
 // ---------------------------------------------------------------------------
 const EventsSection = () => {
+  const { openModal } = useJoinModal();
   const { data: events, isLoading, isError } = useQuery({
     queryKey: ["events"],
     queryFn: fetchEvents,
@@ -82,7 +84,7 @@ const EventsSection = () => {
             <p className="text-center font-body text-muted-foreground py-8">
               No upcoming events at this time.{" "}
               <button
-                onClick={() => document.getElementById("join-cws-trigger")?.click()}
+                onClick={openModal}
                 className="underline underline-offset-2 hover:text-foreground transition-colors"
               >
                 Sign up for our newsletter
