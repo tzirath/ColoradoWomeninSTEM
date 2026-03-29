@@ -19,6 +19,13 @@ interface CoreValue { id: string; label: string; description: string; sort_order
 interface OpenRole { id: string; title: string; commitment: string; description: string; sort_order: number; active: boolean; }
 interface Committee { id: string; name: string; description: string; sort_order: number; }
 
+const DEFAULT_COMMITTEES: Committee[] = [
+  { id: "default-1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
+  { id: "default-2", name: "Outreach & Partnerships", description: "Find meaningful partnerships with external organizations and sponsors.", sort_order: 1 },
+  { id: "default-3", name: "Community Service", description: "Seek out community-focused initiatives.", sort_order: 2 },
+  { id: "default-4", name: "Professional Development", description: "Empower members with the tools and knowledge to thrive in their careers and beyond.", sort_order: 3 },
+];
+
 interface Props {
   user: User;
   initialNewsItems: NewsItem[];
@@ -97,7 +104,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
   const [teamSection, setTeamSection] = useState<"members" | "committees">("members");
   const [newsItems, setNewsItems] = useState(initialNewsItems);
   const [teamMembers, setTeamMembers] = useState(initialTeamMembers);
-  const [committees, setCommittees] = useState(initialCommittees);
+  const [committees, setCommittees] = useState(initialCommittees.length ? initialCommittees : DEFAULT_COMMITTEES);
   const [content, setContent] = useState<Record<string, string>>(Object.fromEntries(initialContent.map((c) => [c.key, c.value])));
   const [coreValues, setCoreValues] = useState(initialCoreValues);
   const [openRoles, setOpenRoles] = useState(initialOpenRoles);
@@ -244,7 +251,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     setSaving(c.id);
     try {
       const payload = { name: c.name, description: c.description, sort_order: c.sort_order };
-      if (c.id.startsWith("new-")) {
+      if (c.id.startsWith("new-") || c.id.startsWith("default-")) {
         const { data, error } = await supabase.from("committees").insert(payload).select().single();
         if (error) throw error;
         setCommittees(committees.map((x) => x.id === c.id ? data : x));
@@ -257,7 +264,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
   };
 
   const removeCommittee = async (id: string) => {
-    if (!id.startsWith("new-")) await supabase.from("committees").delete().eq("id", id);
+    if (!id.startsWith("new-") && !id.startsWith("default-")) await supabase.from("committees").delete().eq("id", id);
     setCommittees(committees.filter((c) => c.id !== id));
     showToast("Committee removed.");
   };
