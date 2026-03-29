@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,6 +15,11 @@ import Footer from "@/components/Footer";
 
 function SiteShell({ children }: { children: React.ReactNode }) {
   const { open, openModal, closeModal } = useJoinModal();
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin") || pathname?.startsWith("/auth");
+
+  if (isAdmin) return <>{children}</>;
+
   return (
     <>
       <Navbar onJoinClick={openModal} />
