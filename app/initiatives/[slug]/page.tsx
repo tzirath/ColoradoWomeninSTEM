@@ -97,7 +97,7 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
   // If content exists in DB, use it as a single block; otherwise use default paragraphs
   const body: string[] = contentMap[item.contentKey] ? [contentMap[item.contentKey]] : item.defaultBody;
   const tagline = contentMap[`${item.contentKey}_tagline`] || item.tagline;
-  const signupHref = contentMap[`${item.contentKey}_signup_url`] || `/initiatives/${params.slug}`;
+  const signupHref = contentMap[`${item.contentKey}_signup_url`] || null;
   const Icon = item.icon;
 
   return (
@@ -124,10 +124,17 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
           <div className="mt-14 p-8 bg-card rounded-2xl border border-border">
             <h2 className="font-body text-xl font-semibold text-foreground mb-3">Get Involved</h2>
             <p className="font-body text-foreground/80 mb-6">Interested in participating in or supporting this initiative?</p>
-            <Link href={signupHref} target={signupHref.startsWith("http") ? "_blank" : undefined} rel={signupHref.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity">
-              Sign Up
-            </Link>
+            {signupHref ? (
+              <Link href={signupHref} target={signupHref.startsWith("http") ? "_blank" : undefined} rel={signupHref.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                Sign Up
+              </Link>
+            ) : (
+              <Link href="/get-involved"
+                className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                Become a Member
+              </Link>
+            )}
           </div>
         </div>
       </section>
