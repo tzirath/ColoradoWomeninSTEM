@@ -40,9 +40,11 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown on outside click
+  // Close desktop dropdown on outside click (desktop only — on mobile this fires before
+  // tap navigation completes, unmounting links before they can route)
   useEffect(() => {
     const handler = (e: MouseEvent) => {
+      if (window.innerWidth < 768) return;
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node | null)) {
         setInitiativesOpen(false);
       }
