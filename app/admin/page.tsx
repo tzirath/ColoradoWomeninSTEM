@@ -21,7 +21,7 @@ export default async function AdminPage() {
     supabase.from("core_values").select("*").order("sort_order"),
     supabase.from("open_roles").select("*").order("sort_order"),
     supabase.from("committees").select("*").order("sort_order"),
-    getSupabaseAdmin().from("members").select("*").then((res) => { if (res.error) console.error("[admin] members fetch error:", res.error); return res; }),
+    getSupabaseAdmin().from("members").select("*").order("created_at", { ascending: false }),
   ]);
 
   return (
