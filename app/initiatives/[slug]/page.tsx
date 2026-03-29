@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Network, Repeat2, Wrench, Users, Mic } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import BecomeAMemberButton from "@/components/BecomeAMemberButton";
 
 const INITIATIVE_META: Record<string, {
   icon: React.ElementType;
@@ -130,10 +131,7 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
                 Sign Up
               </Link>
             ) : (
-              <Link href="/get-involved"
-                className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity">
-                Become a Member
-              </Link>
+              <BecomeAMemberButton />
             )}
           </div>
         </div>
