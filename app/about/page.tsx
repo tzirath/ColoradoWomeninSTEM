@@ -1,11 +1,11 @@
 import { Eye, Target, Heart } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
-const values = [
-  { label: "Belonging", description: "Creating spaces where every woman of color feels she truly belongs — not just included, but centered." },
-  { label: "Authenticity", description: "Showing up fully as ourselves, bringing lived experience and identity as assets, not obstacles." },
-  { label: "Collective Growth", description: "When one of us grows, we all benefit. We rise by lifting each other." },
-  { label: "Equity", description: "Acknowledging that equal is not always equitable — and designing our community with that in mind." },
+const DEFAULT_VALUES = [
+  { id: "1", label: "Belonging", description: "Creating spaces where every woman of color feels she truly belongs — not just included, but centered.", sort_order: 0 },
+  { id: "2", label: "Authenticity", description: "Showing up fully as ourselves, bringing lived experience and identity as assets, not obstacles.", sort_order: 1 },
+  { id: "3", label: "Collective Growth", description: "When one of us grows, we all benefit. We rise by lifting each other.", sort_order: 2 },
+  { id: "4", label: "Equity", description: "Acknowledging that equal is not always equitable — and designing our community with that in mind.", sort_order: 3 },
 ];
 
 export const metadata = {
@@ -22,11 +22,14 @@ const DEFAULTS: Record<string, string> = {
 
 export default async function AboutPage() {
   const supabase = createClient();
-  const { data } = await supabase.from("site_content").select("key, value")
-    .in("key", ["about_story_p1", "about_story_p2", "about_mission", "about_vision"]);
+  const [{ data: contentRows }, { data: valuesRows }] = await Promise.all([
+    supabase.from("site_content").select("key, value").in("key", ["about_story_p1", "about_story_p2", "about_mission", "about_vision"]),
+    supabase.from("core_values").select("*").order("sort_order"),
+  ]);
 
   const c: Record<string, string> = { ...DEFAULTS };
-  data?.forEach((row) => { c[row.key] = row.value; });
+  contentRows?.forEach((row) => { c[row.key] = row.value; });
+  const values = valuesRows?.length ? valuesRows : DEFAULT_VALUES;
 
   return (
     <div className="min-h-screen bg-background pt-24">

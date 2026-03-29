@@ -1,95 +1,55 @@
 import Link from "next/link";
 import { ArrowRight, Network, Repeat2, Wrench, Users, Mic } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Initiatives | CWS",
   description: "Programs and initiatives of Colorado Women of Color in STEM.",
 };
 
-const initiatives = [
-  {
-    slug: "members-network",
-    icon: Network,
-    title: "Members Networking Database",
-    tagline: "Find meaningful professional connections",
-    description:
-      "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage.",
-  },
-  {
-    slug: "skill-swap",
-    icon: Repeat2,
-    title: "Skill Swap",
-    tagline: "Teach what you know. Learn what you don't.",
-    description:
-      "Connect with members based on what you can teach and what you want to learn — building a true knowledge-sharing community.",
-  },
-  {
-    slug: "stem-in-action",
-    icon: Wrench,
-    title: "STEM in Action (Design Team)",
-    tagline: "Apply your skills to real community needs",
-    description:
-      "Partner with community organizations to identify needs and apply members' technical skills towards solutions they help define.",
-  },
-  {
-    slug: "mentorship",
-    icon: Users,
-    title: "Mentorship",
-    tagline: "Guidance for growth at every stage",
-    description:
-      "Pair members and offer guidance and advice for navigating careers, academia, and life in STEM as a woman of color.",
-  },
-  {
-    slug: "cws-voices",
-    icon: Mic,
-    title: "CWS Voices",
-    tagline: "Navigate workplace challenges with community",
-    description:
-      "Empower members with the resources and peer support to thoughtfully navigate ethical challenges and societal impact in STEM workplaces.",
-  },
+const INITIATIVE_META = [
+  { slug: "members-network", icon: Network, title: "Members Networking Database", tagline: "Find meaningful professional connections", contentKey: "initiative_members_network", defaultDesc: "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage." },
+  { slug: "skill-swap", icon: Repeat2, title: "Skill Swap", tagline: "Teach what you know. Learn what you don't.", contentKey: "initiative_skill_swap", defaultDesc: "Connect with members based on what you can teach and what you want to learn — building a true knowledge-sharing community." },
+  { slug: "stem-in-action", icon: Wrench, title: "STEM in Action (Design Team)", tagline: "Apply your skills to real community needs", contentKey: "initiative_stem_in_action", defaultDesc: "Partner with community organizations to identify needs and apply members' technical skills towards solutions they help define." },
+  { slug: "mentorship", icon: Users, title: "Mentorship", tagline: "Guidance for growth at every stage", contentKey: "initiative_mentorship", defaultDesc: "Pair members and offer guidance and advice for navigating careers, academia, and life in STEM as a woman of color." },
+  { slug: "cws-voices", icon: Mic, title: "CWS Voices", tagline: "Navigate workplace challenges with community", contentKey: "initiative_cws_voices", defaultDesc: "Empower members with the resources and peer support to thoughtfully navigate ethical challenges and societal impact in STEM workplaces." },
 ];
 
-export default function InitiativesPage() {
+export default async function InitiativesPage() {
+  const supabase = createClient();
+  const { data } = await supabase.from("site_content").select("key, value")
+    .in("key", INITIATIVE_META.map((i) => i.contentKey));
+
+  const contentMap: Record<string, string> = {};
+  data?.forEach((row) => { contentMap[row.key] = row.value; });
+
   return (
     <div className="min-h-screen bg-background pt-24">
-
-      {/* Header */}
       <section className="py-20 bg-card">
         <div className="container mx-auto px-6 max-w-3xl text-center">
-          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">
-            What We Do
-          </p>
+          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">What We Do</p>
           <h1 className="font-body text-4xl md:text-5xl font-bold text-foreground mb-6">
             Our <span className="font-display italic text-primary">Initiatives</span>
           </h1>
           <p className="font-body text-foreground/80 text-lg leading-relaxed">
-            CWS programs are built by and for our members — designed to create real connection,
-            develop real skills, and drive real change.
+            CWS programs are built by and for our members — designed to create real connection, develop real skills, and drive real change.
           </p>
         </div>
       </section>
 
-      {/* Cards */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {initiatives.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/initiatives/${item.slug}`}
-                className="group bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-lg hover:border-primary/30 transition-all"
-              >
+            {INITIATIVE_META.map((item) => (
+              <Link key={item.slug} href={`/initiatives/${item.slug}`}
+                className="group bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-lg hover:border-primary/30 transition-all">
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                   <item.icon className="w-7 h-7 text-accent" />
                 </div>
-                <h2 className="font-body text-xl font-semibold text-foreground mb-1">
-                  {item.title}
-                </h2>
-                <p className="font-body text-secondary text-sm font-medium mb-3 italic">
-                  {item.tagline}
-                </p>
+                <h2 className="font-body text-xl font-semibold text-foreground mb-1">{item.title}</h2>
+                <p className="font-body text-secondary text-sm font-medium mb-3 italic">{item.tagline}</p>
                 <p className="font-body text-foreground/80 text-sm leading-relaxed mb-4">
-                  {item.description}
+                  {contentMap[item.contentKey] || item.defaultDesc}
                 </p>
                 <span className="inline-flex items-center gap-1 text-primary font-body text-sm font-semibold group-hover:gap-2 transition-all">
                   Learn more <ArrowRight size={14} />
