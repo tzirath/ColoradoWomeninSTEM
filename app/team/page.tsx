@@ -1,4 +1,5 @@
 import TeamSection from "@/components/TeamSection";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Team | CWS",
@@ -28,12 +29,17 @@ const committees = [
   },
 ];
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  const supabase = createClient();
+  const { data: members } = await supabase
+    .from("team_members")
+    .select("*")
+    .eq("active", true)
+    .order("sort_order");
+
   return (
     <div className="min-h-screen bg-background pt-24">
-
-      {/* People — TeamSection already has its own layout */}
-      <TeamSection />
+      <TeamSection members={members ?? []} />
 
       {/* Committees */}
       <section className="py-20 bg-card">

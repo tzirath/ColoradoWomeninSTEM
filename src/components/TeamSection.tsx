@@ -3,26 +3,39 @@
 import { useState } from "react";
 import { Linkedin } from "lucide-react";
 
-const teamMembers = [
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  hobbies: string;
+  image_path: string;
+  linkedin: string;
+}
+
+// Fallback static data used if Supabase fetch fails
+const STATIC_MEMBERS: TeamMember[] = [
   {
+    id: "1",
     name: "Arianne Lazaro",
     role: "Founder & Director",
     bio: "Materials Engineer with interests in Human Spaceflight and Space In-Situ Resource Utilization",
     hobbies: "",
-    image: "/team/arianne.jpg",
+    image_path: "/team/arianne.jpg",
     linkedin: "https://www.linkedin.com/in/arianne-lazaro/",
   },
   {
+    id: "2",
     name: "Dr. Tzirath Perez Oteiza",
     role: "Founder & Director",
     bio: "Data Science PhD exploring how cities influence human wellbeing.",
     hobbies: "Dance · Yoga · Tennis · Travel",
-    image: "/team/tzirath.jpg",
+    image_path: "/team/tzirath.jpg",
     linkedin: "https://www.linkedin.com/in/tzirath-perez",
   },
 ];
 
-function TeamMemberCard({ member }: { member: typeof teamMembers[number] }) {
+function TeamMemberCard({ member }: { member: TeamMember }) {
   const [imgError, setImgError] = useState(false);
 
   const initials = member.name
@@ -33,34 +46,24 @@ function TeamMemberCard({ member }: { member: typeof teamMembers[number] }) {
   return (
     <div className="group text-center w-56">
       <div className="w-32 h-32 mx-auto mb-5 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors flex items-center justify-center">
-        {imgError ? (
+        {imgError || !member.image_path ? (
           <div className="w-full h-full bg-gradient-to-br from-primary/20 to-bloom-coral/20 flex items-center justify-center">
-            <span className="font-display text-3xl font-bold text-primary">
-              {initials}
-            </span>
+            <span className="font-display text-3xl font-bold text-primary">{initials}</span>
           </div>
         ) : (
           <img
-            src={member.image}
+            src={member.image_path}
             alt={member.name}
             className="w-full h-full object-cover"
             onError={() => setImgError(true)}
           />
         )}
       </div>
-      <h3 className="font-body text-lg font-semibold text-foreground">
-        {member.name}
-      </h3>
-      <p className="font-body text-secondary text-sm font-medium mb-2">
-        {member.role}
-      </p>
-      <p className="font-body text-muted-foreground text-sm leading-relaxed">
-        {member.bio}
-      </p>
+      <h3 className="font-body text-lg font-semibold text-foreground">{member.name}</h3>
+      <p className="font-body text-secondary text-sm font-medium mb-2">{member.role}</p>
+      <p className="font-body text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
       {member.hobbies && (
-        <p className="font-body text-muted-foreground/70 text-xs mt-2 tracking-wide">
-          {member.hobbies}
-        </p>
+        <p className="font-body text-muted-foreground/70 text-xs mt-2 tracking-wide">{member.hobbies}</p>
       )}
       {member.linkedin && (
         <a
@@ -77,7 +80,13 @@ function TeamMemberCard({ member }: { member: typeof teamMembers[number] }) {
   );
 }
 
-const TeamSection = () => {
+interface Props {
+  members?: TeamMember[];
+}
+
+const TeamSection = ({ members }: Props) => {
+  const list = members && members.length > 0 ? members : STATIC_MEMBERS;
+
   return (
     <section id="team" className="py-24 bg-background">
       <div className="container mx-auto px-6">
@@ -89,10 +98,9 @@ const TeamSection = () => {
             Meet Our <span className="font-display text-primary italic">Team</span>
           </h2>
         </div>
-
         <div className="flex flex-wrap justify-center gap-8">
-          {teamMembers.map((member) => (
-            <TeamMemberCard key={member.name} member={member} />
+          {list.map((member) => (
+            <TeamMemberCard key={member.id} member={member} />
           ))}
         </div>
       </div>

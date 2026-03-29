@@ -120,6 +120,9 @@ export default function Footer() {
             <Link href="/about" className="font-body text-bloom-sage/50 text-xs hover:text-bloom-sage/80 transition-colors">
               Privacy Policy
             </Link>
+            <Link href="/admin" className="font-body text-bloom-sage/20 text-xs hover:text-bloom-sage/50 transition-colors">
+              Admin
+            </Link>
           </div>
         </div>
       </div>
