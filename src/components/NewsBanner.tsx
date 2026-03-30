@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Megaphone, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props {
@@ -11,6 +11,8 @@ export default function NewsBanner({ items }: Props) {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<"left" | "right">("left");
+  const [height, setHeight] = useState<number | undefined>(undefined);
+  const textRef = useRef<HTMLParagraphElement>(null);
 
   const goTo = (index: number, dir: "left" | "right") => {
     if (animating || items.length <= 1) return;
@@ -24,6 +26,16 @@ export default function NewsBanner({ items }: Props) {
 
   const prev = () => goTo((current - 1 + items.length) % items.length, "right");
   const next = () => goTo((current + 1) % items.length, "left");
+
+  // Update container height whenever the visible text changes size
+  useEffect(() => {
+    if (!textRef.current) return;
+    const update = () => setHeight(textRef.current?.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(textRef.current);
+    return () => ro.disconnect();
+  }, [current]);
 
   useEffect(() => {
     if (items.length <= 1) return;
@@ -40,10 +52,14 @@ export default function NewsBanner({ items }: Props) {
           <ChevronLeft size={18} />
         </button>
 
-        <div className="flex-1 max-w-2xl overflow-hidden relative min-h-[1.75rem] flex items-center justify-center">
+        <div
+          className="flex-1 max-w-2xl overflow-hidden relative flex items-center justify-center transition-[height] duration-200"
+          style={{ height: height ? `${height}px` : "auto", minHeight: "1.75rem" }}
+        >
           <p
+            ref={textRef}
             key={current}
-            className="font-body text-base font-semibold text-foreground absolute w-full text-center flex items-center justify-center gap-2 px-2 leading-snug"
+            className="font-body text-base font-semibold text-foreground absolute w-full text-center flex items-start justify-center gap-2 px-2 leading-snug"
             style={{
               animation: animating
                 ? direction === "left"
@@ -54,7 +70,7 @@ export default function NewsBanner({ items }: Props) {
                   : "slideInRight 0.3s ease forwards",
             }}
           >
-            <Megaphone size={16} className="text-secondary shrink-0" />
+            <Megaphone size={16} className="text-secondary shrink-0 mt-0.5" />
             {items[current]}
           </p>
         </div>
