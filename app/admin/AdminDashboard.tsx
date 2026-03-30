@@ -8,7 +8,7 @@ import {
   LogOut, Megaphone, Users, Plus, Trash2, GripVertical,
   Save, FileText, Heart, Briefcase, Upload, ChevronRight, LayoutDashboard, Search, Mail, MailX
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
 import type { User } from "@supabase/supabase-js";
 
 const INACTIVITY_MS = 15 * 60 * 1000;
@@ -20,6 +20,7 @@ interface CoreValue { id: string; label: string; description: string; sort_order
 interface OpenRole { id: string; title: string; commitment: string; description: string; sort_order: number; active: boolean; }
 interface Committee { id: string; name: string; description: string; sort_order: number; }
 interface Member { id: string; email: string; first_name: string; stem_area: string | null; interests: string[]; opted_in: boolean; created_at: string; }
+interface InitiativeEvent { slug: string; event_type: string; created_at: string; }
 
 const DEFAULT_COMMITTEES: Committee[] = [
   { id: "default-1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
@@ -37,6 +38,7 @@ interface Props {
   initialOpenRoles: OpenRole[];
   initialCommittees: Committee[];
   initialMembers: Member[];
+  initialInitiativeEvents: InitiativeEvent[];
 }
 
 type Tab = "dashboard" | "news" | "team" | "content" | "roles";
@@ -112,7 +114,7 @@ const MAIN_TABS = [
   { key: "roles" as Tab, icon: Briefcase, label: "Open Roles" },
 ];
 
-export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees, initialMembers }: Props) {
+export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees, initialMembers, initialInitiativeEvents }: Props) {
   const [tab, setTab] = useState<Tab>("dashboard");
   const [memberSearch, setMemberSearch] = useState("");
   const [contentSection, setContentSection] = useState("about");
@@ -525,6 +527,42 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                       )}
                     </div>
                   </div>
+
+                  {/* Initiative interest */}
+                  {(() => {
+                    const SLUGS = ["members-network", "skill-swap", "stem-in-action", "mentorship", "cws-voices"];
+                    const LABELS: Record<string, string> = {
+                      "members-network": "Members Network",
+                      "skill-swap": "Skill Swap",
+                      "stem-in-action": "STEM in Action",
+                      "mentorship": "Mentorship",
+                      "cws-voices": "CWS Voices",
+                    };
+                    const initiativeData = SLUGS.map((slug) => ({
+                      name: LABELS[slug],
+                      views: initialInitiativeEvents.filter((e) => e.slug === slug && e.event_type === "view").length,
+                      clicks: initialInitiativeEvents.filter((e) => e.slug === slug && e.event_type === "signup_click").length,
+                    })).sort((a, b) => b.views - a.views);
+                    return (
+                      <div className="bg-card border border-border rounded-2xl p-6">
+                        <h3 className="font-body font-semibold text-foreground mb-1">Initiative Interest</h3>
+                        <p className="font-body text-xs text-foreground/40 mb-5">Page views and sign-up button clicks per initiative</p>
+                        {initialInitiativeEvents.length === 0 ? (
+                          <p className="font-body text-sm text-foreground/40 py-4">No data yet — visits will appear here once members browse the initiatives.</p>
+                        ) : (
+                          <ResponsiveContainer width="100%" height={200}>
+                            <BarChart data={initiativeData} barSize={18} barGap={4}>
+                              <XAxis dataKey="name" tick={{ fontFamily: "inherit", fontSize: 11 }} axisLine={false} tickLine={false} />
+                              <YAxis allowDecimals={false} tick={{ fontFamily: "inherit", fontSize: 11 }} axisLine={false} tickLine={false} width={24} />
+                              <Tooltip contentStyle={{ fontFamily: "inherit", fontSize: 12, borderRadius: 8 }} />
+                              <Bar dataKey="views" name="Page views" fill="#7C5CBF" radius={[4, 4, 0, 0]} />
+                              <Bar dataKey="clicks" name="Sign-up clicks" fill="#C06C8A" radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {/* Member table */}
                   <div className="bg-card border border-border rounded-2xl p-6">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Network, Repeat2, Wrench, Users, Mic } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import BecomeAMemberButton from "@/components/BecomeAMemberButton";
+import InitiativeTracker from "@/components/InitiativeTracker";
 
 const INITIATIVE_META: Record<string, {
   icon: React.ElementType;
@@ -103,6 +104,7 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
 
   return (
     <div className="min-h-screen bg-background pt-24">
+      <InitiativeTracker slug={params.slug} />
       <section className="py-20">
         <div className="container mx-auto px-6 max-w-3xl">
           <Link href="/initiatives" className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary font-body text-sm mb-10 transition-colors">
@@ -127,11 +129,12 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
             <p className="font-body text-foreground/80 mb-6">Interested in participating in or supporting this initiative?</p>
             {signupHref ? (
               <Link href={signupHref} target={signupHref.startsWith("http") ? "_blank" : undefined} rel={signupHref.startsWith("http") ? "noopener noreferrer" : undefined}
+                onClick={() => { fetch("/api/track", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug: params.slug, event_type: "signup_click" }) }).catch(() => {}); }}
                 className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity">
                 Sign Up
               </Link>
             ) : (
-              <BecomeAMemberButton />
+              <BecomeAMemberButton slug={params.slug} />
             )}
           </div>
         </div>
