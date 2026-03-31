@@ -40,11 +40,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
               Join <span className="font-display ml-1">CWS</span>
             </button>
             <a
-              href="#about"
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" });
-              }}
+              href="/about"
               className="inline-block border-2 border-white/60 text-white font-body font-semibold px-8 py-3 rounded-lg hover:bg-white/10 transition-colors">
               Learn More
             </a>

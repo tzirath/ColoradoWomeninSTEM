@@ -618,10 +618,14 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <h2 className="font-body text-xl font-semibold text-foreground">News Banner</h2>
                     <p className="font-body text-sm text-foreground/60 mt-1">Rotating announcements at the top of the home page.</p>
                   </div>
-                  <button onClick={() => setNewsItems([...newsItems, { id: `new-${Date.now()}`, text: "", link: null, active: true, sort_order: newsItems.length }])}
-                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                    <Plus size={14} /> Add
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-body text-xs font-medium tabular-nums ${newsItems.length >= 5 ? "text-red-500" : "text-foreground/40"}`}>{newsItems.length}/5</span>
+                    <button onClick={() => setNewsItems([...newsItems, { id: `new-${Date.now()}`, text: "", link: null, active: true, sort_order: newsItems.length }])}
+                      disabled={newsItems.length >= 5}
+                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+                      <Plus size={14} /> Add
+                    </button>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-3">
                   {newsItems.map((item) => (
@@ -658,10 +662,14 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <h2 className="font-body text-xl font-semibold text-foreground">Team Members</h2>
                     <p className="font-body text-sm text-foreground/60 mt-1">Add, edit, or remove team member profiles.</p>
                   </div>
-                  <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", sort_order: teamMembers.length, active: true }])}
-                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                    <Plus size={14} /> Add Member
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-body text-xs font-medium tabular-nums ${teamMembers.length >= 7 ? "text-red-500" : "text-foreground/40"}`}>{teamMembers.length}/7</span>
+                    <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", sort_order: teamMembers.length, active: true }])}
+                      disabled={teamMembers.length >= 7}
+                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+                      <Plus size={14} /> Add Member
+                    </button>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-6">
                   {teamMembers.map((member) => (
@@ -733,10 +741,14 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <h2 className="font-body text-xl font-semibold text-foreground">Committees</h2>
                     <p className="font-body text-sm text-foreground/60 mt-1">Shown in the table on the Team page.</p>
                   </div>
-                  <button onClick={() => setCommittees([...committees, { id: `new-${Date.now()}`, name: "", description: "", sort_order: committees.length }])}
-                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                    <Plus size={14} /> Add Committee
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-body text-xs font-medium tabular-nums ${committees.length >= 6 ? "text-red-500" : "text-foreground/40"}`}>{committees.length}/6</span>
+                    <button onClick={() => setCommittees([...committees, { id: `new-${Date.now()}`, name: "", description: "", sort_order: committees.length }])}
+                      disabled={committees.length >= 6}
+                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+                      <Plus size={14} /> Add Committee
+                    </button>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-5">
                   {committees.map((c) => (
@@ -827,10 +839,14 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <h2 className="font-body text-xl font-semibold text-foreground">Core Values</h2>
                     <p className="font-body text-sm text-foreground/60 mt-1">Shown on the About page.</p>
                   </div>
-                  <button onClick={() => setCoreValues([...coreValues, { id: `new-${Date.now()}`, label: "", description: "", sort_order: coreValues.length }])}
-                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                    <Plus size={14} /> Add Value
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-body text-xs font-medium tabular-nums ${coreValues.length >= 6 ? "text-red-500" : "text-foreground/40"}`}>{coreValues.length}/6</span>
+                    <button onClick={() => setCoreValues([...coreValues, { id: `new-${Date.now()}`, label: "", description: "", sort_order: coreValues.length }])}
+                      disabled={coreValues.length >= 6}
+                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+                      <Plus size={14} /> Add Value
+                    </button>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-5">
                   {coreValues.map((v) => (
@@ -870,10 +886,14 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <h2 className="font-body text-xl font-semibold text-foreground">Open Roles</h2>
                     <p className="font-body text-sm text-foreground/60 mt-1">Volunteer and leadership opportunities on Get Involved.</p>
                   </div>
-                  <button onClick={() => setOpenRoles([...openRoles, { id: `new-${Date.now()}`, title: "", commitment: "", description: "", sort_order: openRoles.length, active: true }])}
-                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
-                    <Plus size={14} /> Add Role
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-body text-xs font-medium tabular-nums ${openRoles.length >= 6 ? "text-red-500" : "text-foreground/40"}`}>{openRoles.length}/6</span>
+                    <button onClick={() => setOpenRoles([...openRoles, { id: `new-${Date.now()}`, title: "", commitment: "", description: "", sort_order: openRoles.length, active: true }])}
+                      disabled={openRoles.length >= 6}
+                      className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+                      <Plus size={14} /> Add Role
+                    </button>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-5">
                   {openRoles.map((r) => (
