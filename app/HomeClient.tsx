@@ -6,7 +6,7 @@ import { useJoinModal } from "@/components/JoinModalContext";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export default function HomeClient({ newsItems }: { newsItems: string[] }) {
+export default function HomeClient({ newsItems }: { newsItems: { text: string; link: string | null }[] }) {
   const { openModal } = useJoinModal();
 
   return (

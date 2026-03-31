@@ -13,7 +13,7 @@ import type { User } from "@supabase/supabase-js";
 
 const INACTIVITY_MS = 15 * 60 * 1000;
 
-interface NewsItem { id: string; text: string; active: boolean; sort_order: number; }
+interface NewsItem { id: string; text: string; link: string | null; active: boolean; sort_order: number; }
 interface TeamMember { id: string; name: string; role: string; bio: string; hobbies: string; image_path: string; linkedin: string; sort_order: number; active: boolean; }
 interface ContentItem { key: string; value: string; }
 interface CoreValue { id: string; label: string; description: string; sort_order: number; }
@@ -167,7 +167,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       await supabase.from("news_items").delete().neq("id", "00000000-0000-0000-0000-000000000000");
       const rows = newsItems.filter((n) => n.text.trim()).map((n, i) => ({
         ...(n.id.startsWith("new-") ? {} : { id: n.id }),
-        text: n.text.trim(), active: n.active, sort_order: i,
+        text: n.text.trim(), link: n.link || null, active: n.active, sort_order: i,
       }));
       if (rows.length) { const { error } = await supabase.from("news_items").insert(rows); if (error) throw error; }
       showToast("News saved!"); router.refresh();
@@ -618,22 +618,27 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <h2 className="font-body text-xl font-semibold text-foreground">News Banner</h2>
                     <p className="font-body text-sm text-foreground/60 mt-1">Rotating announcements at the top of the home page.</p>
                   </div>
-                  <button onClick={() => setNewsItems([...newsItems, { id: `new-${Date.now()}`, text: "", active: true, sort_order: newsItems.length }])}
+                  <button onClick={() => setNewsItems([...newsItems, { id: `new-${Date.now()}`, text: "", link: null, active: true, sort_order: newsItems.length }])}
                     className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90">
                     <Plus size={14} /> Add
                   </button>
                 </div>
                 <div className="flex flex-col gap-3">
                   {newsItems.map((item) => (
-                    <div key={item.id} className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3">
-                      <GripVertical size={16} className="text-foreground/30 shrink-0" />
-                      <input value={item.text} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, text: e.target.value } : n))}
-                        placeholder="Announcement text..."
-                        className="flex-1 font-body text-sm bg-transparent outline-none text-foreground placeholder:text-foreground/30" />
-                      <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60 shrink-0">
-                        <input type="checkbox" checked={item.active} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, active: e.target.checked } : n))} className="accent-primary" /> Active
-                      </label>
-                      <button onClick={() => setNewsItems(newsItems.filter((n) => n.id !== item.id))} className="text-foreground/30 hover:text-red-500 transition-colors shrink-0"><Trash2 size={15} /></button>
+                    <div key={item.id} className="bg-card border border-border rounded-xl px-4 py-3 flex flex-col gap-2">
+                      <div className="flex items-center gap-3">
+                        <GripVertical size={16} className="text-foreground/30 shrink-0" />
+                        <input value={item.text} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, text: e.target.value } : n))}
+                          placeholder="Announcement text…"
+                          className="flex-1 font-body text-sm bg-transparent outline-none text-foreground placeholder:text-foreground/30" />
+                        <label className="flex items-center gap-1.5 font-body text-xs text-foreground/60 shrink-0">
+                          <input type="checkbox" checked={item.active} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, active: e.target.checked } : n))} className="accent-primary" /> Active
+                        </label>
+                        <button onClick={() => setNewsItems(newsItems.filter((n) => n.id !== item.id))} className="text-foreground/30 hover:text-red-500 transition-colors shrink-0"><Trash2 size={15} /></button>
+                      </div>
+                      <input value={item.link ?? ""} onChange={(e) => setNewsItems(newsItems.map((n) => n.id === item.id ? { ...n, link: e.target.value || null } : n))}
+                        placeholder="Link (optional) — e.g. /get-involved or https://..."
+                        className="ml-6 font-body text-xs bg-transparent outline-none text-foreground/60 placeholder:text-foreground/20 border-b border-dashed border-border focus:border-primary transition-colors pb-0.5" />
                     </div>
                   ))}
                 </div>

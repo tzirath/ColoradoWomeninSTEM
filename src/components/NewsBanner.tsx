@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Megaphone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Megaphone, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import Link from "next/link";
+
+interface NewsItem { text: string; link: string | null; }
 
 interface Props {
-  items: string[];
+  items: NewsItem[];
 }
 
 export default function NewsBanner({ items }: Props) {
@@ -56,23 +59,33 @@ export default function NewsBanner({ items }: Props) {
           className="flex-1 max-w-2xl overflow-hidden relative flex items-center justify-center transition-[height] duration-200"
           style={{ height: height ? `${height}px` : "auto", minHeight: "1.75rem" }}
         >
-          <p
-            ref={textRef}
-            key={current}
-            className="font-body text-base font-semibold text-foreground absolute w-full text-center flex items-start justify-center gap-2 px-2 leading-snug"
-            style={{
+          {(() => {
+            const item = items[current];
+            const style = {
               animation: animating
-                ? direction === "left"
-                  ? "slideOutLeft 0.3s ease forwards"
-                  : "slideOutRight 0.3s ease forwards"
-                : direction === "left"
-                  ? "slideInLeft 0.3s ease forwards"
-                  : "slideInRight 0.3s ease forwards",
-            }}
-          >
-            <Megaphone size={16} className="text-secondary shrink-0 mt-0.5" />
-            {items[current]}
-          </p>
+                ? direction === "left" ? "slideOutLeft 0.3s ease forwards" : "slideOutRight 0.3s ease forwards"
+                : direction === "left" ? "slideInLeft 0.3s ease forwards" : "slideInRight 0.3s ease forwards",
+            };
+            const inner = (
+              <>
+                <Megaphone size={16} className="text-secondary shrink-0 mt-0.5" />
+                <span>{item.text}</span>
+                {item.link && <ExternalLink size={13} className="text-secondary/60 shrink-0 mt-0.5" />}
+              </>
+            );
+            const cls = "font-body text-base font-semibold text-foreground absolute w-full text-center flex items-start justify-center gap-2 px-2 leading-snug";
+            return item.link ? (
+              item.link.startsWith("http") ? (
+                <a ref={textRef as unknown as React.RefObject<HTMLAnchorElement>} key={current} href={item.link} target="_blank" rel="noopener noreferrer"
+                  className={cls + " hover:text-primary transition-colors"} style={style}>{inner}</a>
+              ) : (
+                <Link ref={textRef as unknown as React.RefObject<HTMLAnchorElement>} key={current} href={item.link}
+                  className={cls + " hover:text-primary transition-colors"} style={style}>{inner}</Link>
+              )
+            ) : (
+              <p ref={textRef} key={current} className={cls} style={style}>{inner}</p>
+            );
+          })()}
         </div>
 
         <button onClick={next} className="text-foreground/40 hover:text-secondary transition-colors shrink-0" aria-label="Next">
