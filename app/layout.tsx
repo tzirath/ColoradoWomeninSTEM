@@ -15,6 +15,20 @@ export const metadata: Metadata = {
     siteName: "Colorado Women of Color in STEM",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "https://coloradowomeninstem.com/cws-logo-sqr.png",
+        width: 512,
+        height: 512,
+        alt: "Colorado Women of Color in STEM logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Colorado Women of Color in STEM",
+    description: "A community cultivating belonging and opportunity for women of color in STEM across Colorado.",
+    images: ["https://coloradowomeninstem.com/cws-logo-sqr.png"],
   },
 };
 
