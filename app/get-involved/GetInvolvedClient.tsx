@@ -97,26 +97,50 @@ export default function GetInvolvedClient({ roles, content }: Props) {
               CWS is volunteer-led. These committee chair roles are open and waiting for the right person.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {roles.map((role) => (
-              <div key={role.id} className="bg-background rounded-2xl p-7 border border-border shadow-sm">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <Briefcase className="w-5 h-5 text-primary" />
+          {roles.length > 0 ? (
+            <>
+              <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                {roles.map((role) => (
+                  <div key={role.id} className="bg-background rounded-2xl p-7 border border-border shadow-sm">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                        <Briefcase className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-body font-semibold text-foreground mb-1">{role.title}</h3>
+                        <p className="font-body text-secondary text-xs font-medium mb-2">{role.commitment}</p>
+                        <p className="font-body text-foreground/80 text-sm leading-relaxed">{role.description}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-body font-semibold text-foreground mb-1">{role.title}</h3>
-                    <p className="font-body text-secondary text-xs font-medium mb-2">{role.commitment}</p>
-                    <p className="font-body text-foreground/80 text-sm leading-relaxed">{role.description}</p>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link href="/contact" className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity">
-              <HeartHandshake size={16} /> Express Interest
-            </Link>
+              <div className="text-center mt-10">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                  <HeartHandshake size={16} /> Express Interest
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="max-w-xl mx-auto text-center bg-background rounded-2xl p-10 border border-border shadow-sm">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-5 mx-auto">
+                <HeartHandshake className="w-7 h-7 text-primary" />
+              </div>
+              <h3 className="font-body text-xl font-semibold text-foreground mb-3">No open roles right now</h3>
+              <p className="font-body text-foreground/70 text-sm leading-relaxed mb-8">
+                We don't have any listed positions at the moment, but we're always looking for passionate people.
+                Reach out to express your interest or sign up to stay in the loop.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
+                  <HeartHandshake size={15} /> Contact Us
+                </Link>
+                <button onClick={openModal} className="inline-flex items-center gap-2 border-2 border-secondary text-secondary font-body font-semibold px-6 py-2.5 rounded-lg hover:bg-secondary/5 transition-colors">
+                  Become a Member
+                </button>
+              </div>
+            </div>
+          )}
           </div>
         </div>
       </section>
