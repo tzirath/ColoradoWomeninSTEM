@@ -141,7 +141,6 @@ export default function GetInvolvedClient({ roles, content }: Props) {
               </div>
             </div>
           )}
-          </div>
         </div>
       </section>
 
