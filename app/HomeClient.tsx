@@ -26,7 +26,7 @@ export default function HomeClient({ newsItems }: { newsItems: { text: string; l
             drives innovation
           </h2>
           <p className="font-body text-foreground/80 text-lg leading-relaxed mb-8">
-            Colorado Women of Color in STEM cultivates an intentional space where women of color
+            Colorado Women in STEM cultivates an intentional space where women
             engage authentically, develop confidence through community support, and access
             opportunities through meaningful collaboration.
           </p>
@@ -67,7 +67,7 @@ export default function HomeClient({ newsItems }: { newsItems: { text: string; l
             Ready to join the community?
           </h2>
           <p className="font-body text-bloom-sage mb-8 max-w-xl mx-auto">
-            Connect with women of color in STEM across Colorado. Membership is free and open to all.
+            Connect with Women in STEM across Colorado. Membership is free and open to all.
           </p>
           <button
             onClick={openModal}
