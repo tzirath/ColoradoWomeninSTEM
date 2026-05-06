@@ -63,8 +63,8 @@ export default function Footer() {
               CWS<span className="text-secondary">.</span>
             </Link>
             <p className="font-body text-bloom-sage/70 text-sm leading-relaxed mt-4 max-w-xs">
-              Colorado Women of Color in STEM is a community organization cultivating belonging,
-              confidence, and opportunity for BIPOC women in STEM across Colorado.
+              Colorado Women in STEM is a community organization cultivating belonging,
+              confidence, and opportunity for women in STEM across Colorado.
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
