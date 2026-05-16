@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Team | CWS",
-  description: "Meet the founders and committee leads of Colorado Women of Color in STEM.",
+  description: "Meet the founders and committee leads of Colorado Women in STEM.",
 };
 
 const DEFAULT_COMMITTEES = [

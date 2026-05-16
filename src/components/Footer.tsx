@@ -116,7 +116,7 @@ export default function Footer() {
         <div className="border-t border-bloom-sage/20 pt-8 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
           <div className="flex flex-col items-center gap-1 sm:items-start">
             <p className="font-body text-bloom-sage/50 text-xs">
-              © {new Date().getFullYear()} Colorado Women of Color in STEM (CWS). All Rights Reserved.
+              © {new Date().getFullYear()} Colorado Women in STEM (CWS). All Rights Reserved.
             </p>
             <Link href="/admin" className="font-body text-bloom-sage/20 text-xs hover:text-bloom-sage/50 transition-colors">
               Admin

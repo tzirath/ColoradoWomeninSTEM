@@ -5,13 +5,13 @@ const items = [
     icon: Eye,
     title: "Our Vision",
     description:
-      "Equal representation and celebration of BIPOC women across every STEM discipline in Colorado. Where belonging is the foundation of innovation and diverse perspectives drive discovery.",
+      "Equal representation and celebration of women across every STEM discipline in Colorado. Where belonging is the foundation of innovation and diverse perspectives drive discovery.",
   },
   {
     icon: Target,
     title: "Our Mission",
     description:
-      "To cultivate intentional spaces where women in STEM across Colorado build authentic professional relationships, develop confidence through community support, and access opportunities through meaningful collaboration. We are rooted in uplifting BIPOC women and historically marginalized communities through dedicated programming and intentional inclusion.",
+      "To cultivate intentional spaces where women in STEM across Colorado build authentic professional relationships, develop confidence through community support, and access opportunities through meaningful collaboration.",
   },
   {
     icon: Heart,
@@ -41,7 +41,7 @@ professional relationships.
 
 Today, CWS cultivates belonging through intentional gatherings that 
 encourage authenticity and collective advancement. Our community serves 
-all women in STEM fields with a focus on uplifting BIPOC women and those 
+all women in STEM fields, with intentional support for those
 from historically marginalized backgrounds.
 
 This is a space where women can become stronger together.

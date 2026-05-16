@@ -23,7 +23,7 @@ const INITIATIVE_KEYS = [
 
 const DEFAULT_CONTENT = {
   get_involved_hero: "Whether you're joining as a member, lending a skill, or stepping up to lead — there's a place for you here.",
-  get_involved_member_desc: "Membership is free and open to all women of color in STEM and allies across Colorado. Join to connect, grow, and contribute.",
+  get_involved_member_desc: "Membership is free and open to all women in STEM and allies across Colorado. Join to connect, grow, and contribute.",
   get_involved_community_service: "CWS seeks out community-focused initiatives and volunteer opportunities for members to give back together. Keep an eye on our events page and social media for upcoming community service days.",
 };
 

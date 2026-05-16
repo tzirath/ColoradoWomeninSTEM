@@ -2,7 +2,7 @@ import ContactSection from "@/components/ContactSection";
 
 export const metadata = {
   title: "Contact | CWS",
-  description: "Get in touch with Colorado Women of Color in STEM.",
+  description: "Get in touch with Colorado Women in STEM.",
 };
 
 export default function ContactPage() {

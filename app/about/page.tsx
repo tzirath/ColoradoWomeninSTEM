@@ -2,7 +2,7 @@ import { Eye, Target, Heart } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 const DEFAULT_VALUES = [
-  { id: "1", label: "Belonging", description: "Creating spaces where every woman of color feels she truly belongs — not just included, but centered.", sort_order: 0 },
+  { id: "1", label: "Belonging", description: "Creating spaces where every woman feels she truly belongs — not just included, but centered.", sort_order: 0 },
   { id: "2", label: "Authenticity", description: "Showing up fully as ourselves, bringing lived experience and identity as assets, not obstacles.", sort_order: 1 },
   { id: "3", label: "Collective Growth", description: "When one of us grows, we all benefit. We rise by lifting each other.", sort_order: 2 },
   { id: "4", label: "Equity", description: "Acknowledging that equal is not always equitable — and designing our community with that in mind.", sort_order: 3 },
@@ -10,14 +10,14 @@ const DEFAULT_VALUES = [
 
 export const metadata = {
   title: "About | CWS",
-  description: "The story, mission, vision, and values behind Colorado Women of Color in STEM.",
+  description: "The story, mission, vision, and values behind Colorado Women in STEM.",
 };
 
 const DEFAULTS: Record<string, string> = {
-  about_story_p1: "Colorado Women of Color in STEM (CWS) was created by two friends, Tzirath and Arianne, who recognized that existing systems weren't designed to fully support BIPOC women in these fields. They envisioned a space rooted in genuine connection outside of traditional networking.",
-  about_story_p2: "Today, CWS brings together women across STEM disciplines, centering and uplifting those from historically marginalized communities. We strive to tackle the issues that often go unspoken, show up authentically, and use our collective experiences and expertise to create meaningful change. This is a space where belonging is the foundation of innovation and diverse perspectives drive discovery.",
-  about_mission: "To cultivate an intentional space where women of color in STEM engage authentically, develop confidence through community support, and access opportunities through meaningful collaboration.",
-  about_vision: "A Colorado where women of color don't just enter STEM, but stay, lead, and shape its future.",
+  about_story_p1: "Colorado Women in STEM (CWS) was created by two friends, Tzirath and Arianne, who recognized that existing systems weren't designed to fully support women in these fields. They envisioned a space rooted in genuine connection outside of traditional networking.",
+  about_story_p2: "Today, CWS brings together women across STEM disciplines, uplifting those from historically marginalized communities. We strive to tackle the issues that often go unspoken, show up authentically, and use our collective experiences and expertise to create meaningful change. This is a space where belonging is the foundation of innovation and diverse perspectives drive discovery.",
+  about_mission: "To cultivate an intentional space where women in STEM engage authentically, develop confidence through community support, and access opportunities through meaningful collaboration.",
+  about_vision: "A Colorado where women don't just enter STEM, but stay, lead, and shape its future.",
 };
 
 export default async function AboutPage() {

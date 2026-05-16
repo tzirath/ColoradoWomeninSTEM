@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Initiatives | CWS",
-  description: "Programs and initiatives of Colorado Women of Color in STEM.",
+  description: "Programs and initiatives of Colorado Women in STEM.",
 };
 
 const INITIATIVE_META = [

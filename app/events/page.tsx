@@ -2,7 +2,7 @@ import EventsSection from "@/components/EventsSection";
 
 export const metadata = {
   title: "Events | CWS",
-  description: "Upcoming events from Colorado Women of Color in STEM.",
+  description: "Upcoming events from Colorado Women in STEM.",
 };
 
 export default function EventsPage() {
