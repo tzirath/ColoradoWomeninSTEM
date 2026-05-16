@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 
 interface JoinModalContextValue {
@@ -19,15 +19,30 @@ export function JoinModalProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const prevPath = useRef<string | null>(null);
 
   useEffect(() => {
     if (pathname === "/join" || searchParams.get("join") === "true") setOpen(true);
   }, [pathname, searchParams]);
 
+  const openModal = () => {
+    setOpen(true);
+    if (typeof window !== "undefined" && window.location.pathname !== "/join") {
+      prevPath.current = window.location.pathname + window.location.search;
+      window.history.pushState(null, "", "/join");
+    }
+  };
+
+  const closeModal = () => {
+    setOpen(false);
+    if (prevPath.current !== null) {
+      window.history.pushState(null, "", prevPath.current);
+      prevPath.current = null;
+    }
+  };
+
   return (
-    <JoinModalContext.Provider
-      value={{ open, openModal: () => setOpen(true), closeModal: () => setOpen(false) }}
-    >
+    <JoinModalContext.Provider value={{ open, openModal, closeModal }}>
       {children}
     </JoinModalContext.Provider>
   );
