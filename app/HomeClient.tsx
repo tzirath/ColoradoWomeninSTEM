@@ -4,15 +4,80 @@ import HeroSection from "@/components/HeroSection";
 import NewsBanner from "@/components/NewsBanner";
 import { useJoinModal } from "@/components/JoinModalContext";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
 
-export default function HomeClient({ newsItems }: { newsItems: { text: string; link: string | null }[] }) {
+interface NextEvent {
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  signUpUrl: string;
+}
+
+export default function HomeClient({
+  newsItems,
+  nextEvent,
+}: {
+  newsItems: { text: string; link: string | null }[];
+  nextEvent: NextEvent | null;
+}) {
   const { openModal } = useJoinModal();
 
   return (
     <div className="min-h-screen bg-background">
       <HeroSection onJoinClick={openModal} />
       <NewsBanner items={newsItems} />
+
+      {/* ── Featured Next Event ── */}
+      {nextEvent && (
+        <section className="py-14 bg-secondary/10 border-b border-secondary/20">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="flex flex-col md:flex-row md:items-center gap-8 justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="font-body text-secondary text-xs uppercase tracking-[0.25em] font-semibold mb-2">
+                  You&apos;re Invited
+                </p>
+                <h2 className="font-body text-2xl md:text-3xl font-bold text-foreground mb-3 leading-tight">
+                  {nextEvent.title}
+                </h2>
+                <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-foreground/65 font-body mb-3">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={13} className="text-secondary shrink-0" /> {nextEvent.date}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={13} className="text-secondary shrink-0" /> {nextEvent.time}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin size={13} className="text-secondary shrink-0" /> {nextEvent.location}
+                  </span>
+                </div>
+                {nextEvent.description && (
+                  <p className="font-body text-foreground/65 text-sm leading-relaxed line-clamp-2">
+                    {nextEvent.description}
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
+                <a
+                  href={nextEvent.signUpUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  Save My Spot <ArrowRight size={15} />
+                </a>
+                <Link
+                  href="/events"
+                  className="inline-flex items-center justify-center font-body text-sm text-secondary hover:underline underline-offset-2 transition-colors"
+                >
+                  View all events
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Mission blurb */}
       <section className="py-20 bg-card">
