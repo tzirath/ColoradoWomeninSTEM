@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,9 +40,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <JoinModalProvider>
-            <SiteShell>{children}</SiteShell>
-          </JoinModalProvider>
+          <Suspense>
+            <JoinModalProvider>
+              <SiteShell>{children}</SiteShell>
+            </JoinModalProvider>
+          </Suspense>
         </TooltipProvider>
       </QueryClientProvider>
     </GoogleReCaptchaProvider>
