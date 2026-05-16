@@ -20,6 +20,7 @@ interface EventbriteEvent {
   venue?: EventbriteVenue;
   category?: { name: string };
   logo?: { url: string; original?: { url: string } };
+  tags?: { tag: string; display_name?: string }[];
 }
 
 function formatDate(local: string): string {
@@ -56,7 +57,7 @@ function mapEvents(raw: EventbriteEvent[]) {
     time: formatTime(e.start.local, e.end.local),
     location: formatLocation(e.venue),
     description: e.summary ?? "",
-    tag: e.category?.name ?? "Event",
+    tag: e.tags?.[0]?.display_name ?? e.tags?.[0]?.tag ?? e.category?.name ?? "Event",
     signUpUrl: e.url,
     imageUrl: e.logo?.original?.url ?? e.logo?.url ?? null,
   }));
@@ -77,7 +78,7 @@ export async function GET() {
   }
 
   const eventParams =
-    "?status=live&time_filter=current_future&expand=venue,category,logo&order_by=start_asc";
+    "?status=live&time_filter=current_future&expand=venue,category,logo,tags&order_by=start_asc";
 
   try {
     const { ok: userOk, data: user } = await eb<{ id?: string; error_description?: string }>(
