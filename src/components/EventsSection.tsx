@@ -97,29 +97,31 @@ const EventsSection = () => {
           {events?.map((event) => (
             <div
               key={event.title}
-              className="bg-background rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-border group overflow-hidden"
+              className="bg-background rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-border group overflow-hidden flex flex-col sm:flex-row"
             >
               {event.imageUrl && (
-                <div className="w-full bg-muted flex items-center justify-center">
+                <div className="sm:w-56 sm:shrink-0 bg-muted">
                   <img
                     src={event.imageUrl}
                     alt={event.title}
-                    className="w-full h-auto object-contain max-h-96"
+                    className="w-full h-48 sm:h-full object-cover object-center"
                   />
                 </div>
               )}
-              <div className="p-6 md:p-8">
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-                  <h3 className="font-body text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                    {event.title}
-                  </h3>
-                  <span className="text-xs font-body font-semibold uppercase tracking-wider bg-secondary/15 text-secondary px-3 py-1 rounded-full">
-                    {event.tag}
-                  </span>
+              <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
+                <div>
+                  <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
+                    <h3 className="font-body text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {event.title}
+                    </h3>
+                    <span className="text-xs font-body font-semibold uppercase tracking-wider bg-secondary/15 text-secondary px-3 py-1 rounded-full">
+                      {event.tag}
+                    </span>
+                  </div>
+                  <p className="font-body text-muted-foreground text-sm mb-4 leading-relaxed">
+                    {event.description}
+                  </p>
                 </div>
-                <p className="font-body text-muted-foreground text-sm mb-4 leading-relaxed">
-                  {event.description}
-                </p>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground font-body">
                     <span className="flex items-center gap-1.5">
