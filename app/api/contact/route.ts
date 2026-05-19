@@ -77,31 +77,39 @@ export async function POST(req: NextRequest) {
 
   const inquiry = inquiryType?.trim() || "General";
 
-  await transporter.sendMail({
-    from: `"CWS Contact Form" <${gmailUser}>`,
-    to: gmailUser,
-    replyTo: email,
-    subject: `[${inquiry}] New message from ${name} — CWS Website`,
-    text: [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Inquiry type: ${inquiry}`,
-      `reCAPTCHA score: ${score.toFixed(2)}`,
-      "",
-      "Message:",
-      message,
-    ].join("\n"),
-    html: `
-      <h2 style="color:#1a4731">New Contact Form Submission</h2>
-      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-      <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
-      <p><strong>Inquiry type:</strong> ${escapeHtml(inquiry)}</p>
-      <p><strong>reCAPTCHA score:</strong> ${score.toFixed(2)} / 1.00</p>
-      <hr />
-      <p><strong>Message:</strong></p>
-      <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
-    `,
-  });
+  try {
+    await transporter.sendMail({
+      from: `"CWS Contact Form" <${gmailUser}>`,
+      to: gmailUser,
+      replyTo: email,
+      subject: `[${inquiry}] New message from ${name} — CWS Website`,
+      text: [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Inquiry type: ${inquiry}`,
+        `reCAPTCHA score: ${score.toFixed(2)}`,
+        "",
+        "Message:",
+        message,
+      ].join("\n"),
+      html: `
+        <h2 style="color:#1a4731">New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+        <p><strong>Inquiry type:</strong> ${escapeHtml(inquiry)}</p>
+        <p><strong>reCAPTCHA score:</strong> ${score.toFixed(2)} / 1.00</p>
+        <hr />
+        <p><strong>Message:</strong></p>
+        <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
+      `,
+    });
+  } catch (err) {
+    console.error("sendMail error:", err);
+    return NextResponse.json(
+      { error: "Failed to send email. Please try again or email us directly." },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({ success: true });
 }
