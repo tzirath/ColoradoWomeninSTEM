@@ -3,7 +3,7 @@
 import { useJoinModal } from "@/components/JoinModalContext";
 import { Users, Briefcase, HeartHandshake, Network, Repeat2, Wrench, Mic } from "lucide-react";
 import Link from "next/link";
-import FlowerDecor, { BURGUNDY } from "@/components/FlowerDecor";
+import FlowerDecor from "@/components/FlowerDecor";
 
 const programs = [
   { slug: "members-network", contentKey: "initiative_members_network", icon: Network, title: "Members Networking Database", defaultDesc: "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage." },
@@ -30,7 +30,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
       <section className="py-20 bg-card relative overflow-hidden">
         <FlowerDecor flowers={[
           { src: 2, position: "-left-8  -bottom-2", size: 185, opacity: 0.68, anim: "cw",    dur: 27, mx: 22, my: 11, td: 440 },
-          { src: 1, position: "-right-6 top-6",     size: 150, opacity: 0.6,  anim: "ccw",   dur: 33, mx: -18, my: -9, td: 520, tint: BURGUNDY },
+          { src: 1, position: "-right-6 top-6",     size: 150, opacity: 0.6,  anim: "ccw",   dur: 33, mx: -18, my: -9, td: 520 },
         ]} />
         <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Take Action</p>

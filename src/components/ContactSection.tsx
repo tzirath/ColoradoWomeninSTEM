@@ -7,7 +7,7 @@ import { z } from "zod";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { toast } from "sonner";
 import { Mail, MapPin, Instagram, Linkedin, Loader2 } from "lucide-react";
-import FlowerDecor, { PEACH } from "@/components/FlowerDecor";
+import FlowerDecor from "@/components/FlowerDecor";
 
 const INQUIRY_TYPES = [
   "General",
@@ -97,9 +97,9 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-24 bg-primary relative overflow-hidden">
       <FlowerDecor flowers={[
-        { src: 1, position: "-left-10 -bottom-4",  size: 195, opacity: 0.45, anim: "cw",    dur: 29, mx: 18, my: 10, td: 460, tint: PEACH },
-        { src: 3, position: "-left-4  top-4",      size: 125, opacity: 0.35, anim: "ccw",   dur: 35, mx: -12, my: -7, td: 540, tint: PEACH },
-        { src: 2, position: "-right-8 top-1/3",    size: 165, opacity: 0.4,  anim: "drift", dur: 21, mx: 22, my: 13, td: 400, tint: PEACH },
+        { src: 1, position: "-left-10 -bottom-4",  size: 195, opacity: 0.45, anim: "cw",    dur: 29, mx: 18, my: 10, td: 460 },
+        { src: 3, position: "-left-4  top-4",      size: 125, opacity: 0.35, anim: "ccw",   dur: 35, mx: -12, my: -7, td: 540 },
+        { src: 2, position: "-right-8 top-1/3",    size: 165, opacity: 0.4,  anim: "drift", dur: 21, mx: 22, my: 13, td: 400 },
       ]} />
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-12">

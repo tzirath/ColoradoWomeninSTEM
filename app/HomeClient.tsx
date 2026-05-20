@@ -7,7 +7,6 @@ import Link from "next/link";
 import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { BURGUNDY } from "@/components/FlowerDecor";
 
 interface NextEvent {
   title: string;
@@ -115,10 +114,7 @@ export default function HomeClient({
           }}
         >
           <div style={{ animation: "spin-slow 28s linear infinite" }}>
-            <div className="relative drop-shadow-md" style={{ isolation: "isolate" }}>
-              <Image src="/flower1.webp" alt="" width={200} height={200} style={{ opacity: 0.75, display: "block" }} />
-              <div className="absolute inset-0" style={{ backgroundColor: BURGUNDY, mixBlendMode: "color", opacity: 0.9 }} />
-            </div>
+            <Image src="/flower1.webp" alt="" width={200} height={200} className="opacity-75 drop-shadow-md" />
           </div>
         </div>
 
