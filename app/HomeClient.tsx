@@ -5,6 +5,8 @@ import NewsBanner from "@/components/NewsBanner";
 import { useJoinModal } from "@/components/JoinModalContext";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
 
 interface NextEvent {
   title: string;
@@ -23,6 +25,17 @@ export default function HomeClient({
   nextEvent: NextEvent | null;
 }) {
   const { openModal } = useJoinModal();
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,8 +93,58 @@ export default function HomeClient({
       )}
 
       {/* Mission blurb */}
-      <section className="py-20 bg-card">
-        <div className="container mx-auto px-6 max-w-3xl text-center">
+      <section className="py-20 bg-card relative overflow-hidden">
+        <style>{`
+          @keyframes spin-slow { to { transform: rotate(360deg); } }
+          @keyframes spin-slow-reverse { to { transform: rotate(-360deg); } }
+          @keyframes spin-drift {
+            0%   { transform: rotate(0deg) translateY(0px); }
+            33%  { transform: rotate(120deg) translateY(-10px); }
+            66%  { transform: rotate(240deg) translateY(4px); }
+            100% { transform: rotate(360deg) translateY(0px); }
+          }
+        `}</style>
+
+        {/* flower1 — bottom-left, peeks in */}
+        <div
+          className="absolute -left-10 -bottom-6 pointer-events-none"
+          style={{
+            transform: `rotate(${mousePos.x * 22}deg) translateY(${mousePos.y * 12}px)`,
+            transition: "transform 0.45s ease-out",
+          }}
+        >
+          <div style={{ animation: "spin-slow 28s linear infinite" }}>
+            <Image src="/flower1.webp" alt="" width={200} height={200} className="opacity-75 drop-shadow-md" />
+          </div>
+        </div>
+
+        {/* flower3 — top-left, peeks in */}
+        <div
+          className="absolute -left-6 top-4 pointer-events-none"
+          style={{
+            transform: `rotate(${mousePos.x * -16}deg) translateY(${mousePos.y * -10}px)`,
+            transition: "transform 0.6s ease-out",
+          }}
+        >
+          <div style={{ animation: "spin-slow-reverse 35s linear infinite" }}>
+            <Image src="/flower3.webp" alt="" width={145} height={145} className="opacity-60 drop-shadow-sm" />
+          </div>
+        </div>
+
+        {/* flower2 — right side, peeks in */}
+        <div
+          className="absolute -right-8 top-1/2 -translate-y-1/2 pointer-events-none"
+          style={{
+            transform: `translateY(calc(-50% + ${mousePos.y * 14}px)) rotate(${mousePos.x * 28}deg)`,
+            transition: "transform 0.5s ease-out",
+          }}
+        >
+          <div style={{ animation: "spin-drift 22s ease-in-out infinite" }}>
+            <Image src="/flower2.webp" alt="" width={175} height={175} className="opacity-70 drop-shadow-md" />
+          </div>
+        </div>
+
+        <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-4">
             Our Purpose
           </p>
