@@ -21,6 +21,8 @@ const animName = (a: FlowerItem["anim"]) =>
 
 // CSS filter that tints flowers to approx #5B1B3A (dark burgundy)
 export const BURGUNDY = "sepia(1) hue-rotate(285deg) saturate(5) brightness(0.6)";
+// CSS filter that tints flowers to approx #F2D8C2 (warm peach/cream)
+export const PEACH = "sepia(0.9) hue-rotate(352deg) saturate(0.6) brightness(1.35)";
 
 export default function FlowerDecor({ flowers }: { flowers: FlowerItem[] }) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });

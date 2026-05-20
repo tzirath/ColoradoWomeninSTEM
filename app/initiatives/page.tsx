@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Network, Repeat2, Wrench, Users, Mic } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import FlowerDecor from "@/components/FlowerDecor";
+import FlowerDecor, { BURGUNDY } from "@/components/FlowerDecor";
 
 export const metadata = {
   title: "Initiatives | CWS",
@@ -30,7 +30,7 @@ export default async function InitiativesPage() {
         <FlowerDecor flowers={[
           { src: 1, position: "-left-10 -bottom-4", size: 190, opacity: 0.7, anim: "cw",   dur: 26, mx: 22, my: 12, td: 450 },
           { src: 3, position: "-left-4  top-6",     size: 130, opacity: 0.55, anim: "ccw", dur: 32, mx: -14, my: -8, td: 550 },
-          { src: 2, position: "-right-8 top-4",     size: 170, opacity: 0.65, anim: "drift", dur: 22, mx: 25, my: 10, td: 400 },
+          { src: 2, position: "-right-8 top-4",     size: 170, opacity: 0.65, anim: "drift", dur: 22, mx: 25, my: 10, td: 400, filter: BURGUNDY },
         ]} />
         <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">What We Do</p>
