@@ -91,8 +91,12 @@ export default function GetInvolvedClient({ roles, content }: Props) {
       </section>
 
       {/* Open Roles */}
-      <section id="open-roles" className="py-20 bg-card">
-        <div className="container mx-auto px-6">
+      <section id="open-roles" className="py-20 bg-card relative overflow-hidden">
+        <FlowerDecor flowers={[
+          { src: 3, position: "-left-8 top-8",      size: 160, opacity: 0.6,  anim: "ccw",   dur: 31, mx: -16, my: -9, td: 510 },
+          { src: 2, position: "-right-6 -bottom-4", size: 175, opacity: 0.65, anim: "drift", dur: 24, mx: 22,  my: 11, td: 430 },
+        ]} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-14">
             <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Leadership Opportunities</p>
             <h2 className="font-body text-4xl font-bold text-foreground">
