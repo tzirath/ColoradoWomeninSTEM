@@ -1,5 +1,6 @@
 import { Eye, Target, Heart } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import FlowerDecor from "@/components/FlowerDecor";
 
 const DEFAULT_VALUES = [
   { id: "1", label: "Belonging", description: "Creating spaces where every woman feels she truly belongs — not just included, but centered.", sort_order: 0 },
@@ -35,8 +36,12 @@ export default async function AboutPage() {
     <div className="min-h-screen bg-background pt-24">
 
       {/* Story */}
-      <section className="py-20 bg-card">
-        <div className="container mx-auto px-6 max-w-5xl">
+      <section className="py-20 bg-card relative overflow-hidden">
+        <FlowerDecor flowers={[
+          { src: 1, position: "-left-10 -bottom-4", size: 190, opacity: 0.65, anim: "cw",    dur: 27, mx: 20,  my: 11, td: 450 },
+          { src: 2, position: "-right-8 top-6",     size: 160, opacity: 0.6,  anim: "drift", dur: 22, mx: 24,  my: 10, td: 410 },
+        ]} />
+        <div className="container mx-auto px-6 max-w-5xl relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Who We Are</p>
@@ -58,8 +63,11 @@ export default async function AboutPage() {
       </section>
 
       {/* Mission + Vision */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-6">
+      <section className="py-20 bg-background relative overflow-hidden">
+        <FlowerDecor flowers={[
+          { src: 3, position: "-right-6 top-1/3", size: 145, opacity: 0.55, anim: "ccw", dur: 33, mx: -18, my: -9, td: 520 },
+        ]} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="bg-card rounded-2xl p-8 border border-border shadow-sm">
               <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
@@ -80,8 +88,12 @@ export default async function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-20 bg-card">
-        <div className="container mx-auto px-6">
+      <section className="py-20 bg-card relative overflow-hidden">
+        <FlowerDecor flowers={[
+          { src: 2, position: "-left-8  top-8",     size: 155, opacity: 0.6,  anim: "cw",    dur: 26, mx: 20,  my: 10, td: 460 },
+          { src: 1, position: "-right-6 -bottom-4", size: 170, opacity: 0.55, anim: "drift", dur: 29, mx: 22,  my: 12, td: 420 },
+        ]} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-14">
             <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">What We Stand For</p>
             <h2 className="font-body text-4xl font-bold text-foreground">
