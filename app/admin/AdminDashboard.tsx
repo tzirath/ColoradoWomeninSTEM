@@ -14,7 +14,7 @@ import type { User } from "@supabase/supabase-js";
 const INACTIVITY_MS = 15 * 60 * 1000;
 
 interface NewsItem { id: string; text: string; link: string | null; active: boolean; sort_order: number; }
-interface TeamMember { id: string; name: string; role: string; bio: string; hobbies: string; image_path: string; linkedin: string; sort_order: number; active: boolean; }
+interface TeamMember { id: string; name: string; role: string; bio: string; hobbies: string; image_path: string; linkedin: string; flag: string; sort_order: number; active: boolean; }
 interface ContentItem { key: string; value: string; }
 interface CoreValue { id: string; label: string; description: string; sort_order: number; }
 interface OpenRole { id: string; title: string; commitment: string; description: string; sort_order: number; active: boolean; }
@@ -178,7 +178,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
   const saveTeamMember = async (member: TeamMember) => {
     setSaving(member.id);
     try {
-      const payload = { name: member.name, role: member.role, bio: member.bio, hobbies: member.hobbies, image_path: member.image_path, linkedin: member.linkedin, sort_order: member.sort_order, active: member.active };
+      const payload = { name: member.name, role: member.role, bio: member.bio, hobbies: member.hobbies, image_path: member.image_path, linkedin: member.linkedin, flag: member.flag, sort_order: member.sort_order, active: member.active };
       if (member.id.startsWith("new-")) {
         const { data, error } = await supabase.from("team_members").insert(payload).select().single();
         if (error) throw error;
@@ -664,7 +664,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                   </div>
                   <div className="flex items-center gap-3">
                     <span className={`font-body text-xs font-medium tabular-nums ${teamMembers.length >= 7 ? "text-red-500" : "text-foreground/40"}`}>{teamMembers.length}/7</span>
-                    <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", sort_order: teamMembers.length, active: true }])}
+                    <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", flag: "", sort_order: teamMembers.length, active: true }])}
                       disabled={teamMembers.length >= 7}
                       className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
                       <Plus size={14} /> Add Member
@@ -720,6 +720,11 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                           <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Hobbies / Interests</label>
                           <input value={member.hobbies} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, hobbies: e.target.value } : m))}
                             placeholder="Dance · Yoga · Travel" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
+                        </div>
+                        <div>
+                          <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Flag emoji</label>
+                          <input value={member.flag ?? ""} onChange={(e) => setTeamMembers(teamMembers.map((m) => m.id === member.id ? { ...m, flag: e.target.value } : m))}
+                            placeholder="🇲🇽" className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors" />
                         </div>
                       </div>
                       <button onClick={() => saveTeamMember(member)} disabled={saving === member.id || uploadingFor === member.id}

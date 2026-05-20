@@ -11,6 +11,7 @@ interface TeamMember {
   hobbies: string;
   image_path: string;
   linkedin: string;
+  flag?: string;
 }
 
 // Fallback static data used if Supabase fetch fails
@@ -23,6 +24,7 @@ const STATIC_MEMBERS: TeamMember[] = [
     hobbies: "",
     image_path: "/team/arianne.jpg",
     linkedin: "https://www.linkedin.com/in/arianne-lazaro/",
+    flag: "🇵🇭",
   },
   {
     id: "2",
@@ -32,6 +34,7 @@ const STATIC_MEMBERS: TeamMember[] = [
     hobbies: "Dance · Yoga · Tennis · Travel",
     image_path: "/team/tzirath.jpg",
     linkedin: "https://www.linkedin.com/in/tzirath-perez",
+    flag: "🇲🇽",
   },
 ];
 
@@ -65,17 +68,22 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
       {member.hobbies && (
         <p className="font-body text-muted-foreground/70 text-xs mt-2 tracking-wide">{member.hobbies}</p>
       )}
-      {member.linkedin && (
-        <a
-          href={member.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 inline-block text-muted-foreground hover:text-primary transition-colors"
-          aria-label={`${member.name}'s LinkedIn`}
-        >
-          <Linkedin size={18} />
-        </a>
-      )}
+      <div className="mt-3 flex items-center justify-center gap-2">
+        {member.linkedin && (
+          <a
+            href={member.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-muted-foreground hover:text-primary transition-colors"
+            aria-label={`${member.name}'s LinkedIn`}
+          >
+            <Linkedin size={18} />
+          </a>
+        )}
+        {member.flag && (
+          <span className="text-lg leading-none" aria-label="Country">{member.flag}</span>
+        )}
+      </div>
     </div>
   );
 }
