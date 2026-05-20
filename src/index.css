@@ -139,3 +139,13 @@
     font-family: 'Glacial Indifference', 'DM Sans', sans-serif;
   }
 }
+
+@keyframes flower-spin-cw      { to { transform: rotate(360deg); } }
+@keyframes flower-spin-ccw     { to { transform: rotate(-360deg); } }
+@keyframes flower-spin-drift {
+  0%   { transform: rotate(0deg)   translateY(0px); }
+  25%  { transform: rotate(90deg)  translateY(-10px); }
+  50%  { transform: rotate(180deg) translateY(0px); }
+  75%  { transform: rotate(270deg) translateY(-6px); }
+  100% { transform: rotate(360deg) translateY(0px); }
+}

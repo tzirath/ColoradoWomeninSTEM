@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, MapPin, Clock } from "lucide-react";
 import { useJoinModal } from "@/components/JoinModalContext";
+import FlowerDecor from "@/components/FlowerDecor";
 
 interface Event {
   title: string;
@@ -55,8 +56,12 @@ const EventsSection = () => {
   });
 
   return (
-    <section id="events" className="py-24 bg-card">
-      <div className="container mx-auto px-6">
+    <section id="events" className="py-24 bg-card relative overflow-hidden">
+      <FlowerDecor flowers={[
+        { src: 1, position: "-left-10 top-6",     size: 175, opacity: 0.65, anim: "cw",    dur: 28, mx: 20, my: 10, td: 460 },
+        { src: 3, position: "-right-8 -bottom-4", size: 155, opacity: 0.6,  anim: "drift", dur: 23, mx: 24, my: 12, td: 400 },
+      ]} />
+      <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">
             What's Coming Up
