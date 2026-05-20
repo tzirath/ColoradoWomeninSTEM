@@ -59,7 +59,7 @@ const EventsSection = () => {
     <section id="events" className="py-24 bg-card relative overflow-hidden">
       <FlowerDecor flowers={[
         { src: 1, position: "-left-10 top-6",     size: 175, opacity: 0.65, anim: "cw",    dur: 28, mx: 20, my: 10, td: 460 },
-        { src: 3, position: "-right-8 -bottom-4", size: 155, opacity: 0.6,  anim: "drift", dur: 23, mx: 24, my: 12, td: 400, filter: BURGUNDY },
+        { src: 3, position: "-right-8 -bottom-4", size: 155, opacity: 0.6,  anim: "drift", dur: 23, mx: 24, my: 12, td: 400, tint: BURGUNDY },
       ]} />
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">

@@ -109,7 +109,7 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
       <section className="py-20 relative overflow-hidden">
         <FlowerDecor flowers={[
           { src: 3, position: "-left-8  top-8",      size: 145, opacity: 0.55, anim: "ccw",  dur: 30, mx: -16, my: -8, td: 500 },
-          { src: 2, position: "-right-6 bottom-8",   size: 160, opacity: 0.6,  anim: "drift", dur: 24, mx: 20,  my: 12, td: 420, filter: BURGUNDY },
+          { src: 2, position: "-right-6 bottom-8",   size: 160, opacity: 0.6,  anim: "drift", dur: 24, mx: 20,  my: 12, td: 420, tint: BURGUNDY },
         ]} />
         <div className="container mx-auto px-6 max-w-3xl">
           <Link href="/initiatives" className="inline-flex items-center gap-2 text-foreground/60 hover:text-primary font-body text-sm mb-10 transition-colors">

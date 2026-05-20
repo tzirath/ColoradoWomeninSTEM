@@ -100,8 +100,8 @@ const TeamSection = ({ members }: Props) => {
     <section id="team" className="py-24 bg-background relative overflow-hidden">
       <FlowerDecor flowers={[
         { src: 1, position: "-left-10 top-1/3",    size: 180, opacity: 0.6,  anim: "cw",    dur: 27, mx: 20, my: 10, td: 460 },
-        { src: 3, position: "-left-4  -bottom-2",  size: 130, opacity: 0.5,  anim: "ccw",   dur: 34, mx: -14, my: -8, td: 530, filter: BURGUNDY },
-        { src: 2, position: "-right-8 top-8",      size: 170, opacity: 0.55, anim: "drift", dur: 23, mx: 24, my: 12, td: 410, filter: BURGUNDY },
+        { src: 3, position: "-left-4  -bottom-2",  size: 130, opacity: 0.5,  anim: "ccw",   dur: 34, mx: -14, my: -8, td: 530, tint: BURGUNDY },
+        { src: 2, position: "-right-8 top-8",      size: 170, opacity: 0.55, anim: "drift", dur: 23, mx: 24, my: 12, td: 410, tint: BURGUNDY },
       ]} />
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">

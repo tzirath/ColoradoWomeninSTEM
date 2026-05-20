@@ -13,16 +13,14 @@ export interface FlowerItem {
   mx?: number;
   my?: number;
   td?: number;
-  filter?: string;
+  tint?: string; // hex color — applied as mix-blend-mode:color overlay
 }
 
 const animName = (a: FlowerItem["anim"]) =>
   a === "ccw" ? "flower-spin-ccw" : a === "drift" ? "flower-spin-drift" : "flower-spin-cw";
 
-// CSS filter that tints flowers to approx #5B1B3A (dark burgundy)
-export const BURGUNDY = "sepia(1) hue-rotate(285deg) saturate(5) brightness(0.6)";
-// CSS filter that tints flowers to approx #F2D8C2 (warm peach/cream)
-export const PEACH = "sepia(0.9) hue-rotate(352deg) saturate(0.6) brightness(1.35)";
+export const BURGUNDY = "#5B1B3A";
+export const PEACH = "#F2D8C2";
 
 export default function FlowerDecor({ flowers }: { flowers: FlowerItem[] }) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -49,19 +47,27 @@ export default function FlowerDecor({ flowers }: { flowers: FlowerItem[] }) {
             transition: `transform ${f.td ?? 450}ms ease-out`,
           }}
         >
-          <div
-            style={{
-              animation: `${animName(f.anim)} ${f.dur ?? 25}s linear infinite`,
-            }}
-          >
-            <Image
-              src={`/flower${f.src}.webp`}
-              alt=""
-              width={f.size}
-              height={f.size}
-              style={{ opacity: f.opacity ?? 0.7, filter: f.filter }}
-              className="drop-shadow-md"
-            />
+          <div style={{ animation: `${animName(f.anim)} ${f.dur ?? 25}s linear infinite` }}>
+            {/* isolation:isolate ensures the blend mode composites against the flower only */}
+            <div className="relative drop-shadow-md" style={{ isolation: "isolate" }}>
+              <Image
+                src={`/flower${f.src}.webp`}
+                alt=""
+                width={f.size}
+                height={f.size}
+                style={{ opacity: f.opacity ?? 0.7, display: "block" }}
+              />
+              {f.tint && (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundColor: f.tint,
+                    mixBlendMode: "color",
+                    opacity: 0.9,
+                  }}
+                />
+              )}
+            </div>
           </div>
         </div>
       ))}

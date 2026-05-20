@@ -115,7 +115,10 @@ export default function HomeClient({
           }}
         >
           <div style={{ animation: "spin-slow 28s linear infinite" }}>
-            <Image src="/flower1.webp" alt="" width={200} height={200} className="opacity-75 drop-shadow-md" style={{ filter: BURGUNDY }} />
+            <div className="relative drop-shadow-md" style={{ isolation: "isolate" }}>
+              <Image src="/flower1.webp" alt="" width={200} height={200} style={{ opacity: 0.75, display: "block" }} />
+              <div className="absolute inset-0" style={{ backgroundColor: BURGUNDY, mixBlendMode: "color", opacity: 0.9 }} />
+            </div>
           </div>
         </div>
 
