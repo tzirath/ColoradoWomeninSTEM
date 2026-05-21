@@ -40,6 +40,7 @@ export default async function AboutPage() {
         <FlowerDecor flowers={[
           { src: 1, position: "-left-10 -bottom-4", size: 190, opacity: 0.65, anim: "cw",    dur: 27, mx: 20,  my: 11, td: 450 },
           { src: 2, position: "-right-8 top-6",     mobileHide: true, size: 160, opacity: 0.6,  anim: "drift", dur: 22, mx: 24,  my: 10, td: 410 },
+          { src: 3, position: "right-6 top-6",      size: 68,  opacity: 0.75, anim: "ccw",  dur: 18, mx: -12, my: -6, td: 350 },
         ]} />
         <div className="container mx-auto px-6 max-w-5xl relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">

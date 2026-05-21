@@ -144,6 +144,9 @@ export default function HomeClient({
           </div>
         </div>
 
+        {/* Mobile-only: same-color backdrop so flowers stay visually behind text */}
+        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-screen max-w-3xl bg-card md:hidden" style={{ zIndex: 5 }} />
+
         <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-4">
             Our Purpose

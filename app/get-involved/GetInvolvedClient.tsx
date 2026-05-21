@@ -31,6 +31,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
         <FlowerDecor flowers={[
           { src: 2, position: "-left-8  -bottom-2", size: 185, opacity: 0.68, anim: "cw",    dur: 27, mx: 22, my: 11, td: 440 },
           { src: 1, position: "-right-6 top-6",     mobileHide: true, size: 150, opacity: 0.6,  anim: "ccw",   dur: 33, mx: -18, my: -9, td: 520 },
+          { src: 2, position: "right-6 top-6",      size: 68,  opacity: 0.75, anim: "drift", dur: 19, mx: 16, my: 8, td: 380 },
         ]} />
         <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
           <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">Take Action</p>
