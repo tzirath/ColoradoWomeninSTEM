@@ -120,7 +120,7 @@ export default function HomeClient({
 
         {/* flower3 — top-left, peeks in */}
         <div
-          className="absolute -left-6 top-4 pointer-events-none"
+          className="absolute -left-6 top-4 pointer-events-none hidden md:block"
           style={{
             transform: `rotate(${mousePos.x * -16}deg) translateY(${mousePos.y * -10}px)`,
             transition: "transform 0.6s ease-out",
