@@ -181,6 +181,10 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (step < 4) {
+      if (canAdvance) setStep(step + 1);
+      return;
+    }
     if (!executeRecaptcha) {
       toast.error("Security check not ready — please refresh and try again.");
       return;
