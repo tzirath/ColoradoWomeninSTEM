@@ -24,7 +24,7 @@ async function pushToBrevo(email, firstName) {
 }
 
 const [members, subscribers] = await Promise.all([
-  fetchTable("members", "opted_in"),
+  fetchTable("members", "active"),
   fetchTable("email_subscribers", "is_active"),
 ]);
 
