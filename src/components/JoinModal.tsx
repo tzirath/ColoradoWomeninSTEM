@@ -179,8 +179,8 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
   const toggleEthnicity = (v: string) =>
     setEthnicBackground((p) => p.includes(v) ? p.filter((i) => i !== v) : [...p, v]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (step < 4) {
       if (canAdvance) setStep(step + 1);
       return;
@@ -306,7 +306,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
               <span className="text-foreground font-medium">{STEPS[step - 1]}</span>
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-5" noValidate>
 
               {/* ── Step 1: Basic info ── */}
               {step === 1 && (
@@ -547,7 +547,8 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
                 ) : (
                   <button
                     key="submit"
-                    type="submit"
+                    type="button"
+                    onClick={() => handleSubmit()}
                     disabled={isSubmitting}
                     className="bg-secondary text-secondary-foreground font-body font-semibold px-8 py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
                   >
