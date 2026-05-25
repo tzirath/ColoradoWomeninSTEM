@@ -536,6 +536,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
 
                 {step < 4 ? (
                   <button
+                    key="continue"
                     type="button"
                     onClick={() => canAdvance && setStep(step + 1)}
                     disabled={!canAdvance || isSubmitting}
@@ -545,6 +546,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
                   </button>
                 ) : (
                   <button
+                    key="submit"
                     type="submit"
                     disabled={isSubmitting}
                     className="bg-secondary text-secondary-foreground font-body font-semibold px-8 py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
