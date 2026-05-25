@@ -123,8 +123,9 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
   const [ethnicOther,      setEthnicOther]      = useState("");
 
   // Step 3 — STEM context
-  const [stemArea,    setStemArea]    = useState("");
-  const [careerStage, setCareerStage] = useState("");
+  const [stemArea,      setStemArea]      = useState("");
+  const [stemAreaOther, setStemAreaOther] = useState("");
+  const [careerStage,   setCareerStage]   = useState("");
 
   // Step 4 — Interests & location
   const [location,       setLocation]       = useState("");
@@ -144,7 +145,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
       setStep(1);
       setFirstName(""); setEmail("");
       setJoiningAs(""); setEthnicBackground([]); setEthnicOther("");
-      setStemArea(""); setCareerStage("");
+      setStemArea(""); setStemAreaOther(""); setCareerStage("");
       setLocation(""); setHowFound(""); setHopes(""); setInterests([]);
       setNewsletterOptIn(true); setSuccess(false);
     }
@@ -169,7 +170,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
   const stepValid = [
     firstName.trim().length > 0 && emailValid,
     joiningAs !== "" && ethnicBackground.length > 0,
-    stemArea !== "" && careerStage !== "",
+    stemArea !== "" && (stemArea !== "Other" || stemAreaOther.trim().length > 0) && careerStage !== "",
     true,
   ];
   const canAdvance = stepValid[step - 1];
@@ -198,6 +199,10 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
           ? [...ethnicBackground.filter((v) => v !== "Not listed"), `Not listed: ${ethnicOther.trim()}`]
           : ethnicBackground;
 
+      const stemAreaFinal = stemArea === "Other" && stemAreaOther.trim()
+        ? `Other: ${stemAreaOther.trim()}`
+        : stemArea;
+
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -206,7 +211,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
           email: email.trim(),
           joiningAs,
           ethnicBackground: ethnicFinal,
-          stemArea,
+          stemArea: stemAreaFinal,
           careerStage,
           location: location || null,
           howFound: howFound || null,
@@ -411,6 +416,17 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
                         <option key={area} value={area}>{area}</option>
                       ))}
                     </select>
+                    {stemArea === "Other" && (
+                      <input
+                        type="text"
+                        placeholder="Please specify your field…"
+                        value={stemAreaOther}
+                        onChange={(e) => setStemAreaOther(e.target.value)}
+                        className={inputClass + " mt-3"}
+                        disabled={isSubmitting}
+                        maxLength={100}
+                      />
+                    )}
                   </div>
 
                   <div>
