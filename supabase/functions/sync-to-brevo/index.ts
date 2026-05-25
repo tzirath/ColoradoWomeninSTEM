@@ -13,7 +13,7 @@ serve(async (req) => {
     return new Response("BREVO_API_KEY not set", { status: 500 });
   }
 
-  const optedIn = record.opted_in === true;
+  const optedIn = record.opted_in === true || record.is_active === true;
 
   const res = await fetch("https://api.brevo.com/v3/contacts", {
     method: "POST",
