@@ -83,6 +83,7 @@ export async function POST(req: NextRequest) {
         ...(howFound ? { HOW_FOUND: howFound } : {}),
         ...(hopes?.trim() ? { HOPES: hopes.trim() } : {}),
       },
+      listIds: optedIn ? [3] : [],
       emailBlacklisted: !optedIn,
       updateEnabled: true,
     }),
