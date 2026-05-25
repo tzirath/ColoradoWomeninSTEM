@@ -26,13 +26,23 @@ export async function POST(req: NextRequest) {
     interests?: string[];
     newsletterOptIn?: boolean;
     recaptchaToken?: string;
+    joiningAs?: string | null;
+    ethnicBackground?: string[];
+    ethnicOther?: string | null;
+    careerStage?: string | null;
+    location?: string | null;
+    howFound?: string | null;
+    hopes?: string | null;
   } | null;
 
   if (!body) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { firstName, email, stemArea, interests, newsletterOptIn, recaptchaToken } = body;
+  const {
+    firstName, email, stemArea, interests, newsletterOptIn, recaptchaToken,
+    joiningAs, ethnicBackground, ethnicOther, careerStage, location, howFound, hopes,
+  } = body;
 
   if (!firstName?.trim() || !email?.trim() || !recaptchaToken) {
     return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
@@ -65,6 +75,13 @@ export async function POST(req: NextRequest) {
         FIRSTNAME: firstName.trim(),
         ...(stemArea ? { STEM_AREA: stemArea } : {}),
         ...(interests?.length ? { INTERESTS: interests.join(", ") } : {}),
+        ...(joiningAs ? { JOINING_AS: joiningAs } : {}),
+        ...(ethnicBackground?.length ? { ETHNIC_BACKGROUND: ethnicBackground.join(", ") } : {}),
+        ...(ethnicOther?.trim() ? { ETHNIC_OTHER: ethnicOther.trim() } : {}),
+        ...(careerStage ? { CAREER_STAGE: careerStage } : {}),
+        ...(location ? { LOCATION: location } : {}),
+        ...(howFound ? { HOW_FOUND: howFound } : {}),
+        ...(hopes?.trim() ? { HOPES: hopes.trim() } : {}),
       },
       emailBlacklisted: !optedIn,
       updateEnabled: true,
@@ -82,6 +99,13 @@ export async function POST(req: NextRequest) {
           stem_area: stemArea ?? null,
           interests: interests ?? [],
           opted_in: optedIn,
+          joining_as: joiningAs ?? null,
+          ethnic_background: ethnicBackground ?? [],
+          ethnic_other: ethnicOther?.trim() ?? null,
+          career_stage: careerStage ?? null,
+          location: location ?? null,
+          how_found: howFound ?? null,
+          hopes: hopes?.trim() ?? null,
         },
         { onConflict: "email" }
       );
