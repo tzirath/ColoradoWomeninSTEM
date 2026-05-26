@@ -218,7 +218,7 @@ export default function HomeClient({
           <p className="font-body text-foreground/80 text-lg leading-relaxed mb-8">
             Follow us on social, reach out directly, or subscribe to stay in the loop on events, resources, and community updates.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <a
               href="https://www.instagram.com/coloradowomeninstem/"
               target="_blank"
@@ -237,6 +237,24 @@ export default function HomeClient({
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
               LinkedIn
             </a>
+            <a
+              href="https://www.meetup.com/colorado-women-in-stem/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+              Meetup
+            </a>
+            <a
+              href="https://www.eventbrite.com/o/121059308488?aff=ebdsshcopyurl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              Eventbrite
+            </a>
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
@@ -244,13 +262,14 @@ export default function HomeClient({
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               Contact Us
             </Link>
+            <button
+              onClick={openModal}
+              className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Subscribe
+            </button>
           </div>
-          <button
-            onClick={openModal}
-            className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity"
-          >
-            Subscribe
-          </button>
         </div>
       </section>
 
