@@ -29,14 +29,9 @@ const STEM_AREAS = [
 const ETHNIC_BACKGROUNDS = [
   "Black / African American",
   "Indigenous / Native American / Alaska Native",
-  "East Asian",
-  "Southeast Asian",
-  "South Asian",
-  "West Asian / SWANA",
-  "Pacific Islander / Native Hawaiian",
+  "Asian (East, Southeast, South, West/SWANA, Pacific Islander/Native Hawaiian)",
   "Latina / Hispanic",
   "White / European",
-  "Multiracial",
   "Prefer not to say",
   "Not listed",
 ];
@@ -50,15 +45,6 @@ const CAREER_STAGES = [
   "Entrepreneur / Founder",
 ];
 
-const LOCATIONS = [
-  "Denver Metro",
-  "Boulder / Longmont",
-  "Colorado Springs",
-  "Fort Collins / Northern CO",
-  "Western Slope",
-  "Rural Colorado",
-  "Outside Colorado",
-];
 
 const HOW_FOUND = [
   "Word of mouth",
@@ -128,7 +114,6 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
   const [careerStage,   setCareerStage]   = useState("");
 
   // Step 4 — Interests & location
-  const [location,       setLocation]       = useState("");
   const [howFound,       setHowFound]       = useState("");
   const [hopes,          setHopes]          = useState("");
   const [interests,      setInterests]      = useState<string[]>([]);
@@ -146,7 +131,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
       setFirstName(""); setEmail("");
       setJoiningAs(""); setEthnicBackground([]); setEthnicOther("");
       setStemArea(""); setStemAreaOther(""); setCareerStage("");
-      setLocation(""); setHowFound(""); setHopes(""); setInterests([]);
+      setHowFound(""); setHopes(""); setInterests([]);
       setNewsletterOptIn(true); setSuccess(false);
     }
   }, [open]);
@@ -213,7 +198,6 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
           ethnicBackground: ethnicFinal,
           stemArea: stemAreaFinal,
           careerStage,
-          location: location || null,
           howFound: howFound || null,
           hopes: hopes.trim() || null,
           interests,
@@ -449,21 +433,6 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
               {/* ── Step 4: Interests & location ── */}
               {step === 4 && (
                 <div className="space-y-5">
-                  <div>
-                    <FieldLabel>Location</FieldLabel>
-                    <select
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      disabled={isSubmitting}
-                      className={inputClass + " cursor-pointer"}
-                    >
-                      <option value="">Select your area…</option>
-                      {LOCATIONS.map((loc) => (
-                        <option key={loc} value={loc}>{loc}</option>
-                      ))}
-                    </select>
-                  </div>
-
                   <div>
                     <FieldLabel>How did you find us?</FieldLabel>
                     <select
