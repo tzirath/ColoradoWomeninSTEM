@@ -192,7 +192,7 @@ export default function HomeClient({
       </section>
 
       {/* Stay Connected */}
-      <section className="py-14 bg-card border-b border-border relative overflow-hidden">
+      <section className="py-20 bg-card relative overflow-hidden">
         <div
           className="absolute -left-8 -bottom-4 pointer-events-none"
           style={{ transform: `rotate(${mousePos.x * 18}deg) translateY(${mousePos.y * 10}px)`, transition: "transform 0.45s ease-out" }}
@@ -209,10 +209,16 @@ export default function HomeClient({
             <Image src="/flower2.webp" alt="" width={140} height={140} className="opacity-55 drop-shadow-sm" />
           </div>
         </div>
-        <div className="container mx-auto px-6 max-w-2xl text-center relative z-10">
-          <h2 className="font-body text-2xl font-bold text-foreground mb-2">Stay Connected</h2>
-          <p className="font-body text-foreground/70 text-sm mb-8">Follow us, reach out, or just say hi.</p>
-          <div className="flex flex-wrap justify-center gap-4">
+        <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
+          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-4">Community</p>
+          <h2 className="font-body text-3xl md:text-4xl font-bold text-foreground mb-6">
+            Stay{" "}
+            <span className="font-display italic text-primary">Connected</span>
+          </h2>
+          <p className="font-body text-foreground/80 text-lg leading-relaxed mb-8">
+            Follow us on social, reach out directly, or subscribe to stay in the loop on events, resources, and community updates.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 mb-4">
             <a
               href="https://www.instagram.com/coloradowomeninstem/"
               target="_blank"
@@ -239,6 +245,12 @@ export default function HomeClient({
               Contact Us
             </Link>
           </div>
+          <button
+            onClick={openModal}
+            className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity"
+          >
+            Subscribe
+          </button>
         </div>
       </section>
 
