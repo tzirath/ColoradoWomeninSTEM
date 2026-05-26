@@ -191,7 +191,59 @@ export default function HomeClient({
         </div>
       </section>
 
+      {/* Stay Connected */}
+      <section className="py-14 bg-card border-b border-border relative overflow-hidden">
+        <div
+          className="absolute -left-8 -bottom-4 pointer-events-none"
+          style={{ transform: `rotate(${mousePos.x * 18}deg) translateY(${mousePos.y * 10}px)`, transition: "transform 0.45s ease-out" }}
+        >
+          <div style={{ animation: "spin-slow 30s linear infinite" }}>
+            <Image src="/flower3.webp" alt="" width={150} height={150} className="opacity-60 drop-shadow-sm" />
+          </div>
+        </div>
+        <div
+          className="absolute -right-6 -top-4 pointer-events-none hidden md:block"
+          style={{ transform: `rotate(${mousePos.x * -20}deg) translateY(${mousePos.y * 12}px)`, transition: "transform 0.5s ease-out" }}
+        >
+          <div style={{ animation: "spin-slow-reverse 26s linear infinite" }}>
+            <Image src="/flower2.webp" alt="" width={140} height={140} className="opacity-55 drop-shadow-sm" />
+          </div>
+        </div>
+        <div className="container mx-auto px-6 max-w-2xl text-center relative z-10">
+          <h2 className="font-body text-2xl font-bold text-foreground mb-2">Stay Connected</h2>
+          <p className="font-body text-foreground/70 text-sm mb-8">Follow us, reach out, or just say hi.</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a
+              href="https://www.instagram.com/coloradowomeninstem/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/groups/18686021/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </a>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 border-2 border-border text-foreground font-body font-semibold px-6 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA strip */}
+
       <section className="py-16 bg-primary">
         <div className="container mx-auto px-6 text-center">
           <h2 className="font-body text-3xl font-bold text-primary-foreground mb-4">
