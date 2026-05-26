@@ -216,7 +216,7 @@ export default function HomeClient({
             <span className="font-display italic text-primary">Connected</span>
           </h2>
           <p className="font-body text-foreground/80 text-lg leading-relaxed mb-8">
-            Follow us on social, reach out directly, or subscribe to stay in the loop on events, resources, and community updates.
+            Follow us on social media, reach out directly, or join us at our next event.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
