@@ -155,7 +155,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
 
   const stepValid = [
     firstName.trim().length > 0 && emailValid,
-    joiningAs !== "" && ethnicBackground.length > 0,
+    joiningAs !== "",
     stemArea !== "" && (stemArea !== "Other" || stemAreaOther.trim().length > 0) && careerStage !== "",
     true,
   ];
@@ -350,7 +350,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
                   </div>
 
                   <div>
-                    <FieldLabel required>Ethnic background</FieldLabel>
+                    <FieldLabel>Ethnic background</FieldLabel>
                     <p className="font-body text-xs text-muted-foreground mb-3">
                       This helps us understand our community and ensure our programming reflects who we&apos;re here to serve. Select all that apply.
                     </p>
