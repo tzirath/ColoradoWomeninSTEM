@@ -265,7 +265,7 @@ const JoinModal = ({ open, onClose }: JoinModalProps) => {
                 Join CWS<span className="text-secondary">.</span>
               </h2>
               <p className="font-body text-muted-foreground text-sm">
-                Sign up to stay connected with Colorado Women in STEM.
+                Sign up to become a member, connect with women in STEM, access resources, and find your people in Colorado.
               </p>
             </div>
 
