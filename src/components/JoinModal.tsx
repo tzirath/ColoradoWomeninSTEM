@@ -29,7 +29,7 @@ const STEM_AREAS = [
 const ETHNIC_BACKGROUNDS = [
   "Black / African American",
   "Indigenous / Native American / Alaska Native",
-  "Asian (East, Southeast, South, West/SWANA, Pacific Islander)",
+  "Asian (East, Southeast, South, West/SWANA)",
   "Native Hawaiian / Pacific Islander",
   "Latina / Hispanic",
   "White / European",
