@@ -30,7 +30,7 @@ const ETHNIC_BACKGROUNDS = [
   "Asian (East, Southeast, South, West/SWANA)",
   "Black / African American",
   "Indigenous / Native American / Alaska Native",
-  "Latin American / Hispanic",
+  "Latina / Hispanic",
   "Native Hawaiian / Pacific Islander",
   "White / European",
   "Prefer not to say",
