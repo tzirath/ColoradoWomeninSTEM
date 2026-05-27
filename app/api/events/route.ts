@@ -45,8 +45,9 @@ function formatTime(start: string, end: string): string {
 }
 
 function formatLocation(venue?: EventbriteVenue): string {
-  if (!venue) return "Online";
+  if (!venue) return "TBD";
   const parts = [venue.name, venue.address?.city, venue.address?.region].filter(Boolean);
+  if (parts.length === 0) return "TBD";
   return parts.join(", ");
 }
 
