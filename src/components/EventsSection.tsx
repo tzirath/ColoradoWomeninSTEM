@@ -115,33 +115,31 @@ const EventsSection = () => {
                   />
                 </div>
               )}
-              <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
-                <div>
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-                    <h3 className="font-body text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {event.title}
-                    </h3>
-                    <span className="text-xs font-body font-semibold uppercase tracking-wider bg-secondary/15 text-secondary px-3 py-1 rounded-full">
-                      {event.tag}
-                    </span>
-                  </div>
-                  <p className="font-body text-muted-foreground text-sm mb-4 leading-relaxed">
-                    {event.description}
-                  </p>
+              <div className="flex-1 p-6 md:p-8 flex flex-col">
+                <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
+                  <h3 className="font-body text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {event.title}
+                  </h3>
+                  <span className="text-xs font-body font-semibold uppercase tracking-wider bg-secondary/15 text-secondary px-3 py-1 rounded-full">
+                    {event.tag}
+                  </span>
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground font-body">
-                    <span className="flex items-center gap-1.5">
-                      <Calendar size={14} className="text-primary" /> {event.date}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Clock size={14} className="text-primary" /> {event.time}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <MapPin size={14} className="text-primary" /> {event.location}
-                    </span>
-                  </div>
-                  {event.signUpUrl && (
+                <p className="font-body text-muted-foreground text-sm leading-relaxed flex-1">
+                  {event.description}
+                </p>
+                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground font-body mt-4">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={14} className="text-primary" /> {event.date}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={14} className="text-primary" /> {event.time}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin size={14} className="text-primary" /> {event.location}
+                  </span>
+                </div>
+                {event.signUpUrl && (
+                  <div className="flex justify-end mt-4">
                     <a
                       href={event.signUpUrl}
                       target="_blank"
@@ -150,8 +148,8 @@ const EventsSection = () => {
                     >
                       Sign Up
                     </a>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
