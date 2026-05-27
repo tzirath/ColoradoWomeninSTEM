@@ -66,6 +66,7 @@ function mapEvents(raw: EventbriteEvent[]) {
 async function eb<T>(path: string, apiKey: string): Promise<{ ok: boolean; data: T }> {
   const res = await fetch(`https://www.eventbriteapi.com/v3${path}`, {
     headers: { Authorization: `Bearer ${apiKey}` },
+    cache: "no-store",
   });
   const data = (await res.json()) as T;
   return { ok: res.ok, data };
