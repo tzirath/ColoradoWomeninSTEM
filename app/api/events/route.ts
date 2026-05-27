@@ -78,7 +78,7 @@ export async function GET() {
   }
 
   const eventParams =
-    "?status=live&time_filter=current_future&expand=venue,category,logo,tags&order_by=start_asc";
+    "?time_filter=current_future&expand=venue,category,logo,tags&order_by=start_asc";
 
   try {
     const { ok: userOk, data: user } = await eb<{ id?: string; error_description?: string }>(
