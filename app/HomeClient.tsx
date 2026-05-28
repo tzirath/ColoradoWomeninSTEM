@@ -196,7 +196,7 @@ export default function HomeClient({
 
       {/* Photo Carousel */}
       {galleryPhotos.length > 0 && (
-        <section className="py-16 bg-background">
+        <section className="py-16 bg-card">
           <div className="container mx-auto px-6 max-w-5xl">
             <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-6 text-center">Our Community</p>
             <PhotoCarousel photos={galleryPhotos} />
@@ -223,7 +223,7 @@ export default function HomeClient({
           </div>
         </div>
         <div className="container mx-auto px-6 max-w-3xl text-center relative z-10">
-          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-4">Community</p>
+          <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-4">Find Us</p>
           <h2 className="font-body text-3xl md:text-4xl font-bold text-foreground mb-6">
             Stay{" "}
             <span className="font-display italic text-primary">Connected</span>
