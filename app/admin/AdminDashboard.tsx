@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   LogOut, Megaphone, Users, Plus, Trash2, GripVertical,
-  Save, FileText, Heart, Briefcase, Upload, ChevronRight, LayoutDashboard, Search, Mail, MailX
+  Save, FileText, Heart, Briefcase, Upload, ChevronRight, LayoutDashboard, Search, Mail, MailX, Images
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
 import type { User } from "@supabase/supabase-js";
@@ -21,6 +21,7 @@ interface OpenRole { id: string; title: string; commitment: string; description:
 interface Committee { id: string; name: string; description: string; sort_order: number; }
 interface Member { id: string; email: string; first_name: string; stem_area: string | null; interests: string[]; opted_in: boolean; created_at: string; }
 interface InitiativeEvent { slug: string; event_type: string; created_at: string; }
+interface GalleryPhoto { id: string; url: string; sort_order: number; }
 
 const DEFAULT_COMMITTEES: Committee[] = [
   { id: "default-1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
@@ -39,9 +40,10 @@ interface Props {
   initialCommittees: Committee[];
   initialMembers: Member[];
   initialInitiativeEvents: InitiativeEvent[];
+  initialGalleryPhotos: GalleryPhoto[];
 }
 
-type Tab = "dashboard" | "news" | "team" | "content" | "roles";
+type Tab = "dashboard" | "news" | "team" | "content" | "roles" | "gallery";
 
 // ── Content sections + fields ────────────────────────────────────────────────
 const CONTENT_SECTIONS = [
@@ -112,9 +114,10 @@ const MAIN_TABS = [
   { key: "team" as Tab, icon: Users, label: "Team" },
   { key: "content" as Tab, icon: FileText, label: "Site Content" },
   { key: "roles" as Tab, icon: Briefcase, label: "Open Roles" },
+  { key: "gallery" as Tab, icon: Images, label: "Gallery" },
 ];
 
-export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees, initialMembers, initialInitiativeEvents }: Props) {
+export default function AdminDashboard({ user, initialNewsItems, initialTeamMembers, initialContent, initialCoreValues, initialOpenRoles, initialCommittees, initialMembers, initialInitiativeEvents, initialGalleryPhotos }: Props) {
   const [tab, setTab] = useState<Tab>("dashboard");
   const [memberSearch, setMemberSearch] = useState("");
   const [contentSection, setContentSection] = useState("about");
@@ -125,6 +128,8 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
   const [content, setContent] = useState<Record<string, string>>(Object.fromEntries(initialContent.map((c) => [c.key, c.value])));
   const [coreValues, setCoreValues] = useState(initialCoreValues);
   const [openRoles, setOpenRoles] = useState(initialOpenRoles);
+  const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>(initialGalleryPhotos);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
   const [saving, setSaving] = useState<string | null>(null); // key being saved
   const [toast, setToast] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(INACTIVITY_MS);
@@ -300,6 +305,30 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     if (!id.startsWith("new-") && !id.startsWith("default-")) await supabase.from("committees").delete().eq("id", id);
     setCommittees(committees.filter((c) => c.id !== id));
     showToast("Committee removed.");
+  };
+
+  // ── Gallery ───────────────────────────────────────────────
+  const handleGalleryUpload = async (file: File) => {
+    if (galleryPhotos.length >= 6) { showToast("Maximum 6 photos."); return; }
+    setUploadingGallery(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const filename = `gallery/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("team-photos").upload(filename, file, { upsert: true });
+      if (upErr) throw upErr;
+      const { data: { publicUrl } } = supabase.storage.from("team-photos").getPublicUrl(filename);
+      const sort_order = galleryPhotos.length;
+      const { data, error } = await supabase.from("gallery_photos").insert({ url: publicUrl, sort_order }).select().single();
+      if (error) throw error;
+      setGalleryPhotos([...galleryPhotos, data]);
+      showToast("Photo added!");
+    } catch { showToast("Upload failed."); } finally { setUploadingGallery(false); }
+  };
+
+  const removeGalleryPhoto = async (id: string) => {
+    await supabase.from("gallery_photos").delete().eq("id", id);
+    setGalleryPhotos(galleryPhotos.filter((p) => p.id !== id));
+    showToast("Photo removed.");
   };
 
   const activeSection = CONTENT_SECTIONS.find((s) => s.id === contentSection) ?? CONTENT_SECTIONS[0];
@@ -937,6 +966,48 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                   ))}
                 </div>
                 {openRoles.length === 0 && <p className="text-center font-body text-sm text-foreground/40 py-10">No roles. Add one above.</p>}
+              </div>
+            )}
+
+            {/* ── Gallery ── */}
+            {tab === "gallery" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="font-body text-xl font-bold text-foreground">Gallery</h2>
+                    <p className="font-body text-sm text-foreground/50 mt-0.5">Up to 6 photos shown in the home page carousel.</p>
+                  </div>
+                  {galleryPhotos.length < 6 && (
+                    <label className={`inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 cursor-pointer ${uploadingGallery ? "opacity-50 pointer-events-none" : ""}`}>
+                      <Upload size={14} />{uploadingGallery ? "Uploading…" : "Add Photo"}
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleGalleryUpload(f); e.target.value = ""; }} />
+                    </label>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {galleryPhotos.map((p) => (
+                    <div key={p.id} className="relative group rounded-xl overflow-hidden aspect-[4/3] bg-muted">
+                      <img src={p.url} alt="" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                        <button
+                          onClick={() => removeGalleryPhoto(p.id)}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {Array.from({ length: Math.max(0, 6 - galleryPhotos.length) }).map((_, i) => (
+                    <label key={`empty-${i}`} className="relative rounded-xl aspect-[4/3] bg-muted border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-colors">
+                      <Upload size={20} className="text-muted-foreground mb-1" />
+                      <span className="font-body text-xs text-muted-foreground">Add photo</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleGalleryUpload(f); e.target.value = ""; }} />
+                    </label>
+                  ))}
+                </div>
+                <p className="font-body text-xs text-foreground/40">{galleryPhotos.length}/6 photos · Hover a photo and click the trash icon to remove it.</p>
               </div>
             )}
 

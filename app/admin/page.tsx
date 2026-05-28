@@ -14,6 +14,7 @@ export default async function AdminPage() {
     { data: committees },
     { data: members },
     { data: initiativeEvents },
+    { data: galleryPhotos },
   ] = await Promise.all([
     supabase.auth.getUser(),
     supabase.from("news_items").select("*").order("sort_order"),
@@ -24,6 +25,7 @@ export default async function AdminPage() {
     supabase.from("committees").select("*").order("sort_order"),
     getSupabaseAdmin().from("members").select("*").order("created_at", { ascending: false }),
     getSupabaseAdmin().from("initiative_events").select("slug, event_type, created_at"),
+    supabase.from("gallery_photos").select("id, url, sort_order").order("sort_order"),
   ]);
 
   return (
@@ -37,6 +39,7 @@ export default async function AdminPage() {
       initialCommittees={committees ?? []}
       initialMembers={members ?? []}
       initialInitiativeEvents={initiativeEvents ?? []}
+      initialGalleryPhotos={galleryPhotos ?? []}
     />
   );
 }

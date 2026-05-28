@@ -71,9 +71,10 @@ async function fetchNextEvent(): Promise<NextEvent | null> {
 
 export default async function Home() {
   const supabase = createClient();
-  const [{ data }, nextEvent] = await Promise.all([
+  const [{ data }, nextEvent, { data: galleryData }] = await Promise.all([
     supabase.from("news_items").select("text, link").eq("active", true).order("sort_order"),
     fetchNextEvent(),
+    supabase.from("gallery_photos").select("id, url").order("sort_order").limit(6),
   ]);
 
   const newsItems = data?.map((d) => ({ text: d.text, link: d.link ?? null })) ?? [
@@ -82,5 +83,11 @@ export default async function Home() {
     { text: "Follow us on Instagram @coloradowomeninstem for updates", link: null },
   ];
 
-  return <HomeClient newsItems={newsItems} nextEvent={nextEvent} />;
+  return (
+    <HomeClient
+      newsItems={newsItems}
+      nextEvent={nextEvent}
+      galleryPhotos={galleryData ?? []}
+    />
+  );
 }

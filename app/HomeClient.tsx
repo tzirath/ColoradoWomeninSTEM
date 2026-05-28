@@ -2,6 +2,7 @@
 
 import HeroSection from "@/components/HeroSection";
 import NewsBanner from "@/components/NewsBanner";
+import PhotoCarousel from "@/components/PhotoCarousel";
 import { useJoinModal } from "@/components/JoinModalContext";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock, MapPin } from "lucide-react";
@@ -20,9 +21,11 @@ interface NextEvent {
 export default function HomeClient({
   newsItems,
   nextEvent,
+  galleryPhotos,
 }: {
   newsItems: { text: string; link: string | null }[];
   nextEvent: NextEvent | null;
+  galleryPhotos: { id: string; url: string }[];
 }) {
   const { openModal } = useJoinModal();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -190,6 +193,16 @@ export default function HomeClient({
           </ul>
         </div>
       </section>
+
+      {/* Photo Carousel */}
+      {galleryPhotos.length > 0 && (
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-6 text-center">Our Community</p>
+            <PhotoCarousel photos={galleryPhotos} />
+          </div>
+        </section>
+      )}
 
       {/* Stay Connected */}
       <section className="py-20 bg-card relative overflow-hidden">
