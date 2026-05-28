@@ -322,7 +322,7 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
       if (error) throw error;
       setGalleryPhotos([...galleryPhotos, data]);
       showToast("Photo added!");
-    } catch { showToast("Upload failed."); } finally { setUploadingGallery(false); }
+    } catch (err) { console.error("Gallery upload error:", err); showToast("Upload failed."); } finally { setUploadingGallery(false); }
   };
 
   const removeGalleryPhoto = async (id: string) => {
