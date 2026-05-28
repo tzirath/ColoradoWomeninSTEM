@@ -205,7 +205,7 @@ export default function HomeClient({
       )}
 
       {/* Stay Connected */}
-      <section className="py-20 bg-card relative overflow-hidden">
+      <section className="py-20 bg-background relative overflow-hidden">
         <div
           className="absolute -left-8 -bottom-4 pointer-events-none"
           style={{ transform: `rotate(${mousePos.x * 18}deg) translateY(${mousePos.y * 10}px)`, transition: "transform 0.45s ease-out" }}
