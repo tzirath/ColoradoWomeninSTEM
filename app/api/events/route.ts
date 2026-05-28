@@ -79,8 +79,8 @@ export async function GET() {
     return NextResponse.json({ error: "Eventbrite API key not configured" }, { status: 500 });
   }
 
-  const eventParams =
-    "?time_filter=current_future&expand=venue,category,logo,tags&order_by=start_asc";
+  const upcomingParams = "?time_filter=current_future&expand=venue,category,logo,tags&order_by=start_asc";
+  const pastParams     = "?time_filter=past&expand=venue,category,logo,tags&order_by=start_desc&page_size=3";
 
   try {
     const { ok: userOk, data: user } = await eb<{ id?: string; error_description?: string }>(
@@ -100,24 +100,24 @@ export async function GET() {
     }>(`/users/${user.id}/organizations/`, apiKey);
 
     const orgId = orgsOk ? orgsData.organizations?.[0]?.id : undefined;
+    const base = orgId ? `/organizations/${orgId}/events` : `/users/${user.id}/events`;
 
-    const eventsPath = orgId
-      ? `/organizations/${orgId}/events/${eventParams}`
-      : `/users/${user.id}/events/${eventParams}`;
+    const [{ ok: upOk, data: upData }, { data: pastData }] = await Promise.all([
+      eb<{ events?: EventbriteEvent[]; error_description?: string }>(`${base}/${upcomingParams}`, apiKey),
+      eb<{ events?: EventbriteEvent[] }>(`${base}/${pastParams}`, apiKey),
+    ]);
 
-    const { ok: eventsOk, data: eventsData } = await eb<{
-      events?: EventbriteEvent[];
-      error_description?: string;
-    }>(eventsPath, apiKey);
-
-    if (!eventsOk) {
+    if (!upOk) {
       return NextResponse.json(
-        { error: eventsData.error_description ?? "Failed to fetch events" },
+        { error: upData.error_description ?? "Failed to fetch events" },
         { status: 502 }
       );
     }
 
-    return NextResponse.json({ events: mapEvents(eventsData.events ?? []) });
+    return NextResponse.json({
+      events:     mapEvents(upData.events ?? []),
+      pastEvents: mapEvents((pastData.events ?? []).slice(0, 3)),
+    });
   } catch (err) {
     console.error("events route error:", err);
     return NextResponse.json(

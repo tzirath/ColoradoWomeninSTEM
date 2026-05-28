@@ -1,9 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin, Clock, ChevronDown } from "lucide-react";
 import { useJoinModal } from "@/components/JoinModalContext";
 import FlowerDecor from "@/components/FlowerDecor";
+import { useState } from "react";
 
 interface Event {
   title: string;
@@ -16,11 +17,15 @@ interface Event {
   imageUrl: string | null;
 }
 
-async function fetchEvents(): Promise<Event[]> {
+interface EventsData {
+  events: Event[];
+  pastEvents: Event[];
+}
+
+async function fetchEvents(): Promise<EventsData> {
   const res = await fetch("/api/events");
   if (!res.ok) throw new Error("Failed to load events");
-  const data = await res.json();
-  return data.events as Event[];
+  return res.json() as Promise<EventsData>;
 }
 
 // ---------------------------------------------------------------------------
@@ -49,11 +54,14 @@ function EventSkeleton() {
 // ---------------------------------------------------------------------------
 const EventsSection = () => {
   const { openModal } = useJoinModal();
-  const { data: events, isLoading, isError } = useQuery({
+  const [pastOpen, setPastOpen] = useState(false);
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["events"],
     queryFn: fetchEvents,
-    staleTime: 5 * 60 * 1000, // cache for 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
+  const events     = data?.events     ?? [];
+  const pastEvents = data?.pastEvents ?? [];
 
   return (
     <section id="events" className="py-24 bg-card relative overflow-hidden">
@@ -88,7 +96,7 @@ const EventsSection = () => {
             </p>
           )}
 
-          {!isLoading && !isError && events?.length === 0 && (
+          {!isLoading && !isError && events.length === 0 && (
             <p className="text-center font-body text-muted-foreground py-8">
               No upcoming events at this time.{" "}
               <button
@@ -101,7 +109,7 @@ const EventsSection = () => {
             </p>
           )}
 
-          {events?.map((event) => (
+          {events.map((event) => (
             <div
               key={event.title}
               className="bg-background rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-border group overflow-hidden flex flex-col sm:flex-row"
@@ -154,6 +162,41 @@ const EventsSection = () => {
             </div>
           ))}
         </div>
+
+        {/* Past Events */}
+        {!isLoading && pastEvents.length > 0 && (
+          <div className="max-w-3xl mx-auto mt-12">
+            <button
+              onClick={() => setPastOpen((o) => !o)}
+              className="w-full flex items-center justify-between font-body text-foreground/60 hover:text-foreground text-sm font-semibold uppercase tracking-[0.15em] transition-colors py-3 border-t border-border"
+            >
+              Past Events
+              <ChevronDown size={16} className={`transition-transform duration-300 ${pastOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {pastOpen && (
+              <div className="space-y-4 mt-4">
+                {pastEvents.map((event) => (
+                  <div key={event.title} className="bg-background/60 rounded-xl p-5 border border-border flex flex-col sm:flex-row sm:items-center gap-4 opacity-75">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-body font-semibold text-foreground text-sm mb-1">{event.title}</p>
+                      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground font-body">
+                        <span className="flex items-center gap-1"><Calendar size={11} className="text-primary" /> {event.date}</span>
+                        <span className="flex items-center gap-1"><MapPin size={11} className="text-primary" /> {event.location}</span>
+                      </div>
+                    </div>
+                    {event.signUpUrl && (
+                      <a href={event.signUpUrl} target="_blank" rel="noopener noreferrer"
+                        className="shrink-0 font-body text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors">
+                        View event
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
