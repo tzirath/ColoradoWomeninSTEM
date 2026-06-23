@@ -15,11 +15,16 @@ const DEFAULT_COMMITTEES = [
 
 export default async function TeamPage() {
   const supabase = createClient();
-  const [{ data: members }, { data: committeesData }] = await Promise.all([
+  const [{ data: members }, { data: committeesData }, { data: contentRows }] = await Promise.all([
     supabase.from("team_members").select("*").eq("active", true).order("sort_order"),
     supabase.from("committees").select("*").order("sort_order"),
+    supabase.from("site_content").select("key, value").in("key", ["committee_apply_url", "committee_apply_visible"]),
   ]);
   const committees = committeesData?.length ? committeesData : DEFAULT_COMMITTEES;
+  const contentMap: Record<string, string> = {};
+  contentRows?.forEach((r) => { contentMap[r.key] = r.value; });
+  const applyUrl = contentMap["committee_apply_url"];
+  const applyActive = applyUrl && contentMap["committee_apply_visible"] !== "false";
 
   return (
     <div className="min-h-screen bg-background pt-24">
@@ -37,9 +42,15 @@ export default async function TeamPage() {
             </h2>
             <p className="font-body text-foreground/70 mt-4 max-w-xl mx-auto">
               CWS runs through volunteer-led committees. Interested in leading one?{" "}
-              <a href="/contact" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
-                Get in touch.
-              </a>
+              {applyActive ? (
+                <a href={applyUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
+                  Apply here.
+                </a>
+              ) : (
+                <a href="/contact" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
+                  Get in touch.
+                </a>
+              )}
             </p>
           </div>
 
