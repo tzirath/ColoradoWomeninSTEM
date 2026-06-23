@@ -261,6 +261,19 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     showToast("Value removed.");
   };
 
+  // ── Application Link ──────────────────────────────────────────
+  const saveApplicationLink = async () => {
+    setSaving("committee_apply");
+    try {
+      const now = new Date().toISOString();
+      await Promise.all([
+        supabase.from("site_content").upsert({ key: "committee_apply_url", value: content["committee_apply_url"] ?? "", updated_at: now }),
+        supabase.from("site_content").upsert({ key: "committee_apply_visible", value: content["committee_apply_visible"] ?? "true", updated_at: now }),
+      ]);
+      showToast("Saved!"); router.refresh();
+    } catch { showToast("Error saving."); } finally { setSaving(null); }
+  };
+
   // ── Open Roles ────────────────────────────────────────────
   const saveOpenRole = async (r: OpenRole) => {
     setSaving(r.id);
@@ -915,6 +928,39 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
             {/* ── Open Roles ── */}
             {tab === "roles" && (
               <div>
+                {/* Application link card */}
+                <div className="bg-card border border-border rounded-2xl p-5 mb-8">
+                  <h3 className="font-body font-semibold text-foreground mb-1">Committee Application Link</h3>
+                  <p className="font-body text-xs text-foreground/50 mb-4">Controls the "Apply" button shown below the roles on the Get Involved page.</p>
+                  <div className="grid gap-3">
+                    <div>
+                      <label className="block font-body text-xs font-medium text-foreground/60 mb-1">Application form URL</label>
+                      <input
+                        value={content["committee_apply_url"] ?? ""}
+                        onChange={(e) => setContent({ ...content, committee_apply_url: e.target.value })}
+                        placeholder="https://forms.gle/..."
+                        className="w-full font-body text-sm bg-background border border-border rounded-lg px-3 py-2 outline-none focus:border-primary transition-colors"
+                      />
+                    </div>
+                    <label className="flex items-center gap-2 font-body text-sm text-foreground/70 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={content["committee_apply_visible"] !== "false"}
+                        onChange={(e) => setContent({ ...content, committee_apply_visible: e.target.checked ? "true" : "false" })}
+                        className="accent-primary"
+                      />
+                      Show "Apply for a Committee Position" button on the public page
+                    </label>
+                  </div>
+                  <button
+                    onClick={saveApplicationLink}
+                    disabled={saving === "committee_apply"}
+                    className="mt-4 inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2 rounded-lg hover:opacity-90 disabled:opacity-50"
+                  >
+                    <Save size={13} />{saving === "committee_apply" ? "Saving…" : "Save"}
+                  </button>
+                </div>
+
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h2 className="font-body text-xl font-semibold text-foreground">Open Roles</h2>

@@ -19,6 +19,8 @@ const INITIATIVE_KEYS = [
   "initiative_stem_in_action",
   "initiative_mentorship",
   "initiative_cws_voices",
+  "committee_apply_url",
+  "committee_apply_visible",
 ];
 
 const DEFAULT_CONTENT = {
