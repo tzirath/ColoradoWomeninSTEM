@@ -70,10 +70,10 @@ const SignupBanner = ({ onJoinClick }: SignupBannerProps) => {
             <span className="text-2xl shrink-0">🌸</span>
             <div className="min-w-0">
               <p className="font-body font-semibold text-foreground text-sm leading-snug">
-                Join Colorado Women in STEM
+                Stay in the loop with CWS
               </p>
               <p className="font-body text-muted-foreground text-xs mt-0.5 leading-snug">
-                Events, mentorship & community for women in STEM across Denver.
+                Get updates on events, news, and opportunities for women in STEM.
               </p>
             </div>
           </div>
@@ -83,7 +83,7 @@ const SignupBanner = ({ onJoinClick }: SignupBannerProps) => {
             onClick={handleJoin}
             className="shrink-0 bg-secondary text-secondary-foreground font-body font-semibold text-sm px-5 py-2 rounded-lg hover:opacity-90 transition-opacity w-full sm:w-auto"
           >
-            Join CWS
+            Subscribe
           </button>
         </div>
       </div>

@@ -8,7 +8,7 @@ export default function BecomeAMemberButton({ slug }: { slug?: string }) {
   return (
     <button onClick={() => { if (slug) trackSignupClick(slug); openModal(); }}
       className="inline-flex items-center gap-2 bg-secondary text-white font-body font-semibold px-7 py-3 rounded-lg hover:opacity-90 transition-opacity">
-      Become a Member
+      Subscribe to Newsletter
     </button>
   );
 }

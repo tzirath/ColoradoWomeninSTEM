@@ -50,10 +50,10 @@ export default function GetInvolvedClient({ roles, content }: Props) {
               <Users className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h2 className="font-body text-3xl font-bold text-primary-foreground mb-4">Become a Member</h2>
-          <p className="font-body text-bloom-sage mb-8 max-w-xl mx-auto">{content.get_involved_member_desc}</p>
+          <h2 className="font-body text-3xl font-bold text-primary-foreground mb-4">Stay Connected</h2>
+          <p className="font-body text-bloom-sage mb-8 max-w-xl mx-auto">Get updates on events, resources, and community news from Colorado Women in STEM.</p>
           <button onClick={openModal} className="bg-secondary text-white font-body font-semibold text-lg px-10 py-3.5 rounded-lg hover:opacity-90 transition-opacity">
-            Join CWS
+            Subscribe to Newsletter
           </button>
         </div>
       </section>
@@ -157,7 +157,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
                   <HeartHandshake size={15} /> Contact Us
                 </Link>
                 <button onClick={openModal} className="inline-flex items-center gap-2 border-2 border-secondary text-secondary font-body font-semibold px-6 py-2.5 rounded-lg hover:bg-secondary/5 transition-colors">
-                  Become a Member
+                  Subscribe to Newsletter
                 </button>
               </div>
             </div>

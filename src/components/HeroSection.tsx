@@ -37,7 +37,7 @@ const HeroSection = ({ onJoinClick }: HeroSectionProps) => {
             <button
               onClick={onJoinClick}
               className="bg-secondary text-secondary-foreground font-body font-semibold text-lg px-9 py-3.5 rounded-lg hover:opacity-90 transition-opacity">
-              Join <span className="font-display ml-1">CWS</span>
+              Get Updates
             </button>
             <a
               href="/about"

@@ -284,16 +284,16 @@ export default function HomeClient({
       <section className="py-16 bg-primary">
         <div className="container mx-auto px-6 text-center">
           <h2 className="font-body text-3xl font-bold text-primary-foreground mb-4">
-            Ready to join the community?
+            Stay in the loop
           </h2>
           <p className="font-body text-bloom-sage mb-8 max-w-xl mx-auto">
-            Connect with Women in STEM across Colorado. Membership is free and open to all.
+            Get updates on events, resources, and community news from Colorado Women in STEM.
           </p>
           <button
             onClick={openModal}
             className="bg-secondary text-white font-body font-semibold text-lg px-10 py-3.5 rounded-lg hover:opacity-90 transition-opacity"
           >
-            Become a Member
+            Subscribe to Newsletter
           </button>
         </div>
       </section>
