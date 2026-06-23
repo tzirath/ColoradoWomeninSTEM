@@ -126,7 +126,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
                 ))}
               </div>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-                {content.committee_apply_url && content.committee_apply_visible !== "false" && (
+                {content.committee_apply_url && content.committee_apply_visible !== "false" ? (
                   <a
                     href={content.committee_apply_url}
                     target="_blank"
@@ -135,10 +135,11 @@ export default function GetInvolvedClient({ roles, content }: Props) {
                   >
                     <Briefcase size={16} /> Apply for a Committee Position
                   </a>
+                ) : (
+                  <Link href="/contact" className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body font-semibold px-8 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    <HeartHandshake size={16} /> Express Interest
+                  </Link>
                 )}
-                <Link href="/contact" className="inline-flex items-center gap-2 border-2 border-primary text-primary font-body font-semibold px-8 py-3 rounded-lg hover:bg-primary/5 transition-colors">
-                  <HeartHandshake size={16} /> Express Interest
-                </Link>
               </div>
             </>
           ) : (
