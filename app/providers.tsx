@@ -8,7 +8,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { JoinModalProvider, useJoinModal } from "@/components/JoinModalContext";
+// TO RE-ENABLE MEMBER SIGN-UP: replace NewsletterModal with JoinModal below
 import NewsletterModal from "@/components/NewsletterModal";
+// import JoinModal from "@/components/JoinModal";
 import Navbar from "@/components/Navbar";
 import SignupBanner from "@/components/SignupBanner";
 import Footer from "@/components/Footer";
@@ -25,7 +27,7 @@ function SiteShell({ children }: { children: React.ReactNode }) {
       <Navbar onJoinClick={openModal} />
       <main>{children}</main>
       <Footer />
-      <NewsletterModal open={open} onClose={closeModal} />
+      <NewsletterModal open={open} onClose={closeModal} />{/* swap with <JoinModal> to re-enable */}
       <SignupBanner onJoinClick={openModal} />
     </>
   );
