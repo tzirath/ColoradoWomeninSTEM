@@ -28,55 +28,23 @@ export default async function TeamPage() {
 
   return (
     <div className="min-h-screen bg-background pt-24">
-      <TeamSection members={members ?? []} />
+      <TeamSection members={members ?? []} committees={committees} />
 
-      {/* Committees */}
-      <section className="py-20 bg-card">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-3">
-              How We Operate
-            </p>
-            <h2 className="font-body text-4xl font-bold text-foreground">
-              Our <span className="font-display italic text-primary">Committees</span>
-            </h2>
-            <p className="font-body text-foreground/70 mt-4 max-w-xl mx-auto">
-              CWS runs through volunteer-led committees. Interested in leading one?{" "}
-              {applyActive ? (
-                <a href={applyUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
-                  Apply here.
-                </a>
-              ) : (
-                <a href="/contact" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
-                  Get in touch.
-                </a>
-              )}
-            </p>
-          </div>
-
-          <div className="overflow-x-auto max-w-4xl mx-auto">
-            <table className="w-full font-body text-sm border-collapse">
-              <thead>
-                <tr className="bg-primary/10 text-left">
-                  <th className="px-6 py-4 font-semibold text-foreground rounded-tl-xl">Committee</th>
-                  <th className="px-6 py-4 font-semibold text-foreground rounded-tr-xl">Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {committees.map((c, i) => (
-                  <tr
-                    key={c.name}
-                    className={`border-b border-border transition-colors hover:bg-primary/5 ${
-                      i % 2 === 0 ? "bg-background" : "bg-card"
-                    }`}
-                  >
-                    <td className="px-6 py-4 font-semibold text-foreground">{c.name}</td>
-                    <td className="px-6 py-4 text-foreground/80">{c.description}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Apply to lead a committee */}
+      <section className="py-16 bg-card">
+        <div className="container mx-auto px-6 text-center">
+          <p className="font-body text-foreground/70 max-w-xl mx-auto">
+            CWS runs through volunteer-led committees. Interested in leading one?{" "}
+            {applyActive ? (
+              <a href={applyUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
+                Apply here.
+              </a>
+            ) : (
+              <a href="/contact" className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity">
+                Get in touch.
+              </a>
+            )}
+          </p>
         </div>
       </section>
     </div>

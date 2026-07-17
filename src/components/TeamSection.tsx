@@ -13,6 +13,14 @@ interface TeamMember {
   image_path: string;
   linkedin: string;
   flag?: string;
+  committee_id?: string | null;
+}
+
+interface Committee {
+  id: string;
+  name: string;
+  description: string;
+  sort_order: number;
 }
 
 // Fallback static data used if Supabase fetch fails
@@ -39,7 +47,11 @@ const STATIC_MEMBERS: TeamMember[] = [
   },
 ];
 
-function TeamMemberCard({ member }: { member: TeamMember }) {
+function isFounder(member: TeamMember) {
+  return member.role.toLowerCase().includes("founder");
+}
+
+function TeamMemberCard({ member, large }: { member: TeamMember; large?: boolean }) {
   const [imgError, setImgError] = useState(false);
 
   const initials = member.name
@@ -47,9 +59,12 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
     .map((n) => n[0])
     .join("");
 
+  const photoSize = large ? "w-40 h-40" : "w-32 h-32";
+  const cardWidth = large ? "w-64" : "w-56";
+
   return (
-    <div className="group text-center w-56">
-      <div className="w-32 h-32 mx-auto mb-5 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors flex items-center justify-center">
+    <div className={`group text-center ${cardWidth}`}>
+      <div className={`${photoSize} mx-auto mb-5 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors flex items-center justify-center`}>
         {imgError || !member.image_path ? (
           <div className="w-full h-full bg-gradient-to-br from-primary/20 to-bloom-coral/20 flex items-center justify-center">
             <span className="font-display text-3xl font-bold text-primary">{initials}</span>
@@ -91,10 +106,26 @@ function TeamMemberCard({ member }: { member: TeamMember }) {
 
 interface Props {
   members?: TeamMember[];
+  committees?: Committee[];
 }
 
-const TeamSection = ({ members }: Props) => {
+const TeamSection = ({ members, committees = [] }: Props) => {
   const list = members && members.length > 0 ? members : STATIC_MEMBERS;
+
+  const founders = list.filter(isFounder);
+  const rest = list.filter((m) => !isFounder(m));
+
+  const committeeGroups = committees
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((committee) => ({
+      committee,
+      members: rest.filter((m) => m.committee_id === committee.id),
+    }));
+
+  const unassigned = rest.filter(
+    (m) => !committees.some((c) => c.id === m.committee_id)
+  );
 
   return (
     <section id="team" className="py-24 bg-background relative overflow-hidden">
@@ -112,10 +143,50 @@ const TeamSection = ({ members }: Props) => {
             Meet Our <span className="font-display text-primary italic">Team</span>
           </h2>
         </div>
-        <div className="flex flex-wrap justify-center gap-8">
-          {list.map((member) => (
-            <TeamMemberCard key={member.id} member={member} />
+
+        {/* Founders — spotlighted side by side, not part of the committee grid */}
+        {founders.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-12 mb-20 pb-16 border-b border-border/60">
+            {founders.map((member) => (
+              <TeamMemberCard key={member.id} member={member} large />
+            ))}
+          </div>
+        )}
+
+        {/* Committees — every member appears as an equal peer within their group */}
+        <div className="flex flex-col gap-16">
+          {committeeGroups.map(({ committee, members: committeeMembers }) => (
+            committeeMembers.length > 0 && (
+              <div key={committee.id}>
+                <div className="text-center mb-10">
+                  <h3 className="font-body text-2xl font-bold text-foreground">{committee.name}</h3>
+                  {committee.description && (
+                    <p className="font-body text-foreground/60 text-sm mt-2 max-w-xl mx-auto">{committee.description}</p>
+                  )}
+                </div>
+                <div className="flex flex-wrap justify-center gap-8">
+                  {committeeMembers.map((member) => (
+                    <TeamMemberCard key={member.id} member={member} />
+                  ))}
+                </div>
+              </div>
+            )
           ))}
+
+          {unassigned.length > 0 && (
+            <div>
+              {committeeGroups.some((g) => g.members.length > 0) && (
+                <div className="text-center mb-10">
+                  <h3 className="font-body text-2xl font-bold text-foreground">General Members</h3>
+                </div>
+              )}
+              <div className="flex flex-wrap justify-center gap-8">
+                {unassigned.map((member) => (
+                  <TeamMemberCard key={member.id} member={member} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
