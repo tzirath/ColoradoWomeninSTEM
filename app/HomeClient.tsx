@@ -276,6 +276,21 @@ export default function HomeClient({
               Contact Us
             </Link>
           </div>
+
+          <div className="mt-12 pt-10 border-t border-border">
+            <p className="font-body text-secondary text-sm uppercase tracking-[0.2em] mb-4">Read Our Newsletter</p>
+            <div className="flex justify-center">
+              <iframe
+                src="https://coloradowomeninstem.substack.com/embed"
+                width="480"
+                height="320"
+                style={{ border: "1px solid #EEE", background: "white", maxWidth: "100%" }}
+                frameBorder="0"
+                scrolling="no"
+                title="Subscribe to Colorado Women in STEM on Substack"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
