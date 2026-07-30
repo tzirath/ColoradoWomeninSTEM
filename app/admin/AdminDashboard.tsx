@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   LogOut, Megaphone, Users, Plus, Trash2, GripVertical,
-  Save, FileText, Heart, Briefcase, Upload, ChevronRight, LayoutDashboard, Search, Mail, MailX, Images
+  Save, FileText, Heart, Briefcase, Upload, ChevronRight, LayoutDashboard, Search, Mail, MailX, Images, Download
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
 import type { User } from "@supabase/supabase-js";
@@ -320,6 +320,38 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
     showToast("Committee removed.");
   };
 
+  // ── Substack Export ───────────────────────────────────────
+  const lastSubstackExport = content["substack_last_export_at"] ? new Date(content["substack_last_export_at"]) : null;
+  const substackCsvEscape = (s: string) => `"${s.replace(/"/g, '""')}"`;
+
+  const exportSubstackCsv = async (newOnly: boolean) => {
+    const rows = initialMembers.filter((m) => {
+      if (!m.opted_in) return false;
+      if (newOnly && lastSubstackExport && new Date(m.created_at) <= lastSubstackExport) return false;
+      return true;
+    });
+    if (rows.length === 0) {
+      showToast("No subscribers to export.");
+      return;
+    }
+    const csv = [
+      "email,name",
+      ...rows.map((m) => `${substackCsvEscape(m.email)},${substackCsvEscape(m.first_name)}`),
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `substack-subscribers-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    const now = new Date().toISOString();
+    setContent((c) => ({ ...c, substack_last_export_at: now }));
+    await supabase.from("site_content").upsert({ key: "substack_last_export_at", value: now, updated_at: now });
+    showToast(`Exported ${rows.length} subscriber${rows.length === 1 ? "" : "s"}.`);
+  };
+
   // ── Gallery ───────────────────────────────────────────────
   const handleGalleryUpload = async (file: File) => {
     if (galleryPhotos.length >= 6) { showToast("Maximum 6 photos."); return; }
@@ -605,6 +637,30 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                       </div>
                     );
                   })()}
+
+                  {/* Substack export */}
+                  <div className="bg-card border border-border rounded-2xl p-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <h3 className="font-body font-semibold text-foreground mb-1">Substack Export</h3>
+                        <p className="font-body text-xs text-foreground/50">
+                          {lastSubstackExport
+                            ? `Last exported ${lastSubstackExport.toLocaleDateString()} at ${lastSubstackExport.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · ${initialMembers.filter((m) => m.opted_in && new Date(m.created_at) > lastSubstackExport).length} new since then`
+                            : "Never exported yet — first download will include everyone opted in."}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button onClick={() => exportSubstackCsv(false)}
+                          className="inline-flex items-center gap-1.5 font-body text-xs text-foreground/50 hover:text-foreground transition-colors px-3 py-2">
+                          Export all
+                        </button>
+                        <button onClick={() => exportSubstackCsv(true)}
+                          className="inline-flex items-center gap-2 bg-secondary text-white font-body text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
+                          <Download size={14} /> Download new subscribers
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
                   {/* Member table */}
                   <div className="bg-card border border-border rounded-2xl p-6">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
@@ -9,6 +9,8 @@ interface NewsletterModalProps {
   open: boolean;
   onClose: () => void;
 }
+
+const SUBSTACK_URL = "https://substack.com/@coloradowomeninstem";
 
 const inputClass =
   "w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:ring-2 focus:ring-secondary disabled:opacity-50";
@@ -129,6 +131,14 @@ const NewsletterModal = ({ open, onClose }: NewsletterModalProps) => {
                 {isSubmitting ? <><Loader2 size={16} className="animate-spin" /> Subscribing…</> : "Subscribe to Newsletter"}
               </button>
             </form>
+            <a
+              href={SUBSTACK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex items-center justify-center gap-1.5 font-body text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Prefer Substack? Read us there instead <ArrowUpRight size={14} />
+            </a>
           </>
         )}
       </div>
