@@ -154,7 +154,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
             onClick={onJoinClick}
             className="inline-flex items-center bg-secondary text-white font-body font-semibold text-base px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
           >
-            Become a Member
+            Join CWS
           </button>
         </div>
 
@@ -231,7 +231,7 @@ const Navbar = ({ onJoinClick }: NavbarProps) => {
                 onClick={() => { setIsOpen(false); onJoinClick(); }}
                 className="bg-secondary text-white font-body font-semibold px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
               >
-                Become a Member
+                Join CWS
               </button>
             </li>
           </ul>
