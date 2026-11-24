@@ -21,6 +21,8 @@ export interface Initiative {
   access?: string;
   /** site_content key for the optional Sign Up link (editable in admin). */
   signupKey: string;
+  /** Set to true to hide this initiative from the public site (nav, footer, cards, its page). Admin still shows it. */
+  hidden?: boolean;
   /** site_content key for the optional photo (uploaded in admin). */
   imageKey: string;
   /** Older site_content key, read as a fallback so existing Sign Up links keep working. */
@@ -79,6 +81,7 @@ export const INITIATIVES: Initiative[] = [
     icon: HandHeart,
     name: "Champions Circle",
     subtitle: "Mentorship + Sponsorship",
+    hidden: true, // Not public yet. Delete this line to show Champions Circle again.
     tagline: "Someone to guide you. Someone to speak up for you.",
     shortDescription:
       "Mentors who guide and sponsors who advocate, at every career stage. As you grow, you help the next woman up.",
@@ -137,8 +140,12 @@ export const INITIATIVES: Initiative[] = [
 
 export const INITIATIVE_SLUGS = INITIATIVES.map((i) => i.slug);
 
+/** Initiatives shown on the public site. */
+export const VISIBLE_INITIATIVES = INITIATIVES.filter((i) => !i.hidden);
+
+/** Looks up a public initiative; hidden ones return undefined so their page 404s. */
 export function getInitiative(slug: string): Initiative | undefined {
-  return INITIATIVES.find((i) => i.slug === slug);
+  return VISIBLE_INITIATIVES.find((i) => i.slug === slug);
 }
 
 /** Old URL slugs mapped to their new slugs (used for redirects and merging old analytics). */

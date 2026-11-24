@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Instagram, Linkedin, MapPin, Mail } from "lucide-react";
+import { VISIBLE_INITIATIVES } from "@/data/initiatives";
 
 const sections = [
   {
@@ -16,11 +17,7 @@ const sections = [
     heading: "Initiatives",
     links: [
       { label: "Overview", href: "/initiatives" },
-      { label: "Curiosity Exchange", href: "/initiatives/curiosity-exchange" },
-      { label: "Grow Bold", href: "/initiatives/grow-bold" },
-      { label: "Champions Circle", href: "/initiatives/champions-circle" },
-      { label: "STEM in Action", href: "/initiatives/stem-in-action" },
-      { label: "CWS Real Talk", href: "/initiatives/real-talk" },
+      ...VISIBLE_INITIATIVES.map((i) => ({ label: i.name, href: `/initiatives/${i.slug}` })),
     ],
   },
   {

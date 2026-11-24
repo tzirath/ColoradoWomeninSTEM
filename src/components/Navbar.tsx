@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useJoinModal } from "@/components/JoinModalContext";
+import { VISIBLE_INITIATIVES } from "@/data/initiatives";
 
 const navLinks = [
   {
@@ -22,11 +23,7 @@ const navLinks = [
     dropdown: "initiatives" as const,
     overview: { label: "Overview", href: "/initiatives" },
     items: [
-      { label: "Curiosity Exchange", href: "/initiatives/curiosity-exchange" },
-      { label: "Grow Bold", href: "/initiatives/grow-bold" },
-      { label: "Champions Circle", href: "/initiatives/champions-circle" },
-      { label: "STEM in Action", href: "/initiatives/stem-in-action" },
-      { label: "CWS Real Talk", href: "/initiatives/real-talk" },
+      ...VISIBLE_INITIATIVES.map((i) => ({ label: i.name, href: `/initiatives/${i.slug}` })),
     ],
   },
   { label: "Events", href: "/events" },

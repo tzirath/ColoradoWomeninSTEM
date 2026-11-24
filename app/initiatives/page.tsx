@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import FlowerDecor from "@/components/FlowerDecor";
-import { INITIATIVES, INITIATIVES_INTRO } from "@/data/initiatives";
+import { VISIBLE_INITIATIVES, INITIATIVES_INTRO } from "@/data/initiatives";
 
 export const metadata = {
   title: "Initiatives | CWS",
@@ -11,7 +11,7 @@ export const metadata = {
 
 export default async function InitiativesPage() {
   const supabase = createClient();
-  const { data } = await supabase.from("site_content").select("key, value").in("key", INITIATIVES.map((i) => i.imageKey));
+  const { data } = await supabase.from("site_content").select("key, value").in("key", VISIBLE_INITIATIVES.map((i) => i.imageKey));
   const images: Record<string, string> = {};
   data?.forEach((row) => { if (row.value) images[row.key] = row.value; });
 
@@ -38,7 +38,7 @@ export default async function InitiativesPage() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {INITIATIVES.map((item) => (
+            {VISIBLE_INITIATIVES.map((item) => (
               <Link key={item.slug} href={`/initiatives/${item.slug}`}
                 className="group bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-lg hover:border-primary/30 transition-all">
                 {images[item.imageKey] && (

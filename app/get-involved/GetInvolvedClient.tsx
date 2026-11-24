@@ -4,7 +4,7 @@ import { useJoinModal } from "@/components/JoinModalContext";
 import { Users, Briefcase, HeartHandshake, CalendarHeart } from "lucide-react";
 import Link from "next/link";
 import FlowerDecor from "@/components/FlowerDecor";
-import { INITIATIVES } from "@/data/initiatives";
+import { VISIBLE_INITIATIVES } from "@/data/initiatives";
 
 interface Role { id: string; title: string; commitment: string; description: string; }
 
@@ -67,7 +67,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {INITIATIVES.slice(0, 3).map((p) => (
+            {VISIBLE_INITIATIVES.slice(0, 3).map((p) => (
               <div key={p.slug} className="bg-card rounded-2xl p-8 border border-border shadow-sm flex flex-col">
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                   <p.icon className="w-7 h-7 text-accent" />
