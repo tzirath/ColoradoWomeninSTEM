@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 const DEFAULT_COMMITTEES = [
-  { id: "1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
+  { id: "1", name: "Social Media", description: "Share our story and grow our community across social media.", sort_order: 0 },
   { id: "2", name: "Outreach & Partnerships", description: "Find meaningful partnerships with external organizations and sponsors.", sort_order: 1 },
   { id: "3", name: "Community Service", description: "Seek out community-focused initiatives.", sort_order: 2 },
   { id: "4", name: "Professional Development", description: "Empower members with the tools and knowledge to thrive in their careers and beyond.", sort_order: 3 },

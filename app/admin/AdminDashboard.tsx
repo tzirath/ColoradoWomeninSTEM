@@ -24,8 +24,10 @@ interface Member { id: string; email: string; first_name: string; stem_area: str
 interface InitiativeEvent { slug: string; event_type: string; created_at: string; }
 interface GalleryPhoto { id: string; url: string; sort_order: number; }
 
+const MAX_TEAM_MEMBERS = 25;
+
 const DEFAULT_COMMITTEES: Committee[] = [
-  { id: "default-1", name: "Social", description: "Plan events that bring members together.", sort_order: 0 },
+  { id: "default-1", name: "Social Media", description: "Share our story and grow our community across social media.", sort_order: 0 },
   { id: "default-2", name: "Outreach & Partnerships", description: "Find meaningful partnerships with external organizations and sponsors.", sort_order: 1 },
   { id: "default-3", name: "Community Service", description: "Seek out community-focused initiatives.", sort_order: 2 },
   { id: "default-4", name: "Professional Development", description: "Empower members with the tools and knowledge to thrive in their careers and beyond.", sort_order: 3 },
@@ -731,9 +733,9 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
                     <p className="font-body text-sm text-foreground/60 mt-1">Add, edit, or remove team member profiles.</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className={`font-body text-xs font-medium tabular-nums ${teamMembers.length >= 7 ? "text-red-500" : "text-foreground/40"}`}>{teamMembers.length}/7</span>
+                    <span className={`font-body text-xs font-medium tabular-nums ${teamMembers.length >= MAX_TEAM_MEMBERS ? "text-red-500" : "text-foreground/40"}`}>{teamMembers.length}/{MAX_TEAM_MEMBERS}</span>
                     <button onClick={() => setTeamMembers([...teamMembers, { id: `new-${Date.now()}`, name: "", role: "", bio: "", hobbies: "", image_path: "", linkedin: "", flag: "", sort_order: teamMembers.length, active: true, committee_id: null }])}
-                      disabled={teamMembers.length >= 7}
+                      disabled={teamMembers.length >= MAX_TEAM_MEMBERS}
                       className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-body text-sm font-semibold px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
                       <Plus size={14} /> Add Member
                     </button>

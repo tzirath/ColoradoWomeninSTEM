@@ -115,17 +115,27 @@ const TeamSection = ({ members, committees = [] }: Props) => {
   const founders = list.filter(isFounder);
   const rest = list.filter((m) => !isFounder(m));
 
-  const committeeGroups = committees
-    .slice()
-    .sort((a, b) => a.sort_order - b.sort_order)
-    .map((committee) => ({
-      committee,
-      members: rest.filter((m) => m.committee_id === committee.id),
-    }));
-
   const unassigned = rest.filter(
     (m) => !committees.some((c) => c.id === m.committee_id)
   );
+
+  // Members without a committee are shown under "Operations"
+  const groups = [
+    ...committees
+      .slice()
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((committee) => ({
+        id: committee.id,
+        name: committee.name,
+        description: committee.description,
+        members: rest.filter((m) => m.committee_id === committee.id),
+      })),
+    { id: "operations", name: "Operations", description: "", members: unassigned },
+  ].filter((g) => g.members.length > 0);
+
+  // Committees with one person sit side by side in a single row to save space
+  const multiGroups = groups.filter((g) => g.members.length > 1);
+  const singleGroups = groups.filter((g) => g.members.length === 1);
 
   return (
     <section id="team" className="py-24 bg-background relative overflow-hidden">
@@ -153,38 +163,37 @@ const TeamSection = ({ members, committees = [] }: Props) => {
           </div>
         )}
 
-        {/* Committees — every member appears as an equal peer within their group */}
+        {/* Committees: every member appears as an equal peer within their group */}
         <div className="flex flex-col gap-16">
-          {committeeGroups.map(({ committee, members: committeeMembers }) => (
-            committeeMembers.length > 0 && (
-              <div key={committee.id}>
-                <div className="text-center mb-10">
-                  <h3 className="font-body text-2xl font-bold text-foreground">{committee.name}</h3>
-                  {committee.description && (
-                    <p className="font-body text-foreground/60 text-sm mt-2 max-w-xl mx-auto">{committee.description}</p>
-                  )}
-                </div>
-                <div className="flex flex-wrap justify-center gap-8">
-                  {committeeMembers.map((member) => (
-                    <TeamMemberCard key={member.id} member={member} />
-                  ))}
-                </div>
+          {multiGroups.map((group) => (
+            <div key={group.id}>
+              <div className="text-center mb-10">
+                <h3 className="font-body text-2xl font-bold text-foreground">{group.name}</h3>
+                {group.description && (
+                  <p className="font-body text-foreground/60 text-sm mt-2 max-w-xl mx-auto">{group.description}</p>
+                )}
               </div>
-            )
-          ))}
-
-          {unassigned.length > 0 && (
-            <div>
-              {committeeGroups.some((g) => g.members.length > 0) && (
-                <div className="text-center mb-10">
-                  <h3 className="font-body text-2xl font-bold text-foreground">Operations</h3>
-                </div>
-              )}
               <div className="flex flex-wrap justify-center gap-8">
-                {unassigned.map((member) => (
+                {group.members.map((member) => (
                   <TeamMemberCard key={member.id} member={member} />
                 ))}
               </div>
+            </div>
+          ))}
+
+          {singleGroups.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-x-10 gap-y-14">
+              {singleGroups.map((group) => (
+                <div key={group.id} className="w-64 flex flex-col items-center">
+                  <div className="text-center mb-6 min-h-[4.5rem]">
+                    <h3 className="font-body text-xl font-bold text-foreground">{group.name}</h3>
+                    {group.description && (
+                      <p className="font-body text-foreground/60 text-xs mt-1">{group.description}</p>
+                    )}
+                  </div>
+                  <TeamMemberCard member={group.members[0]} />
+                </div>
+              ))}
             </div>
           )}
         </div>
