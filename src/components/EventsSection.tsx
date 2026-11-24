@@ -111,7 +111,7 @@ const EventsSection = () => {
 
           {events.map((event) => (
             <div
-              key={event.title}
+              key={event.signUpUrl || event.title}
               className="bg-background rounded-2xl shadow-sm hover:shadow-lg transition-shadow border border-border group overflow-hidden flex flex-col sm:flex-row"
             >
               {event.imageUrl && (
@@ -132,7 +132,7 @@ const EventsSection = () => {
                     {event.tag}
                   </span>
                 </div>
-                <p className="font-body text-muted-foreground text-sm leading-relaxed flex-1">
+                <p className="font-body text-muted-foreground text-sm leading-relaxed flex-1 whitespace-pre-line">
                   {event.description}
                 </p>
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground font-body mt-4">
@@ -177,7 +177,7 @@ const EventsSection = () => {
             {pastOpen && (
               <div className="space-y-4 mt-4">
                 {pastEvents.map((event) => (
-                  <div key={event.title} className="bg-background/60 rounded-xl p-5 border border-border flex flex-col sm:flex-row sm:items-center gap-4 opacity-75">
+                  <div key={event.signUpUrl || event.title} className="bg-background/60 rounded-xl p-5 border border-border flex flex-col sm:flex-row sm:items-center gap-4 opacity-75">
                     <div className="flex-1 min-w-0">
                       <p className="font-body font-semibold text-foreground text-sm mb-1">{event.title}</p>
                       <div className="flex flex-wrap gap-3 text-xs text-muted-foreground font-body">

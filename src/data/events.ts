@@ -8,7 +8,7 @@
 //   location    — venue name and/or address
 //   description — 1–2 sentence summary shown on the card
 //   tag         — short label shown as a badge (e.g. "Networking", "Workshop", "Conference")
-//   signUpUrl   — Eventbrite or Meetup link; leave as "" to hide the button
+//   signUpUrl   — Partiful or Meetup link; leave as "" to hide the button
 
 export const events = [
   {
