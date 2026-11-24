@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
 import type { User } from "@supabase/supabase-js";
+import { INITIATIVES, LEGACY_INITIATIVE_SLUGS } from "@/data/initiatives";
 
 const INACTIVITY_MS = 15 * 60 * 1000;
 
@@ -73,37 +74,15 @@ const CONTENT_SECTIONS = [
     ],
   },
   {
-    id: "initiative-cards",
-    label: "Initiative Cards",
-    parent: "Initiatives",
-    fields: [
-      { key: "initiative_members_network_tagline", label: "Members Network — tagline" },
-      { key: "initiative_members_network", label: "Members Network — description" },
-      { key: "initiative_skill_swap_tagline", label: "Skill Swap — tagline" },
-      { key: "initiative_skill_swap", label: "Skill Swap — description" },
-      { key: "initiative_stem_in_action_tagline", label: "STEM in Action — tagline" },
-      { key: "initiative_stem_in_action", label: "STEM in Action — description" },
-      { key: "initiative_mentorship_tagline", label: "Mentorship — tagline" },
-      { key: "initiative_mentorship", label: "Mentorship — description" },
-      { key: "initiative_cws_voices_tagline", label: "CWS Voices — tagline" },
-      { key: "initiative_cws_voices", label: "CWS Voices — description" },
-    ],
-  },
-  {
     id: "initiative-pages",
     label: "Initiative Detail Pages",
     parent: "Initiatives",
     fields: [
-      { key: "initiative_members_network_body", label: "Members Network — page body" },
-      { key: "initiative_members_network_signup_url", label: "Members Network — Sign Up link" },
-      { key: "initiative_skill_swap_body", label: "Skill Swap — page body" },
-      { key: "initiative_skill_swap_signup_url", label: "Skill Swap — Sign Up link" },
-      { key: "initiative_stem_in_action_body", label: "STEM in Action — page body" },
-      { key: "initiative_stem_in_action_signup_url", label: "STEM in Action — Sign Up link" },
-      { key: "initiative_mentorship_body", label: "Mentorship — page body" },
-      { key: "initiative_mentorship_signup_url", label: "Mentorship — Sign Up link" },
-      { key: "initiative_cws_voices_body", label: "CWS Voices — page body" },
-      { key: "initiative_cws_voices_signup_url", label: "CWS Voices — Sign Up link" },
+      { key: "initiative_curiosity_exchange_signup_url", label: "Curiosity Exchange: Sign Up link" },
+      { key: "initiative_grow_bold_signup_url", label: "Grow Bold: Sign Up link" },
+      { key: "initiative_champions_circle_signup_url", label: "Champions Circle: Sign Up link" },
+      { key: "initiative_stem_in_action_signup_url", label: "STEM in Action: Sign Up link" },
+      { key: "initiative_real_talk_signup_url", label: "CWS Real Talk: Sign Up link" },
     ],
   },
 ];
@@ -604,18 +583,12 @@ export default function AdminDashboard({ user, initialNewsItems, initialTeamMemb
 
                   {/* Initiative interest */}
                   {(() => {
-                    const SLUGS = ["members-network", "skill-swap", "stem-in-action", "mentorship", "cws-voices"];
-                    const LABELS: Record<string, string> = {
-                      "members-network": "Members Network",
-                      "skill-swap": "Skill Swap",
-                      "stem-in-action": "STEM in Action",
-                      "mentorship": "Mentorship",
-                      "cws-voices": "CWS Voices",
-                    };
-                    const initiativeData = SLUGS.map((slug) => ({
-                      name: LABELS[slug],
-                      views: initialInitiativeEvents.filter((e) => e.slug === slug && e.event_type === "view").length,
-                      clicks: initialInitiativeEvents.filter((e) => e.slug === slug && e.event_type === "signup_click").length,
+                    // Events recorded under old slugs count toward the renamed initiative
+                    const canonical = (slug: string) => LEGACY_INITIATIVE_SLUGS[slug] ?? slug;
+                    const initiativeData = INITIATIVES.map(({ slug, name }) => ({
+                      name,
+                      views: initialInitiativeEvents.filter((e) => canonical(e.slug) === slug && e.event_type === "view").length,
+                      clicks: initialInitiativeEvents.filter((e) => canonical(e.slug) === slug && e.event_type === "signup_click").length,
                     })).sort((a, b) => b.views - a.views);
                     return (
                       <div className="bg-card border border-border rounded-2xl p-6">

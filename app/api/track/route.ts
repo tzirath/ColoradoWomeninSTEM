@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isRateLimited, getIp } from "../_lib/rate-limit";
 import { getSupabaseAdmin } from "../_lib/supabase";
+import { INITIATIVE_SLUGS } from "@/data/initiatives";
 
-const VALID_SLUGS = ["members-network", "skill-swap", "stem-in-action", "mentorship", "cws-voices"];
+const VALID_SLUGS = INITIATIVE_SLUGS;
 const VALID_EVENTS = ["view", "signup_click"];
 
 export async function POST(req: NextRequest) {

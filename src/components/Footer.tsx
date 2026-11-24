@@ -16,11 +16,11 @@ const sections = [
     heading: "Initiatives",
     links: [
       { label: "Overview", href: "/initiatives" },
-      { label: "Members Network", href: "/initiatives/members-network" },
-      { label: "Skill Swap", href: "/initiatives/skill-swap" },
+      { label: "Curiosity Exchange", href: "/initiatives/curiosity-exchange" },
+      { label: "Grow Bold", href: "/initiatives/grow-bold" },
+      { label: "Champions Circle", href: "/initiatives/champions-circle" },
       { label: "STEM in Action", href: "/initiatives/stem-in-action" },
-      { label: "Mentorship", href: "/initiatives/mentorship" },
-      { label: "CWS Voices", href: "/initiatives/cws-voices" },
+      { label: "CWS Real Talk", href: "/initiatives/real-talk" },
     ],
   },
   {
