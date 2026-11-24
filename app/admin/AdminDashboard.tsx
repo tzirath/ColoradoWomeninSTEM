@@ -77,13 +77,10 @@ const CONTENT_SECTIONS = [
     id: "initiative-pages",
     label: "Initiative Detail Pages",
     parent: "Initiatives",
-    fields: [
-      { key: "initiative_curiosity_exchange_signup_url", label: "Curiosity Exchange: Sign Up link" },
-      { key: "initiative_grow_bold_signup_url", label: "Grow Bold: Sign Up link" },
-      { key: "initiative_champions_circle_signup_url", label: "Champions Circle: Sign Up link" },
-      { key: "initiative_stem_in_action_signup_url", label: "STEM in Action: Sign Up link" },
-      { key: "initiative_real_talk_signup_url", label: "CWS Real Talk: Sign Up link" },
-    ],
+    fields: INITIATIVES.flatMap((i): { key: string; label: string; type?: "image" }[] => [
+      { key: i.imageKey, label: `${i.name}: photo`, type: "image" },
+      { key: i.signupKey, label: `${i.name}: Sign Up link` },
+    ]),
   },
 ];
 

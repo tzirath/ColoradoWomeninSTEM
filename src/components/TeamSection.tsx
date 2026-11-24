@@ -177,7 +177,7 @@ const TeamSection = ({ members, committees = [] }: Props) => {
             <div>
               {committeeGroups.some((g) => g.members.length > 0) && (
                 <div className="text-center mb-10">
-                  <h3 className="font-body text-2xl font-bold text-foreground">General Members</h3>
+                  <h3 className="font-body text-2xl font-bold text-foreground">Operations</h3>
                 </div>
               )}
               <div className="flex flex-wrap justify-center gap-8">

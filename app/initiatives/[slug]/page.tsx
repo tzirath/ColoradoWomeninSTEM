@@ -5,11 +5,10 @@ import { createClient } from "@/lib/supabase/server";
 import BecomeAMemberButton from "@/components/BecomeAMemberButton";
 import InitiativeTracker from "@/components/InitiativeTracker";
 import FlowerDecor from "@/components/FlowerDecor";
-import { INITIATIVES, getInitiative } from "@/data/initiatives";
+import { getInitiative } from "@/data/initiatives";
 
-export function generateStaticParams() {
-  return INITIATIVES.map((i) => ({ slug: i.slug }));
-}
+// Render on each request so photos and Sign Up links saved in admin show up right away
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const item = getInitiative(params.slug);
@@ -30,15 +29,16 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
   const item = getInitiative(params.slug);
   if (!item) notFound();
 
-  const signupKeys = [item.signupKey, ...(item.legacySignupKey ? [item.legacySignupKey] : [])];
+  const contentKeys = [item.signupKey, item.imageKey, ...(item.legacySignupKey ? [item.legacySignupKey] : [])];
   const supabase = createClient();
-  const { data: contentRows } = await supabase.from("site_content").select("key, value").in("key", signupKeys);
+  const { data: contentRows } = await supabase.from("site_content").select("key, value").in("key", contentKeys);
 
   const contentMap: Record<string, string> = {};
   contentRows?.forEach((row) => { contentMap[row.key] = row.value; });
 
   const signupHref =
     contentMap[item.signupKey] || (item.legacySignupKey ? contentMap[item.legacySignupKey] : "") || null;
+  const imageUrl = contentMap[item.imageKey] || null;
   const Icon = item.icon;
 
   return (
@@ -63,6 +63,13 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
             <p className="font-body text-foreground/60 text-sm font-medium mb-3">{item.subtitle}</p>
           )}
           <p className="font-body text-secondary text-lg italic mb-10">{item.tagline}</p>
+
+          {imageUrl && (
+            <div className="mb-10 aspect-[16/9] overflow-hidden rounded-2xl border border-border">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={imageUrl} alt={item.name} className="w-full h-full object-cover" />
+            </div>
+          )}
 
           {item.steps && (
             <ol className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
@@ -100,7 +107,7 @@ export default async function InitiativeDetailPage({ params }: { params: { slug:
             </div>
           )}
 
-          <p className="font-body text-foreground text-xl md:text-2xl leading-relaxed mb-12">{item.description}</p>
+          {/* Description is hidden for now; the copy is kept in src/data/initiatives.ts so it can be restored. */}
 
           <div className="space-y-8">
             <Section title="About">{item.about}</Section>

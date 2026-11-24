@@ -1,17 +1,10 @@
 "use client";
 
 import { useJoinModal } from "@/components/JoinModalContext";
-import { Users, Briefcase, HeartHandshake, Network, Repeat2, Wrench, Mic } from "lucide-react";
+import { Users, Briefcase, HeartHandshake, CalendarHeart } from "lucide-react";
 import Link from "next/link";
 import FlowerDecor from "@/components/FlowerDecor";
-
-const programs = [
-  { slug: "members-network", contentKey: "initiative_members_network", icon: Network, title: "Members Networking Database", defaultDesc: "A curated directory that helps members discover and connect with each other based on STEM field, interests, and career stage." },
-  { slug: "skill-swap", contentKey: "initiative_skill_swap", icon: Repeat2, title: "Skill Swap", defaultDesc: "Connect with members based on what you can teach and what you want to learn — building a true knowledge-sharing community." },
-  { slug: "stem-in-action", contentKey: "initiative_stem_in_action", icon: Wrench, title: "STEM in Action (Design Team)", defaultDesc: "Partner with community organizations to apply your technical skills towards solutions they help define." },
-  { slug: "mentorship", contentKey: "initiative_mentorship", icon: Users, title: "Mentorship", defaultDesc: "Pair with members for guidance and advice on navigating careers, academia, and life in STEM as a woman of color." },
-  { slug: "cws-voices", contentKey: "initiative_cws_voices", icon: Mic, title: "CWS Voices", defaultDesc: "Empower members with the resources and peer support to navigate ethical challenges and societal impact in STEM workplaces." },
-];
+import { INITIATIVES } from "@/data/initiatives";
 
 interface Role { id: string; title: string; commitment: string; description: string; }
 
@@ -52,9 +45,15 @@ export default function GetInvolvedClient({ roles, content }: Props) {
           </div>
           <h2 className="font-body text-3xl font-bold text-primary-foreground mb-4">Stay Connected</h2>
           <p className="font-body text-bloom-sage mb-8 max-w-xl mx-auto">Get updates on events, resources, and community news from Colorado Women in STEM.</p>
-          <button onClick={openModal} className="bg-secondary text-white font-body font-semibold text-lg px-10 py-3.5 rounded-lg hover:opacity-90 transition-opacity">
-            Subscribe to Newsletter
-          </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button onClick={openModal} className="bg-secondary text-white font-body font-semibold text-lg px-10 py-3.5 rounded-lg hover:opacity-90 transition-opacity">
+              Subscribe to Newsletter
+            </button>
+            <a href="https://partiful.com/u/pZUMCHo0w9UrZUrrbTqR" target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border-2 border-white/70 text-white font-body font-semibold text-lg px-10 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <CalendarHeart size={18} /> Follow us on Partiful
+            </a>
+          </div>
         </div>
       </section>
 
@@ -68,13 +67,14 @@ export default function GetInvolvedClient({ roles, content }: Props) {
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {programs.slice(0, 3).map((p) => (
+            {INITIATIVES.slice(0, 3).map((p) => (
               <div key={p.slug} className="bg-card rounded-2xl p-8 border border-border shadow-sm flex flex-col">
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
                   <p.icon className="w-7 h-7 text-accent" />
                 </div>
-                <h3 className="font-body text-xl font-semibold text-foreground mb-3">{p.title}</h3>
-                <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6 flex-1">{content[p.contentKey] || p.defaultDesc}</p>
+                <h3 className="font-body text-xl font-semibold text-foreground mb-1">{p.name}</h3>
+                <p className="font-body text-secondary text-sm font-medium mb-3 italic">{p.tagline}</p>
+                <p className="font-body text-foreground/80 text-sm leading-relaxed mb-6 flex-1">{p.shortDescription}</p>
                 <Link href={`/initiatives/${p.slug}`}
                   className="inline-block bg-secondary text-white font-body font-semibold text-sm px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity text-center">
                   Sign Up
@@ -85,7 +85,7 @@ export default function GetInvolvedClient({ roles, content }: Props) {
           <div className="text-center mt-10">
             <Link href="/initiatives"
               className="inline-flex items-center gap-2 border-2 border-primary text-primary font-body font-semibold px-7 py-3 rounded-lg hover:bg-primary/5 transition-colors">
-              View All Initiatives
+              Show All Initiatives
             </Link>
           </div>
         </div>

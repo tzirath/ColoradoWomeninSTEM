@@ -21,6 +21,8 @@ export interface Initiative {
   access?: string;
   /** site_content key for the optional Sign Up link (editable in admin). */
   signupKey: string;
+  /** site_content key for the optional photo (uploaded in admin). */
+  imageKey: string;
   /** Older site_content key, read as a fallback so existing Sign Up links keep working. */
   legacySignupKey?: string;
 }
@@ -45,6 +47,7 @@ export const INITIATIVES: Initiative[] = [
     whatToExpect:
       "Skill-swap meetups and field trips, such as geology hikes, bird walks, aquarium visits with marine biologists, and botanical garden walks with ecologists. Roughly every couple of months.",
     signupKey: "initiative_curiosity_exchange_signup_url",
+    imageKey: "initiative_curiosity_exchange_image",
     legacySignupKey: "initiative_skill_swap_signup_url",
   },
   {
@@ -68,6 +71,7 @@ export const INITIATIVES: Initiative[] = [
     comingSoon:
       "Our member networking directory, searchable by STEM category, interests, and career stage.",
     signupKey: "initiative_grow_bold_signup_url",
+    imageKey: "initiative_grow_bold_image",
     legacySignupKey: "initiative_members_network_signup_url",
   },
   {
@@ -89,6 +93,7 @@ export const INITIATIVES: Initiative[] = [
     access:
       "Centered communities (Black, Indigenous, Asian, Pacific Islander, and Latina women in STEM) first, others welcome.",
     signupKey: "initiative_champions_circle_signup_url",
+    imageKey: "initiative_champions_circle_image",
     legacySignupKey: "initiative_mentorship_signup_url",
   },
   {
@@ -107,6 +112,7 @@ export const INITIATIVES: Initiative[] = [
     whatToExpect:
       "Community service partnerships, volunteer projects with local organizations, and design sprints or solution days. Roughly every couple of months.",
     signupKey: "initiative_stem_in_action_signup_url",
+    imageKey: "initiative_stem_in_action_image",
   },
   {
     slug: "real-talk",
@@ -124,6 +130,7 @@ export const INITIATIVES: Initiative[] = [
     whatToExpect:
       "Safe circles, peer support sessions, community discussions on workplace and ethical challenges, and wellbeing events focused on managing burnout and encouraging work-life balance. Roughly every couple of months.",
     signupKey: "initiative_real_talk_signup_url",
+    imageKey: "initiative_real_talk_image",
     legacySignupKey: "initiative_cws_voices_signup_url",
   },
 ];

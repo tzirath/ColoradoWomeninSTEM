@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 import FlowerDecor from "@/components/FlowerDecor";
 import { INITIATIVES, INITIATIVES_INTRO } from "@/data/initiatives";
 
@@ -8,7 +9,12 @@ export const metadata = {
   description: "Programs and initiatives of Colorado Women in STEM.",
 };
 
-export default function InitiativesPage() {
+export default async function InitiativesPage() {
+  const supabase = createClient();
+  const { data } = await supabase.from("site_content").select("key, value").in("key", INITIATIVES.map((i) => i.imageKey));
+  const images: Record<string, string> = {};
+  data?.forEach((row) => { if (row.value) images[row.key] = row.value; });
+
   return (
     <div className="min-h-screen bg-background pt-24">
       <section className="py-20 bg-card relative overflow-hidden">
@@ -35,6 +41,12 @@ export default function InitiativesPage() {
             {INITIATIVES.map((item) => (
               <Link key={item.slug} href={`/initiatives/${item.slug}`}
                 className="group bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-lg hover:border-primary/30 transition-all">
+                {images[item.imageKey] && (
+                  <div className="-mx-8 -mt-8 mb-6 aspect-[16/9] overflow-hidden rounded-t-2xl">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={images[item.imageKey]} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                )}
                 <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                   <item.icon className="w-7 h-7 text-accent" />
                 </div>
